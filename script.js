@@ -1,5 +1,14 @@
 const root = document.documentElement;
 
+function setCssVar(el, name, value) {
+  if (!el || el.style.getPropertyValue(name) === value) return;
+  el.style.setProperty(name, value);
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
 // All coords use the GORA SVG viewBox (2000 x 850). Trail SVG is positioned/sized
 // to match the gora image rect at runtime, so trail path, dots, leaders, and climbers
 // all live in the same coordinate space and stay aligned across viewport changes.
@@ -463,23 +472,181 @@ if (document.fonts) {
   document.fonts.ready.then(() => scheduleTrailOverlay(true));
 }
 
+let scheduleAudienceConnectors = () => {};
+
 function setupAudienceTriptych() {
   const root = document.querySelector("[data-audience-triptych]");
   if (!root) return;
   const cards = Array.from(root.querySelectorAll("[data-audience-card]"));
   if (!cards.length) return;
+  const section = root.closest(".audience-intro") || root;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let sectionTop = 0;
+  let sectionHeight = 1;
+  let sectionScrollable = 1;
+  let activeIndex = null;
+
+  function setActiveCard(index) {
+    if (index === activeIndex) return;
+    activeIndex = index;
+    root.classList.toggle("has-no-active", index < 0);
+    cards.forEach((_, idx) => {
+      root.classList.toggle(`is-active-${idx}`, idx === index);
+    });
+
+    cards.forEach((card, idx) => {
+      const expanded = idx === index;
+      card.classList.toggle("is-expanded", expanded);
+      card.classList.toggle("is-active", expanded);
+
+      const toggle = card.querySelector("[data-audience-toggle]");
+      if (toggle) toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+
+      const label = toggle?.querySelector(".preview__toggle-label");
+      if (label) label.textContent = expanded ? "show less" : "read more";
+    });
+
+    scheduleAudienceConnectors();
+    window.requestAnimationFrame(scheduleAudienceConnectors);
+  }
+
+  function measure() {
+    const rect = section.getBoundingClientRect();
+    sectionTop = (window.scrollY || 0) + rect.top;
+    sectionHeight = section.offsetHeight || window.innerHeight;
+    sectionScrollable = Math.max(1, sectionHeight - window.innerHeight);
+  }
+
+  function updateFromScroll() {
+    if (reducedMotion) {
+      setActiveCard(0);
+      return;
+    }
+
+    const scrollY = window.scrollY || 0;
+    const vh = window.innerHeight || 1;
+    const revealStart = sectionTop - vh * 0.08;
+
+    if (scrollY < revealStart) {
+      setActiveCard(-1);
+      return;
+    }
+
+    const progress = clamp((scrollY - revealStart) / Math.max(1, sectionScrollable * 0.9), 0, 0.999);
+    setActiveCard(Math.min(cards.length - 1, Math.floor(progress * cards.length)));
+  }
+
+  let raf = 0;
+  function scheduleUpdate() {
+    if (raf) return;
+    raf = window.requestAnimationFrame(() => {
+      raf = 0;
+      updateFromScroll();
+    });
+  }
 
   cards.forEach((card) => {
     const toggle = card.querySelector("[data-audience-toggle]");
     if (!toggle) return;
+    card.addEventListener("transitionend", () => {
+      measure();
+      scheduleAudienceConnectors();
+    });
     toggle.addEventListener("click", (e) => {
       e.preventDefault();
-      const expanded = card.classList.toggle("is-expanded");
-      toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
-      const label = toggle.querySelector(".preview__toggle-label");
-      if (label) label.textContent = expanded ? "show less" : "read more";
+      setActiveCard(cards.indexOf(card));
     });
   });
+
+  measure();
+  updateFromScroll();
+  window.addEventListener("scroll", scheduleUpdate, { passive: true });
+  window.addEventListener("resize", () => {
+    measure();
+    scheduleUpdate();
+  }, { passive: true });
+  window.addEventListener("load", () => {
+    measure();
+    scheduleUpdate();
+  }, { once: true });
+  if (document.fonts) document.fonts.ready.then(() => {
+    measure();
+    scheduleUpdate();
+  });
+}
+
+function setupAudienceConnectors() {
+  const section = document.querySelector(".audience-intro");
+  if (!section) return;
+  const connectors = Array.from(section.querySelectorAll(".audience-col__connector"));
+  if (!connectors.length) return;
+
+  const trailPoints = [
+    [0, 94], [52, 95], [137, 94], [221, 98], [318, 97], [398, 101],
+    [432, 96], [506, 86], [552, 89], [589, 72], [652, 64], [701, 69],
+    [746, 51], [817, 42], [858, 46], [917, 28], [971, 32], [1004, 21],
+    [1058, 24], [1096, 7], [1130, 15], [1164, -6], [1186, -1], [1200, -52],
+  ];
+
+  function cssClamp(min, preferred, max) {
+    return Math.min(Math.max(preferred, min), max);
+  }
+
+  function readPx(value, fallback) {
+    const parsed = parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+
+  function trailYAt(x) {
+    const clampedX = clamp(x, 0, 1200);
+    for (let i = 1; i < trailPoints.length; i++) {
+      const [prevX, prevY] = trailPoints[i - 1];
+      const [nextX, nextY] = trailPoints[i];
+      if (clampedX <= nextX) {
+        const t = (clampedX - prevX) / Math.max(1, nextX - prevX);
+        return prevY + (nextY - prevY) * t;
+      }
+    }
+    return trailPoints[trailPoints.length - 1][1];
+  }
+
+  function update() {
+    const sectionRect = section.getBoundingClientRect();
+    if (!sectionRect.width) return;
+
+    const pseudo = getComputedStyle(section, "::after");
+    const cutOffset = readPx(
+      pseudo.top,
+      cssClamp(-180, window.innerWidth * -0.1, -118)
+    );
+    const cutDepth = readPx(
+      pseudo.height,
+      cssClamp(130, window.innerWidth * 0.11, 190)
+    );
+
+    connectors.forEach((connector) => {
+      const rect = connector.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2 - sectionRect.left;
+      const pathX = (centerX / sectionRect.width) * 1200;
+      const pathY = trailYAt(pathX);
+      const lineY = sectionRect.top + cutOffset + cutDepth * (pathY / 160);
+      setCssVar(connector, "--connector-top", `${(lineY - rect.top).toFixed(1)}px`);
+    });
+  }
+
+  let raf = 0;
+  scheduleAudienceConnectors = () => {
+    if (raf) return;
+    raf = window.requestAnimationFrame(() => {
+      raf = 0;
+      update();
+    });
+  };
+
+  scheduleAudienceConnectors();
+  window.addEventListener("resize", scheduleAudienceConnectors, { passive: true });
+  window.addEventListener("load", scheduleAudienceConnectors, { once: true });
+  if (document.fonts) document.fonts.ready.then(scheduleAudienceConnectors);
 }
 
 function setupAboutfold() {
@@ -837,5 +1004,6 @@ setupTransitionMarker();
 setupMobileMenu();
 setupHeroTrail();
 setupAudienceTriptych();
+setupAudienceConnectors();
 setupAboutfold();
 window.addEventListener("load", () => scheduleTrailOverlay(true));
