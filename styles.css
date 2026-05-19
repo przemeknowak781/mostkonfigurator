@@ -1132,6 +1132,29 @@ body.menu-open {
   /* Pinned region: (steps + 1) viewports tall so users scroll through each step. */
   min-height: calc((var(--aboutfold-steps) + 1) * 100svh);
   overflow: visible;
+  isolation: isolate;
+}
+
+.aboutfold::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("background.webp");
+  background-size: cover;
+  background-position: center calc(30% + var(--aboutfold-progress, 0) * 22%);
+  background-repeat: no-repeat;
+  opacity: 0.085;
+  mix-blend-mode: multiply;
+  filter: saturate(0.7);
+  pointer-events: none;
+  z-index: -1;
+  will-change: background-position;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aboutfold::before {
+    background-position: center 40%;
+  }
 }
 
 .aboutfold__rail {
@@ -2376,9 +2399,20 @@ body.menu-open {
   display: contents;
 }
 
-.audience-col--founders { --col-accent: #D17E5F; }
-.audience-col--companies { --col-accent: #9B8B95; }
-.audience-col--investors { --col-accent: #5B7AB0; }
+.audience-col--founders {
+  --col-accent: #D17E5F;
+  --connector-top: clamp(-210px, -21vh, -148px);
+}
+
+.audience-col--companies {
+  --col-accent: #9B8B95;
+  --connector-top: clamp(-250px, -25vh, -184px);
+}
+
+.audience-col--investors {
+  --col-accent: #5B7AB0;
+  --connector-top: clamp(-300px, -30vh, -226px);
+}
 
 .audience-col__connector {
   grid-row: 1;
@@ -2387,6 +2421,7 @@ body.menu-open {
   display: flex;
   justify-content: center;
   align-self: stretch;
+  pointer-events: none;
 }
 
 .audience-col--founders .audience-col__connector { grid-column: 2; }
@@ -2395,23 +2430,41 @@ body.menu-open {
 
 .audience-col__connector::before {
   content: "";
+  position: absolute;
+  top: var(--connector-top);
+  bottom: 0;
+  left: 50%;
   width: 1px;
-  height: 100%;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--col-accent) 58%, transparent), transparent 14% 20%, color-mix(in srgb, var(--col-accent) 34%, transparent) 20% 100%);
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 168, 110, 0.42) 0 2px,
+    transparent 2px 6px
+  );
 }
 
-.audience-col__connector::after {
-  content: "";
+.audience-col__trail-marker,
+.audience-col__card-marker {
   position: absolute;
-  bottom: -3px;
   left: 50%;
-  width: 7px;
-  height: 7px;
+  z-index: 1;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--col-accent);
+  background: rgba(255, 168, 110, 0.98);
   transform: translateX(-50%);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--col-accent) 70%, transparent);
+  box-shadow:
+    0 0 0 3px rgba(255, 168, 110, 0.18),
+    0 0 12px rgba(255, 168, 110, 0.6),
+    0 0 26px rgba(255, 188, 140, 0.32);
+}
+
+.audience-col__trail-marker {
+  top: calc(var(--connector-top) - 4.5px);
+}
+
+.audience-col__card-marker {
+  bottom: -4.5px;
 }
 
 .audience-col > .preview {
