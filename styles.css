@@ -96,7 +96,7 @@ a {
   padding: 0 var(--container-x);
   background: transparent;
   border-bottom: 1px solid transparent;
-  transition: background 320ms var(--ease-out), border-color 320ms ease, backdrop-filter 320ms ease;
+  transition: background 320ms var(--ease-out), border-color 320ms ease;
 }
 
 .top-nav::before {
@@ -107,8 +107,6 @@ a {
   opacity: 0;
   background:
     linear-gradient(180deg, rgba(22, 24, 34, 0.55) 0%, rgba(8, 11, 19, 0.32) 100%);
-  backdrop-filter: blur(22px) saturate(1.4);
-  -webkit-backdrop-filter: blur(22px) saturate(1.4);
   box-shadow: 0 18px 50px rgba(4, 6, 12, 0.28);
   transition: opacity 360ms var(--ease-out);
   pointer-events: none;
@@ -116,6 +114,8 @@ a {
 
 .top-nav.is-scrolled::before {
   opacity: 1;
+  backdrop-filter: blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
 }
 
 .top-nav.is-scrolled {
@@ -643,7 +643,7 @@ body.menu-open {
 .ridge-edge {
   position: relative;
   z-index: 6;
-  margin-top: calc(clamp(-260px, -22vh, -120px) - 2px);
+  margin-top: calc(clamp(-160px, -12vh, -60px) - 2px);
   margin-bottom: -1px;
   pointer-events: none;
   line-height: 0;
@@ -2334,7 +2334,7 @@ body.menu-open {
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(240px, 0.62fr) repeat(3, minmax(0, 1fr));
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: clamp(112px, 13vh, 168px) 1fr;
   column-gap: clamp(16px, 2vw, 28px);
   row-gap: 0;
   align-items: stretch;
@@ -2380,32 +2380,13 @@ body.menu-open {
 .audience-col--companies { --col-accent: #9B8B95; }
 .audience-col--investors { --col-accent: #5B7AB0; }
 
-.audience-col__chart {
-  grid-row: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: stretch;
-  padding: 0 clamp(8px, 1vw, 16px);
-  height: clamp(96px, 12vh, 140px);
-}
-
-.audience-col--founders .audience-col__chart { grid-column: 2; }
-.audience-col--companies .audience-col__chart { grid-column: 3; }
-.audience-col--investors .audience-col__chart { grid-column: 4; }
-
-.audience-col__chart .preview__route {
-  width: 100%;
-  height: 100%;
-  max-height: none;
-  margin: 0;
-}
-
 .audience-col__connector {
-  grid-row: 2;
+  grid-row: 1;
   position: relative;
-  height: clamp(24px, 3vh, 40px);
+  min-height: 100%;
   display: flex;
   justify-content: center;
+  align-self: stretch;
 }
 
 .audience-col--founders .audience-col__connector { grid-column: 2; }
@@ -2416,7 +2397,8 @@ body.menu-open {
   content: "";
   width: 1px;
   height: 100%;
-  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--col-accent) 75%, transparent) 35%, var(--col-accent) 100%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--col-accent) 58%, transparent), transparent 14% 20%, color-mix(in srgb, var(--col-accent) 34%, transparent) 20% 100%);
 }
 
 .audience-col__connector::after {
@@ -2433,7 +2415,7 @@ body.menu-open {
 }
 
 .audience-col > .preview {
-  grid-row: 3;
+  grid-row: 2;
 }
 
 .audience-col--founders > .preview { grid-column: 2; }
@@ -2446,7 +2428,7 @@ body.menu-open {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: clamp(24px, 3vh, 36px) clamp(22px, 2.4vw, 32px) clamp(64px, 6vh, 80px);
+  padding: clamp(20px, 2.6vh, 30px) clamp(22px, 2.4vw, 32px) clamp(64px, 6vh, 80px);
   background: linear-gradient(180deg, rgba(240, 235, 233, 0.04), rgba(240, 235, 233, 0.01));
   border: 1px solid rgba(240, 235, 233, 0.1);
   border-radius: 16px;
@@ -2470,6 +2452,21 @@ body.menu-open {
   gap: 8px;
 }
 
+.preview__chart {
+  position: relative;
+  margin: -4px 0 clamp(12px, 1.8vh, 20px);
+  padding-bottom: clamp(10px, 1.3vh, 16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.preview__chart::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 38%, transparent), transparent);
+}
+
 .preview__num {
   color: var(--accent);
   font: 500 11px / 1 "Montserrat", system-ui, sans-serif;
@@ -2479,8 +2476,9 @@ body.menu-open {
 .preview__route {
   width: 100%;
   height: auto;
-  max-height: 96px;
-  margin: 0 0 4px;
+  max-height: clamp(82px, 9vh, 112px);
+  margin: 0;
+  display: block;
 }
 
 .preview__name {
@@ -2658,9 +2656,6 @@ body.menu-open {
     grid-template-columns: 1fr;
     gap: 0;
   }
-  .audience-col--founders .audience-col__chart,
-  .audience-col--companies .audience-col__chart,
-  .audience-col--investors .audience-col__chart,
   .audience-col--founders .audience-col__connector,
   .audience-col--companies .audience-col__connector,
   .audience-col--investors .audience-col__connector,
@@ -2669,7 +2664,7 @@ body.menu-open {
   .audience-col--investors > .preview {
     grid-column: 1;
   }
-  .audience-col__chart { height: 110px; }
+  .audience-col__connector { min-height: 64px; }
 }
 
 @media (max-width: 860px) {
@@ -3085,15 +3080,8 @@ body.menu-open {
   overflow: visible;
 }
 
-.transition-marker__active {
-}
-
 .transition-marker__head {
   filter: drop-shadow(0 0 12px rgba(255, 97, 44, 0.6));
-}
-
-.transition-marker.is-visible .transition-marker__active {
-  /* x2 set inline via SVG attribute animation later, fallback OK */
 }
 
 .transition-marker__text {
