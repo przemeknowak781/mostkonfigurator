@@ -1,13 +1,4 @@
-const scrollProgressEl = document.querySelector(".scroll-progress");
-
-function setCssVar(el, name, value) {
-  if (!el || el.style.getPropertyValue(name) === value) return;
-  el.style.setProperty(name, value);
-}
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
+const root = document.documentElement;
 
 // All coords use the GORA SVG viewBox (2000 x 850). Trail SVG is positioned/sized
 // to match the gora image rect at runtime, so trail path, dots, leaders, and climbers
@@ -176,10 +167,8 @@ function syncTrailContainersToRidge() {
   const imgRect = ridgesImg.getBoundingClientRect();
   if (imgRect.width === 0 || imgRect.height === 0) return;
 
-  const trailScrollY = Math.min(window.scrollY || 0, cachedHeroHeight || window.innerHeight);
-  const trailOffsetY = trailScrollY * -0.15;
   const left = imgRect.left - heroRect.left;
-  const top = imgRect.top - heroRect.top - trailOffsetY;
+  const top = imgRect.top - heroRect.top;
 
   for (const el of [trailSvg, pointsHost]) {
     if (!el) continue;
@@ -262,57 +251,36 @@ function positionTrailOverlay() {
 const topNav = document.querySelector(".top-nav");
 const heroEl = document.querySelector(".hero");
 const ridgeEdgeEl = document.querySelector(".ridge-edge");
-const heroTrailEl = document.querySelector(".hero-trail");
-const heroTrailPointsEl = document.querySelector(".hero-trail-points");
-let cachedMaxScroll = 1;
-let cachedHeroHeight = window.innerHeight;
-let cachedRidgeTop = 0;
-let cachedRidgeHeight = 0;
-let navScrolled = false;
-
-function updateScrollMetrics() {
-  cachedHeroHeight = heroEl?.offsetHeight || window.innerHeight;
-  cachedRidgeTop = ridgeEdgeEl?.offsetTop || 0;
-  cachedRidgeHeight = ridgeEdgeEl?.offsetHeight || 0;
-  cachedMaxScroll = Math.max(
-    1,
-    Math.max(
-      document.documentElement.scrollHeight,
-      document.body.scrollHeight,
-    ) - window.innerHeight
-  );
-}
 
 function updateScroll() {
   const scrollY = window.scrollY || 0;
-  const scrollProgress = Math.min(1, scrollY / cachedMaxScroll);
+  const scrollHeight = Math.max(
+    document.documentElement.scrollHeight,
+    document.body.scrollHeight,
+  );
+  const maxScroll = Math.max(1, scrollHeight - window.innerHeight);
+  const scrollProgress = Math.min(1, scrollY / maxScroll);
 
-  setCssVar(scrollProgressEl, "--scroll-progress", scrollProgress.toFixed(5));
+  root.style.setProperty("--scroll-y", `${scrollY}px`);
+  root.style.setProperty("--scroll-progress", scrollProgress.toFixed(4));
+  root.style.setProperty("--scroll-progress-percent", `${(scrollProgress * 100).toFixed(2)}%`);
 
   if (heroEl) {
-    const heroScrollY = Math.min(scrollY, cachedHeroHeight);
-    const heroProgress = Math.min(1, Math.max(0, heroScrollY / cachedHeroHeight));
-    setCssVar(heroEl, "--scroll-y", `${heroScrollY}px`);
-    setCssVar(heroEl, "--hero-progress", heroProgress.toFixed(4));
-    setCssVar(heroTrailEl, "--trail-scroll-y", `${heroScrollY}px`);
-    setCssVar(heroTrailPointsEl, "--trail-scroll-y", `${heroScrollY}px`);
+    const heroHeight = heroEl.offsetHeight || window.innerHeight;
+    const heroProgress = Math.min(1, Math.max(0, scrollY / heroHeight));
+    root.style.setProperty("--hero-progress", heroProgress.toFixed(4));
   }
 
-  if (ridgeEdgeEl && scrollY < cachedRidgeTop + cachedRidgeHeight + window.innerHeight) {
+  if (ridgeEdgeEl) {
+    const rect = ridgeEdgeEl.getBoundingClientRect();
     const vh = window.innerHeight || 1;
-    const total = cachedRidgeHeight + vh;
-    const offset = scrollY + vh - cachedRidgeTop;
+    const total = rect.height + vh;
+    const offset = vh - rect.top;
     const ridgeProgress = Math.min(1, Math.max(0, offset / total));
-    setCssVar(ridgeEdgeEl, "--ridge-progress", ridgeProgress.toFixed(4));
-  } else if (ridgeEdgeEl) {
-    setCssVar(ridgeEdgeEl, "--ridge-progress", "1.0000");
+    root.style.setProperty("--ridge-progress", ridgeProgress.toFixed(4));
   }
 
-  const nextNavScrolled = scrollY > 12;
-  if (topNav && nextNavScrolled !== navScrolled) {
-    navScrolled = nextNavScrolled;
-    topNav.classList.toggle("is-scrolled", nextNavScrolled);
-  }
+  if (topNav) topNav.classList.toggle("is-scrolled", scrollY > 12);
 }
 
 function setupSectionReveal() {
@@ -421,43 +389,18 @@ function setupTransitionMarker() {
   const head = marker.querySelector(".transition-marker__head");
   if (!active || !head) return;
 
-  let markerTop = 0;
-  let markerHeight = 1;
-  let lastX = -1;
-
-  function measure() {
-    const rect = marker.getBoundingClientRect();
-    markerTop = (window.scrollY || 0) + rect.top;
-    markerHeight = rect.height || 1;
-  }
-
   function update() {
+    const rect = marker.getBoundingClientRect();
     const vh = window.innerHeight || 1;
-    const scrollY = window.scrollY || 0;
-    const progress = Math.min(1, Math.max(0, (scrollY + vh - markerTop) / (vh + markerHeight)));
+    const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
     const x = Math.round(progress * 1200);
-    if (x === lastX) return;
-    lastX = x;
     active.setAttribute("x2", String(x));
     head.setAttribute("cx", String(x));
   }
 
-  let raf = 0;
-  function schedule() {
-    if (raf) return;
-    raf = window.requestAnimationFrame(() => {
-      raf = 0;
-      update();
-    });
-  }
-
-  measure();
   update();
-  window.addEventListener("scroll", schedule, { passive: true });
-  window.addEventListener("resize", () => {
-    measure();
-    schedule();
-  }, { passive: true });
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
 }
 
 function setupMobileMenu() {
@@ -492,6 +435,7 @@ window.addEventListener(
 
     window.requestAnimationFrame(() => {
       updateScroll();
+      scheduleTrailOverlay();
       ticking = false;
     });
     ticking = true;
@@ -504,215 +448,38 @@ window.addEventListener("resize", () => {
   if (resizeRaf) return;
   resizeRaf = window.requestAnimationFrame(() => {
     resizeRaf = 0;
-    updateScrollMetrics();
     updateScroll();
     scheduleTrailOverlay(true);
   });
 }, { passive: true });
 
 if (window.visualViewport) {
-  window.visualViewport.addEventListener("resize", () => {
-    updateScrollMetrics();
-    updateScroll();
-    scheduleTrailOverlay(true);
-  }, { passive: true });
+  window.visualViewport.addEventListener("resize", () => scheduleTrailOverlay(true), { passive: true });
 }
 
-window.addEventListener("orientationchange", () => {
-  updateScrollMetrics();
-  updateScroll();
-  scheduleTrailOverlay(true);
-}, { passive: true });
+window.addEventListener("orientationchange", () => scheduleTrailOverlay(true), { passive: true });
 
 if (document.fonts) {
-  document.fonts.ready.then(() => {
-    updateScrollMetrics();
-    updateScroll();
-    scheduleTrailOverlay(true);
-  });
+  document.fonts.ready.then(() => scheduleTrailOverlay(true));
 }
-
-let scheduleAudienceConnectors = () => {};
 
 function setupAudienceTriptych() {
   const root = document.querySelector("[data-audience-triptych]");
   if (!root) return;
   const cards = Array.from(root.querySelectorAll("[data-audience-card]"));
   if (!cards.length) return;
-  const section = root.closest(".audience-intro") || root;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let sectionTop = 0;
-  let sectionHeight = 1;
-  let sectionScrollable = 1;
-  let activeIndex = null;
-
-  function setActiveCard(index) {
-    if (index === activeIndex) return;
-    activeIndex = index;
-    root.classList.toggle("has-no-active", index < 0);
-    cards.forEach((_, idx) => {
-      root.classList.toggle(`is-active-${idx}`, idx === index);
-    });
-
-    cards.forEach((card, idx) => {
-      const expanded = idx === index;
-      card.classList.toggle("is-expanded", expanded);
-      card.classList.toggle("is-active", expanded);
-
-      const toggle = card.querySelector("[data-audience-toggle]");
-      if (toggle) toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
-
-      const label = toggle?.querySelector(".preview__toggle-label");
-      if (label) label.textContent = expanded ? "show less" : "read more";
-    });
-
-    scheduleAudienceConnectors();
-    window.requestAnimationFrame(() => {
-      updateScrollMetrics();
-      scheduleAudienceConnectors();
-    });
-  }
-
-  function measure() {
-    const rect = section.getBoundingClientRect();
-    sectionTop = (window.scrollY || 0) + rect.top;
-    sectionHeight = section.offsetHeight || window.innerHeight;
-    sectionScrollable = Math.max(1, sectionHeight - window.innerHeight);
-  }
-
-  function updateFromScroll() {
-    if (reducedMotion) {
-      setActiveCard(0);
-      section.style.setProperty("--aud-progress", "0.5");
-      return;
-    }
-
-    const scrollY = window.scrollY || 0;
-    const vh = window.innerHeight || 1;
-    const revealStart = sectionTop - vh * 0.08;
-
-    if (scrollY < revealStart) {
-      setActiveCard(-1);
-      section.style.setProperty("--aud-progress", "0");
-      return;
-    }
-
-    const progress = clamp((scrollY - revealStart) / Math.max(1, sectionScrollable * 0.9), 0, 0.999);
-    section.style.setProperty("--aud-progress", progress.toFixed(3));
-    setActiveCard(Math.min(cards.length - 1, Math.floor(progress * cards.length)));
-  }
-
-  let raf = 0;
-  function scheduleUpdate() {
-    if (raf) return;
-    raf = window.requestAnimationFrame(() => {
-      raf = 0;
-      updateFromScroll();
-    });
-  }
 
   cards.forEach((card) => {
     const toggle = card.querySelector("[data-audience-toggle]");
     if (!toggle) return;
-    card.addEventListener("transitionend", () => {
-      measure();
-      scheduleAudienceConnectors();
-    });
     toggle.addEventListener("click", (e) => {
       e.preventDefault();
-      setActiveCard(cards.indexOf(card));
+      const expanded = card.classList.toggle("is-expanded");
+      toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      const label = toggle.querySelector(".preview__toggle-label");
+      if (label) label.textContent = expanded ? "show less" : "read more";
     });
   });
-
-  measure();
-  updateFromScroll();
-  window.addEventListener("scroll", scheduleUpdate, { passive: true });
-  window.addEventListener("resize", () => {
-    measure();
-    scheduleUpdate();
-  }, { passive: true });
-  window.addEventListener("load", () => {
-    measure();
-    scheduleUpdate();
-  }, { once: true });
-  if (document.fonts) document.fonts.ready.then(() => {
-    measure();
-    scheduleUpdate();
-  });
-}
-
-function setupAudienceConnectors() {
-  const section = document.querySelector(".audience-intro");
-  if (!section) return;
-  const connectors = Array.from(section.querySelectorAll(".audience-col__connector"));
-  if (!connectors.length) return;
-
-  const trailPoints = [
-    [0, 94], [52, 95], [137, 94], [221, 98], [318, 97], [398, 101],
-    [432, 96], [506, 86], [552, 89], [589, 72], [652, 64], [701, 69],
-    [746, 51], [817, 42], [858, 46], [917, 28], [971, 32], [1004, 21],
-    [1058, 24], [1096, 7], [1130, 15], [1164, -6], [1186, -1], [1200, -52],
-  ];
-
-  function cssClamp(min, preferred, max) {
-    return Math.min(Math.max(preferred, min), max);
-  }
-
-  function readPx(value, fallback) {
-    const parsed = parseFloat(value);
-    return Number.isFinite(parsed) ? parsed : fallback;
-  }
-
-  function trailYAt(x) {
-    const clampedX = clamp(x, 0, 1200);
-    for (let i = 1; i < trailPoints.length; i++) {
-      const [prevX, prevY] = trailPoints[i - 1];
-      const [nextX, nextY] = trailPoints[i];
-      if (clampedX <= nextX) {
-        const t = (clampedX - prevX) / Math.max(1, nextX - prevX);
-        return prevY + (nextY - prevY) * t;
-      }
-    }
-    return trailPoints[trailPoints.length - 1][1];
-  }
-
-  function update() {
-    const sectionRect = section.getBoundingClientRect();
-    if (!sectionRect.width) return;
-
-    const pseudo = getComputedStyle(section, "::after");
-    const cutOffset = readPx(
-      pseudo.top,
-      cssClamp(-180, window.innerWidth * -0.1, -118)
-    );
-    const cutDepth = readPx(
-      pseudo.height,
-      cssClamp(130, window.innerWidth * 0.11, 190)
-    );
-
-    connectors.forEach((connector) => {
-      const rect = connector.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2 - sectionRect.left;
-      const pathX = (centerX / sectionRect.width) * 1200;
-      const pathY = trailYAt(pathX);
-      const lineY = sectionRect.top + cutOffset + cutDepth * (pathY / 160);
-      setCssVar(connector, "--connector-top", `${(lineY - rect.top).toFixed(1)}px`);
-    });
-  }
-
-  let raf = 0;
-  scheduleAudienceConnectors = () => {
-    if (raf) return;
-    raf = window.requestAnimationFrame(() => {
-      raf = 0;
-      update();
-    });
-  };
-
-  scheduleAudienceConnectors();
-  window.addEventListener("resize", scheduleAudienceConnectors, { passive: true });
-  window.addEventListener("load", scheduleAudienceConnectors, { once: true });
-  if (document.fonts) document.fonts.ready.then(scheduleAudienceConnectors);
 }
 
 function setupAboutfold() {
@@ -743,22 +510,13 @@ function setupAboutfold() {
     { at: 1, color: "#e4e7e7" },
   ];
 
+  let bars = [];
   let routeProgressPath = null;
   let routeLength = 0;
   let railDots = [];
   let railProgressPath = null;
   let railLength = 0;
   let lastStepProgress = 0;
-  let lastRouteDash = "";
-  let lastRailDash = "";
-  let lastProgressKey = "";
-  let lastStepIndex = -1;
-  let sectionTop = 0;
-  let sectionScrollable = 1;
-  let activeStart = -Infinity;
-  let activeEnd = Infinity;
-  const itemStates = items.map(() => ({ progress: "", active: false }));
-  let railDotStates = [];
   let patternWidth = 0;
   let seed = 0x4d4f5354;
   const SVG_NS = "http://www.w3.org/2000/svg";
@@ -898,7 +656,6 @@ function setupAboutfold() {
       svg.appendChild(dot);
       return dot;
     });
-    railDotStates = railDots.map(() => ({ visible: false, active: false }));
 
     updateRailState(lastStepProgress);
   }
@@ -934,10 +691,11 @@ function setupAboutfold() {
 
   function buildPattern(force = false) {
     const nextWidth = Math.ceil(pattern.getBoundingClientRect().width || window.innerWidth);
-    if (!force && patternWidth && Math.abs(nextWidth - patternWidth) < 16) return;
+    if (!force && bars.length && Math.abs(nextWidth - patternWidth) < 16) return;
 
     patternWidth = Math.max(320, nextWidth);
     seed = 0x4d4f5354;
+    bars = [];
     pattern.replaceChildren();
 
     let x = 0;
@@ -960,6 +718,15 @@ function setupAboutfold() {
       bar.style.opacity = baseAlpha.toFixed(3);
       pattern.appendChild(bar);
 
+      bars.push({
+        el: bar,
+        xNorm,
+        sample,
+        shade,
+        baseAlpha,
+        phase: rand(),
+      });
+
       x += width;
     }
 
@@ -967,21 +734,21 @@ function setupAboutfold() {
     updateRouteState(lastStepProgress);
   }
 
-  function measureSection() {
-    const rect = section.getBoundingClientRect();
-    const scrollY = window.scrollY || 0;
-    const sectionHeight = section.offsetHeight;
-    sectionTop = scrollY + rect.top;
-    sectionScrollable = Math.max(1, sectionHeight - window.innerHeight);
-    activeStart = sectionTop - window.innerHeight * 1.2;
-    activeEnd = sectionTop + sectionHeight + window.innerHeight * 0.2;
-  }
-
   function updatePattern(progress) {
     const t = reducedMotion ? 0 : progress;
-    setCssVar(pattern, "--pattern-shift", `${((t - 0.5) * 74).toFixed(1)}px`);
-    setCssVar(pattern, "--pattern-detail-shift", `${((0.5 - t) * 42).toFixed(1)}px`);
-    setCssVar(pattern, "--pattern-sheen", (0.56 + t * 0.18).toFixed(3));
+    for (let i = 0; i < bars.length; i++) {
+      const b = bars[i];
+      const shimmer = Math.sin((b.phase + t * 1.65) * Math.PI * 2);
+      const sweep = Math.cos((b.xNorm * 9.5 - t * 3.2) * Math.PI * 2);
+      const pulse = Math.sin((b.xNorm * 18 + b.phase * 2.4 + t * 4.1) * Math.PI * 2);
+      const sample = clamp(b.sample + shimmer * 0.012 + sweep * 0.018, 0, 1);
+      const color = shadeColor(colorAt(sample), b.shade + shimmer * 0.075 + sweep * 0.065 + pulse * 0.035);
+      const opacity = clamp(b.baseAlpha + shimmer * 0.055 + sweep * 0.04 + pulse * 0.03, 0.42, 1);
+
+      b.el.style.backgroundColor = rgbToCss(color);
+      b.el.style.opacity = opacity.toFixed(3);
+      b.el.style.transform = `scaleX(${(1 + sweep * 0.1 + pulse * 0.045).toFixed(3)})`;
+    }
   }
 
   function updateRouteState(stepProgress) {
@@ -989,10 +756,7 @@ function setupAboutfold() {
     if (!routeProgressPath || !routeLength) return;
 
     const routeProgress = clamp(stepProgress / Math.max(1, items.length - 1), 0, 1);
-    const dash = (routeLength * (1 - routeProgress)).toFixed(2);
-    if (dash === lastRouteDash) return;
-    lastRouteDash = dash;
-    routeProgressPath.style.strokeDashoffset = dash;
+    routeProgressPath.style.strokeDashoffset = (routeLength * (1 - routeProgress)).toFixed(2);
   }
 
   function updateRailState(stepProgress) {
@@ -1000,30 +764,18 @@ function setupAboutfold() {
     if (!railProgressPath || !railLength || !railDots.length) return;
 
     const railProgress = clamp(stepProgress / Math.max(1, items.length - 1), 0, 1);
-    const dash = (railLength * (1 - railProgress)).toFixed(2);
-    if (dash !== lastRailDash) {
-      lastRailDash = dash;
-      railProgressPath.style.strokeDashoffset = dash;
-    }
+    railProgressPath.style.strokeDashoffset = (railLength * (1 - railProgress)).toFixed(2);
 
     railDots.forEach((dot, idx) => {
       const isVisible = stepProgress >= idx - 0.05;
       const isActive = idx === Math.min(items.length - 1, Math.max(0, Math.floor(stepProgress + 0.2)));
-      const state = railDotStates[idx];
-      if (!state || state.visible !== isVisible) {
-        dot.classList.toggle("is-visible", isVisible);
-        if (state) state.visible = isVisible;
-      }
-      if (!state || state.active !== isActive) {
-        dot.classList.toggle("is-active", isActive);
-        if (state) state.active = isActive;
-      }
+      dot.classList.toggle("is-visible", isVisible);
+      dot.classList.toggle("is-active", isActive);
     });
   }
 
   buildScrollTrail();
   buildPattern(true);
-  measureSection();
 
   if (reducedMotion) {
     items.forEach((it) => it.classList.add("is-active", "is-expanded"));
@@ -1033,54 +785,32 @@ function setupAboutfold() {
     return;
   }
 
-  function applyProgress(progress) {
-    const progressKey = progress.toFixed(4);
-    if (progressKey === lastProgressKey) return;
-    lastProgressKey = progressKey;
-    setCssVar(section, "--aboutfold-progress", progressKey);
+  function update() {
+    const rect = section.getBoundingClientRect();
+    const scrollable = section.offsetHeight - window.innerHeight;
+    let progress = 0;
+    if (scrollable > 0) {
+      progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+    }
+    section.style.setProperty("--aboutfold-progress", progress.toFixed(4));
 
     // Step progression: (items.length) reveals stretched across most of progress, last 8% reserved for outro.
     const stepProgress = Math.max(0, Math.min(items.length, progress * (items.length + 0.6)));
-    const stepIndex = Math.min(items.length - 1, Math.floor(stepProgress));
-    if (stepIndex !== lastStepIndex) {
-      lastStepIndex = stepIndex;
-      setCssVar(section, "--aboutfold-step", String(stepIndex));
-    }
+    section.style.setProperty("--aboutfold-step", Math.min(items.length - 1, Math.floor(stepProgress)));
 
     items.forEach((item, idx) => {
       const itemProg = Math.max(0, Math.min(1, stepProgress - idx));
       const isLast = idx === items.length - 1;
       const isActive = isLast ? stepProgress >= idx - 0.3 : (stepProgress >= idx - 0.3 && stepProgress < idx + 0.7);
-      const state = itemStates[idx];
-      const itemProgressKey = itemProg.toFixed(3);
-
-      if (state.progress !== itemProgressKey) {
-        state.progress = itemProgressKey;
-        setCssVar(item, "--item-progress", itemProgressKey);
-      }
-      if (state.active !== isActive) {
-        state.active = isActive;
-        item.classList.toggle("is-expanded", isActive);
-        item.classList.toggle("is-active", isActive);
-      }
+      
+      item.style.setProperty("--item-progress", itemProg.toFixed(3));
+      item.classList.toggle("is-expanded", isActive);
+      item.classList.toggle("is-active", isActive);
     });
 
     updatePattern(progress);
     updateRouteState(stepProgress);
     updateRailState(stepProgress);
-  }
-
-  function update() {
-    const scrollY = window.scrollY || 0;
-    if (scrollY < activeStart) {
-      applyProgress(0);
-      return;
-    }
-    if (scrollY > activeEnd) {
-      applyProgress(1);
-      return;
-    }
-    applyProgress(Math.max(0, Math.min(1, (scrollY - sectionTop) / sectionScrollable)));
   }
 
   let raf = 0;
@@ -1095,23 +825,11 @@ function setupAboutfold() {
   window.addEventListener("scroll", schedule, { passive: true });
   window.addEventListener("resize", () => {
     buildPattern();
-    measureSection();
     schedule();
   }, { passive: true });
-  if (document.fonts) {
-    document.fonts.ready.then(() => {
-      measureSection();
-      schedule();
-    });
-  }
-  window.addEventListener("load", () => {
-    measureSection();
-    schedule();
-  }, { once: true });
   update();
 }
 
-updateScrollMetrics();
 updateScroll();
 setupSectionReveal();
 setupRouteMap();
@@ -1119,10 +837,5 @@ setupTransitionMarker();
 setupMobileMenu();
 setupHeroTrail();
 setupAudienceTriptych();
-setupAudienceConnectors();
 setupAboutfold();
-window.addEventListener("load", () => {
-  updateScrollMetrics();
-  updateScroll();
-  scheduleTrailOverlay(true);
-});
+window.addEventListener("load", () => scheduleTrailOverlay(true));
