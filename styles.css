@@ -2327,9 +2327,9 @@ body.menu-open {
   position: relative;
   z-index: 7;
   min-height: 270svh;
-  padding: 0;
+  padding: 0 var(--container-x);
   background: transparent;
-  overflow: clip;
+  overflow: visible;
   isolation: isolate;
 }
 
@@ -2363,8 +2363,6 @@ body.menu-open {
   --aud-accent: rgba(255, 168, 110, 0.22);
   position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 0;
   width: 100%;
   height: 100svh;
@@ -2387,9 +2385,7 @@ body.menu-open {
       color-mix(in srgb, var(--aud-accent) 60%, transparent),
       transparent 70%
     ),
-    radial-gradient(900px 600px at 88% 92%, rgba(255, 97, 44, 0.16), transparent 70%),
-    radial-gradient(700px 500px at 8% 10%, rgba(48, 62, 89, 0.18), transparent 72%),
-    linear-gradient(180deg, #0c0e1a 0%, #050810 100%);
+    linear-gradient(180deg, #050810 0%, #131625 50%, #1A1D2E 100%);
   transition: --aud-accent 760ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: background;
 }
@@ -2432,7 +2428,7 @@ body.menu-open {
   min-height: calc(100svh - var(--nav-height));
   max-width: 1480px;
   margin: 0 auto;
-  padding: clamp(18px, 3vh, 36px) var(--container-x) clamp(44px, 7vh, 78px);
+  padding: clamp(18px, 3vh, 36px) 0 clamp(44px, 7vh, 78px);
   display: grid;
   grid-template-columns: var(--title-track) var(--founders-track) var(--companies-track) var(--investors-track);
   grid-template-rows: clamp(24px, 4vh, 44px) minmax(440px, 1fr);
