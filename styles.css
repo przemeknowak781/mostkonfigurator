@@ -1089,6 +1089,221 @@ body.menu-open {
   }
 }
 
+/* ---------- 1a. ABOUT FOLD — pinned scrollytelling ---------- */
+
+.aboutfold {
+  --aboutfold-steps: 5;
+  --aboutfold-progress: 0;
+  --aboutfold-step: 0;
+  position: relative;
+  background: #F0EBE9;
+  color: #161822;
+  /* Pinned region: (steps + 1) viewports tall so users scroll through each step. */
+  min-height: calc((var(--aboutfold-steps) + 1) * 100svh);
+  overflow: visible;
+}
+
+.aboutfold__rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: clamp(28px, 4vw, 64px);
+  width: 1px;
+  background: linear-gradient(180deg, rgba(255, 97, 44, 0.65) 0%, rgba(255, 97, 44, 0.45) 80%, rgba(255, 97, 44, 0.1) 100%);
+  z-index: 1;
+}
+
+.aboutfold__rail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -3px;
+  right: -3px;
+  height: calc(var(--aboutfold-progress, 0) * 100%);
+  background: linear-gradient(180deg, #FF612C 0%, #FFB077 100%);
+  filter: drop-shadow(0 0 12px rgba(255, 97, 44, 0.6));
+  transition: height 120ms linear;
+}
+
+.aboutfold__sticky {
+  position: sticky;
+  top: var(--nav-height);
+  height: calc(100svh - var(--nav-height));
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: clamp(40px, 6vh, 72px) clamp(60px, 8vw, 120px) clamp(24px, 4vh, 40px);
+}
+
+.aboutfold__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+  max-width: 1320px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.aboutfold__intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 8px;
+}
+
+.aboutfold__title {
+  margin: 0 0 12px;
+  color: #161822;
+  font: 500 clamp(28px, 3vw, 40px) / 1.12 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.aboutfold__lede {
+  margin: 0;
+  color: rgba(22, 24, 34, 0.78);
+  font: 400 clamp(13.5px, 1vw, 15px) / 1.55 "Outfit", system-ui, sans-serif;
+  text-wrap: pretty;
+  max-width: 36ch;
+}
+
+.aboutfold__illu {
+  margin-top: 28px;
+  width: clamp(220px, 24vw, 320px);
+  height: auto;
+  color: rgba(22, 24, 34, 0.72);
+}
+
+.aboutfold__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutfold__item {
+  --item-progress: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(140px, 0.34fr) minmax(0, 0.66fr);
+  gap: clamp(20px, 3vw, 56px);
+  padding: clamp(18px, 2.4vh, 28px) 0;
+  border-top: 1px solid rgba(255, 97, 44, 0.5);
+  align-items: start;
+}
+
+.aboutfold__item:last-child {
+  border-bottom: 1px solid rgba(255, 97, 44, 0.18);
+}
+
+.aboutfold__item-title {
+  margin: 0;
+  color: rgba(22, 24, 34, 0.7);
+  font: 500 clamp(14px, 1.05vw, 16px) / 1.2 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0;
+  transition: color 240ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.aboutfold__item.is-active .aboutfold__item-title {
+  color: #161822;
+}
+
+.aboutfold__item-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: grid-template-rows 480ms cubic-bezier(0.22, 1, 0.36, 1), opacity 320ms ease, transform 320ms ease;
+}
+
+.aboutfold__item-body > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.aboutfold__item.is-expanded .aboutfold__item-body {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.aboutfold__item-body p {
+  margin: 0 0 10px;
+  color: rgba(22, 24, 34, 0.78);
+  font: 400 clamp(13px, 0.95vw, 14.5px) / 1.5 "Outfit", system-ui, sans-serif;
+  max-width: 56ch;
+  text-wrap: pretty;
+}
+
+.aboutfold__item-body p:last-child {
+  margin-bottom: 0;
+}
+
+.aboutfold__item-body ul {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 4px;
+}
+
+.aboutfold__item-body li {
+  position: relative;
+  padding-left: 18px;
+  color: rgba(22, 24, 34, 0.78);
+  font: 400 clamp(13px, 0.95vw, 14.5px) / 1.5 "Outfit", system-ui, sans-serif;
+}
+
+.aboutfold__item-body li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: rgba(255, 97, 44, 0.85);
+}
+
+.aboutfold__pattern {
+  position: relative;
+  width: 100%;
+  height: clamp(28px, 5vh, 56px);
+  margin-top: clamp(32px, 5vh, 64px);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  contain: layout paint;
+}
+
+.aboutfold__bar {
+  display: block;
+  flex: 0 0 auto;
+  transform-origin: center;
+  will-change: transform, opacity, background-color;
+  transition: opacity 120ms linear, background-color 120ms linear;
+}
+
+@media (max-width: 1024px) {
+  .aboutfold__grid {
+    grid-template-columns: 1fr;
+  }
+  .aboutfold__item {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aboutfold { min-height: auto; }
+  .aboutfold__sticky { position: static; height: auto; }
+  .aboutfold__item-body {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transform: none;
+  }
+  .aboutfold__rail::before { height: 0; }
+}
+
 /* ---------- 1b. ASCENT — four lifecycle stages, staircase ---------- */
 
 .ascent {

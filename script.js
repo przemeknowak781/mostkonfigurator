@@ -457,10 +457,119 @@ if (document.fonts) {
   document.fonts.ready.then(() => scheduleTrailOverlay(true));
 }
 
+function setupAboutfold() {
+  const section = document.querySelector(".aboutfold");
+  if (!section) return;
+  const items = Array.from(section.querySelectorAll(".aboutfold__item"));
+  const pattern = section.querySelector("[data-aboutfold-pattern]");
+  if (!items.length || !pattern) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reducedMotion) {
+    items.forEach((it) => it.classList.add("is-active", "is-expanded"));
+    return;
+  }
+
+  section.style.setProperty("--aboutfold-steps", items.length);
+
+  // Parametric vertical bar pattern. Seed-driven so it's stable per render.
+  const palette = [
+    "#161822", "#1F2236", "#2F3754", "#5B7AB0", "#6A6E86",
+    "#9B8B95", "#C4B6B4", "#E2D6CF", "#F0EBE9",
+    "#FF612C", "#FFB077", "#D17E5F", "#7A5246"
+  ];
+  const stripeCount = Math.max(60, Math.min(180, Math.round(window.innerWidth / 9)));
+  const bars = [];
+  // Deterministic pseudo-random with mulberry32.
+  let seed = 0x9e3779b9;
+  function rand() {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  pattern.replaceChildren();
+  for (let i = 0; i < stripeCount; i++) {
+    const width = 2 + rand() * 10; // 2-12 px
+    const colorIdx = Math.floor(rand() * palette.length);
+    const baseAlpha = 0.32 + rand() * 0.55;
+    const baseHeight = 0.55 + rand() * 0.45;
+    const phase = rand();
+    const hueShift = rand() * 6 - 3;
+    const bar = document.createElement("span");
+    bar.className = "aboutfold__bar";
+    bar.style.width = width.toFixed(2) + "px";
+    bar.style.backgroundColor = palette[colorIdx];
+    bar.style.opacity = baseAlpha.toFixed(3);
+    bar.style.transform = `scaleY(${baseHeight.toFixed(3)})`;
+    pattern.appendChild(bar);
+    bars.push({
+      el: bar,
+      colorIdx,
+      baseAlpha,
+      baseHeight,
+      phase,
+      hueShift
+    });
+  }
+
+  function update() {
+    const rect = section.getBoundingClientRect();
+    const scrollable = section.offsetHeight - window.innerHeight;
+    let progress = 0;
+    if (scrollable > 0) {
+      progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+    }
+    section.style.setProperty("--aboutfold-progress", progress.toFixed(4));
+
+    // Step progression: (items.length) reveals stretched across most of progress, last 8% reserved for outro.
+    const stepProgress = Math.max(0, Math.min(items.length, progress * (items.length + 0.6)));
+    section.style.setProperty("--aboutfold-step", Math.min(items.length - 1, Math.floor(stepProgress)));
+
+    items.forEach((item, idx) => {
+      const itemProg = Math.max(0, Math.min(1, stepProgress - idx));
+      item.style.setProperty("--item-progress", itemProg.toFixed(3));
+      item.classList.toggle("is-expanded", itemProg > 0.05);
+      item.classList.toggle("is-active", itemProg > 0.05 && itemProg < 0.98);
+    });
+
+    // Parametric stripes: hue rotation + opacity wave + vertical scale wave.
+    const t = progress;
+    for (let i = 0; i < bars.length; i++) {
+      const b = bars[i];
+      const wave = Math.sin((b.phase + t) * Math.PI * 2);
+      const wave2 = Math.cos((b.phase * 1.6 + t * 1.8) * Math.PI * 2);
+      const op = Math.max(0.08, Math.min(1, b.baseAlpha + wave * 0.22));
+      const sy = Math.max(0.2, Math.min(1, b.baseHeight + wave2 * 0.18));
+      // Cycle through palette as progress advances.
+      const idxShift = Math.floor(t * 8 + b.phase * 4);
+      const colorIdx = (b.colorIdx + idxShift) % palette.length;
+      b.el.style.opacity = op.toFixed(3);
+      b.el.style.transform = `scaleY(${sy.toFixed(3)})`;
+      b.el.style.backgroundColor = palette[colorIdx];
+    }
+  }
+
+  let raf = 0;
+  function schedule() {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      update();
+    });
+  }
+
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule, { passive: true });
+  update();
+}
+
 updateScroll();
 setupSectionReveal();
 setupRouteMap();
 setupTransitionMarker();
 setupMobileMenu();
 setupHeroTrail();
+setupAboutfold();
 window.addEventListener("load", () => scheduleTrailOverlay(true));
