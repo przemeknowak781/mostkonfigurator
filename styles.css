@@ -59,7 +59,7 @@ a {
   top: 0;
   left: 0;
   z-index: 110;
-  width: calc(var(--scroll-progress, 0) * 100%);
+  width: var(--scroll-progress-percent, 0%);
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--orange), var(--orange-soft));
   box-shadow: 0 0 24px rgba(255, 97, 44, 0.45);
@@ -1104,25 +1104,68 @@ body.menu-open {
 }
 
 .aboutfold__rail {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: clamp(28px, 4vw, 64px);
-  width: 1px;
-  background: linear-gradient(180deg, rgba(255, 97, 44, 0.65) 0%, rgba(255, 97, 44, 0.45) 80%, rgba(255, 97, 44, 0.1) 100%);
-  z-index: 1;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  min-height: clamp(520px, 68vh, 760px);
+  margin-top: -10px;
+  pointer-events: none;
 }
 
-.aboutfold__rail::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -3px;
-  right: -3px;
-  height: calc(var(--aboutfold-progress, 0) * 100%);
-  background: linear-gradient(180deg, #FF612C 0%, #FFB077 100%);
-  filter: drop-shadow(0 0 12px rgba(255, 97, 44, 0.6));
-  transition: height 120ms linear;
+.aboutfold__trail-svg {
+  width: clamp(116px, 10vw, 180px);
+  height: 100%;
+  min-height: inherit;
+  overflow: visible;
+}
+
+.aboutfold__trail-path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.aboutfold__trail-path--base {
+  stroke: rgba(255, 168, 110, 0.32);
+  stroke-width: 1.4;
+}
+
+.aboutfold__trail-path--active {
+  stroke: rgba(255, 168, 110, 0.95);
+  stroke-width: 2.2;
+  filter:
+    drop-shadow(0 0 3px rgba(255, 168, 110, 0.7))
+    drop-shadow(0 0 10px rgba(255, 150, 88, 0.38))
+    drop-shadow(0 0 22px rgba(255, 188, 140, 0.2));
+  transition: stroke-dashoffset 300ms var(--ease-out);
+}
+
+.aboutfold__trail-dot {
+  fill: rgba(255, 168, 110, 0.98);
+  stroke: #F0EBE9;
+  stroke-width: 5;
+  opacity: 0;
+  transform: scale(0.25);
+  transform-box: fill-box;
+  transform-origin: center;
+  filter:
+    drop-shadow(0 0 6px rgba(255, 168, 110, 0.6))
+    drop-shadow(0 0 18px rgba(255, 188, 140, 0.32));
+  transition: opacity 240ms var(--ease-out), transform 360ms var(--ease-out), fill 240ms var(--ease-out);
+}
+
+.aboutfold__trail-dot.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.aboutfold__trail-dot.is-active {
+  fill: rgba(255, 168, 110, 1);
+  transform: scale(1.42);
 }
 
 .aboutfold__sticky {
@@ -1131,18 +1174,20 @@ body.menu-open {
   height: calc(100svh - var(--nav-height));
   display: grid;
   grid-template-rows: 1fr auto;
-  padding: clamp(40px, 6vh, 72px) clamp(60px, 8vw, 120px) clamp(24px, 4vh, 40px);
+  padding: clamp(40px, 6vh, 72px) clamp(60px, 8vw, 120px) 0;
 }
 
 .aboutfold__grid {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
-  gap: clamp(40px, 6vw, 96px);
+  grid-template-columns: minmax(0, 0.37fr) clamp(112px, 11vw, 180px) minmax(0, 0.57fr);
+  gap: clamp(24px, 3.8vw, 64px);
   align-items: start;
   max-width: 1320px;
   margin: 0 auto;
   width: 100%;
-  padding-bottom: clamp(60px, 10vh, 100px);
+  padding-bottom: clamp(118px, 15vh, 152px);
 }
 
 .aboutfold__intro {
@@ -1170,10 +1215,10 @@ body.menu-open {
 }
 
 .aboutfold__illu {
+  display: block;
   margin-top: 28px;
   width: clamp(220px, 24vw, 320px);
   height: auto;
-  color: rgba(22, 24, 34, 0.72);
 }
 
 .aboutfold__items {
@@ -1293,28 +1338,99 @@ body.menu-open {
 
 .aboutfold__pattern {
   position: absolute;
-  bottom: clamp(24px, 4vh, 40px);
-  left: clamp(60px, 8vw, 120px);
-  right: clamp(60px, 8vw, 120px);
-  height: clamp(28px, 5vh, 56px);
+  z-index: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: clamp(78px, 10vh, 102px);
   margin-top: 0;
   display: flex;
   align-items: stretch;
+  gap: 0;
   overflow: hidden;
+  background: linear-gradient(90deg, #aeb7c4 0%, #52566e 20%, #513f41 35%, #da5530 57%, #a67b73 73%, #e2e5e5 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(22, 24, 34, 0.1);
   contain: layout paint;
+  isolation: isolate;
+}
+
+.aboutfold__pattern::before,
+.aboutfold__pattern::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.aboutfold__pattern::before {
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgba(240, 235, 233, 0.18) 0%, transparent 18%, rgba(255, 97, 44, 0.1) 48%, transparent 68%, rgba(240, 235, 233, 0.42) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 34%, rgba(22, 24, 34, 0.06));
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+.aboutfold__pattern::after {
+  z-index: 3;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 12px, rgba(22, 24, 34, 0.08) 12px 14px, transparent 14px 28px);
+  opacity: 0.38;
+  filter: blur(0.25px);
 }
 
 .aboutfold__bar {
+  position: relative;
+  z-index: 1;
   display: block;
   flex: 0 0 auto;
-  transform-origin: center;
+  min-height: 100%;
+  box-shadow: inset 1px 0 rgba(255, 255, 255, 0.06), inset -1px 0 rgba(22, 24, 34, 0.07);
+  transform-origin: center center;
   will-change: transform, opacity, background-color;
-  transition: opacity 120ms linear, background-color 120ms linear;
+  transition: transform 90ms linear, opacity 90ms linear, background-color 90ms linear;
+}
+
+.aboutfold__pattern-route {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.aboutfold__pattern-cut {
+  fill: #F0EBE9;
+}
+
+.aboutfold__pattern-path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.aboutfold__pattern-path--base {
+  stroke: rgba(255, 168, 110, 0.28);
+  stroke-width: 1;
+}
+
+.aboutfold__pattern-path--active {
+  stroke: rgba(255, 168, 110, 0.96);
+  stroke-width: 1.25;
+  filter:
+    drop-shadow(0 0 3px rgba(255, 168, 110, 0.72))
+    drop-shadow(0 0 12px rgba(255, 97, 44, 0.32));
+  transition: stroke-dashoffset 260ms var(--ease-out);
 }
 
 @media (max-width: 1024px) {
   .aboutfold__grid {
     grid-template-columns: 1fr;
+  }
+  .aboutfold__rail {
+    display: none;
   }
   .aboutfold__item {
     grid-template-columns: 1fr;
@@ -1330,7 +1446,8 @@ body.menu-open {
     opacity: 1;
     transform: none;
   }
-  .aboutfold__rail::before { height: 0; }
+  .aboutfold__trail-path--active,
+  .aboutfold__trail-dot { transition: none; }
 }
 
 /* ---------- 1b. ASCENT — four lifecycle stages, staircase ---------- */

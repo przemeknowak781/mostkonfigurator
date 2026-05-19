@@ -254,10 +254,16 @@ const ridgeEdgeEl = document.querySelector(".ridge-edge");
 
 function updateScroll() {
   const scrollY = window.scrollY || 0;
-  const maxScroll = Math.max(1, document.body.scrollHeight - window.innerHeight);
+  const scrollHeight = Math.max(
+    document.documentElement.scrollHeight,
+    document.body.scrollHeight,
+  );
+  const maxScroll = Math.max(1, scrollHeight - window.innerHeight);
+  const scrollProgress = Math.min(1, scrollY / maxScroll);
 
   root.style.setProperty("--scroll-y", `${scrollY}px`);
-  root.style.setProperty("--scroll-progress", Math.min(1, scrollY / maxScroll).toFixed(4));
+  root.style.setProperty("--scroll-progress", scrollProgress.toFixed(4));
+  root.style.setProperty("--scroll-progress-percent", `${(scrollProgress * 100).toFixed(2)}%`);
 
   if (heroEl) {
     const heroHeight = heroEl.offsetHeight || window.innerHeight;
@@ -462,26 +468,40 @@ function setupAboutfold() {
   if (!section) return;
   const items = Array.from(section.querySelectorAll(".aboutfold__item"));
   const pattern = section.querySelector("[data-aboutfold-pattern]");
-  if (!items.length || !pattern) return;
-
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reducedMotion) {
-    items.forEach((it) => it.classList.add("is-active", "is-expanded"));
-    return;
-  }
+  const rail = section.querySelector(".aboutfold__rail");
+  if (!items.length || !pattern || !rail) return;
 
   section.style.setProperty("--aboutfold-steps", items.length);
 
-  // Parametric vertical bar pattern. Seed-driven so it's stable per render.
-  const palette = [
-    "#161822", "#1F2236", "#2F3754", "#5B7AB0", "#6A6E86",
-    "#9B8B95", "#C4B6B4", "#E2D6CF", "#F0EBE9",
-    "#FF612C", "#FFB077", "#D17E5F", "#7A5246"
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const stripeStops = [
+    { at: 0, color: "#b9c1cd" },
+    { at: 0.055, color: "#7d89a4" },
+    { at: 0.14, color: "#56617f" },
+    { at: 0.24, color: "#555263" },
+    { at: 0.33, color: "#493f48" },
+    { at: 0.41, color: "#865241" },
+    { at: 0.49, color: "#c65f38" },
+    { at: 0.56, color: "#e4532b" },
+    { at: 0.64, color: "#de5e36" },
+    { at: 0.71, color: "#b9877d" },
+    { at: 0.79, color: "#857a7d" },
+    { at: 0.88, color: "#b4b8be" },
+    { at: 1, color: "#e4e7e7" },
   ];
-  const stripeCount = Math.max(60, Math.min(180, Math.round(window.innerWidth / 9)));
-  const bars = [];
-  // Deterministic pseudo-random with mulberry32.
-  let seed = 0x9e3779b9;
+
+  let bars = [];
+  let routeProgressPath = null;
+  let routeLength = 0;
+  let railDots = [];
+  let railProgressPath = null;
+  let railLength = 0;
+  let lastStepProgress = 0;
+  let patternWidth = 0;
+  let seed = 0x4d4f5354;
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
   function rand() {
     seed |= 0;
     seed = (seed + 0x6d2b79f5) | 0;
@@ -489,29 +509,261 @@ function setupAboutfold() {
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   }
-  pattern.replaceChildren();
-  for (let i = 0; i < stripeCount; i++) {
-    const width = 2 + rand() * 10; // 2-12 px
-    const colorIdx = Math.floor(rand() * palette.length);
-    const baseAlpha = 0.32 + rand() * 0.55;
-    const baseHeight = 0.55 + rand() * 0.45;
-    const phase = rand();
-    const hueShift = rand() * 6 - 3;
-    const bar = document.createElement("span");
-    bar.className = "aboutfold__bar";
-    bar.style.width = width.toFixed(2) + "px";
-    bar.style.backgroundColor = palette[colorIdx];
-    bar.style.opacity = baseAlpha.toFixed(3);
-    bar.style.transform = `scaleY(${baseHeight.toFixed(3)})`;
-    pattern.appendChild(bar);
-    bars.push({
-      el: bar,
-      colorIdx,
-      baseAlpha,
-      baseHeight,
-      phase,
-      hueShift
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function hexToRgb(hex) {
+    const value = hex.replace("#", "");
+    return [
+      parseInt(value.slice(0, 2), 16),
+      parseInt(value.slice(2, 4), 16),
+      parseInt(value.slice(4, 6), 16),
+    ];
+  }
+
+  function mixChannel(a, b, t) {
+    return Math.round(a + (b - a) * t);
+  }
+
+  function mixColor(a, b, t) {
+    return [
+      mixChannel(a[0], b[0], t),
+      mixChannel(a[1], b[1], t),
+      mixChannel(a[2], b[2], t),
+    ];
+  }
+
+  function shadeColor(rgb, amount) {
+    const target = amount >= 0 ? 255 : 0;
+    const strength = Math.abs(amount);
+    return rgb.map((channel) => Math.round(channel + (target - channel) * strength));
+  }
+
+  function colorAt(position) {
+    const x = clamp(position, 0, 1);
+    for (let i = 1; i < stripeStops.length; i++) {
+      const prev = stripeStops[i - 1];
+      const next = stripeStops[i];
+      if (x <= next.at) {
+        const t = (x - prev.at) / (next.at - prev.at);
+        return mixColor(prev.rgb, next.rgb, clamp(t, 0, 1));
+      }
+    }
+    return stripeStops[stripeStops.length - 1].rgb;
+  }
+
+  function rgbToCss(rgb) {
+    return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+  }
+
+  stripeStops.forEach((stop) => {
+    stop.rgb = hexToRgb(stop.color);
+  });
+
+  function buildOrnamentRoutePath() {
+    const source = [
+      TRAIL.start,
+      ...TRAIL.curve,
+      TRAIL.end,
+    ].map((point) => getTrailPoint(point));
+    const minY = Math.min(...source.map((point) => point.y));
+    const maxY = Math.max(...source.map((point) => point.y));
+    const yTop = 18;
+    const ySpan = 48;
+    const yScale = ySpan / Math.max(1, maxY - minY);
+    const anchors = source.map((point) => ({
+      ...point,
+      y: yTop + (point.y - minY) * yScale,
+      slope: point.slope * yScale,
+    }));
+
+    let d = `M${anchors[0].x} ${anchors[0].y.toFixed(1)}`;
+    for (let i = 0; i < anchors.length - 1; i++) {
+      const a = anchors[i];
+      const b = anchors[i + 1];
+      const dx = b.x - a.x;
+      const t = dx / 3;
+      const cp1x = a.x + t;
+      const cp1y = a.y + a.slope * t;
+      const cp2x = b.x - t;
+      const cp2y = b.y - b.slope * t;
+      d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${b.x} ${b.y.toFixed(1)}`;
+    }
+    return d;
+  }
+
+  function createSvgEl(tag, attrs = {}) {
+    const el = document.createElementNS(SVG_NS, tag);
+    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+    return el;
+  }
+
+  function buildScrollTrail() {
+    const trailD = "M112 24 C 86 56, 62 78, 66 124 C 69 160, 104 190, 118 230 C 132 270, 91 296, 72 334 C 54 370, 75 397, 104 430 C 134 464, 129 500, 101 532 C 74 564, 66 602, 96 634 C 128 668, 141 702, 142 736";
+    const svg = createSvgEl("svg", {
+      class: "aboutfold__trail-svg",
+      viewBox: "0 0 180 760",
+      preserveAspectRatio: "xMidYMid meet",
+      "aria-hidden": "true",
     });
+    const base = createSvgEl("path", {
+      class: "aboutfold__trail-path aboutfold__trail-path--base",
+      d: trailD,
+    });
+    railProgressPath = createSvgEl("path", {
+      class: "aboutfold__trail-path aboutfold__trail-path--active",
+      d: trailD,
+    });
+
+    rail.replaceChildren();
+    svg.append(base, railProgressPath);
+    rail.appendChild(svg);
+
+    railLength = railProgressPath.getTotalLength();
+    railProgressPath.style.strokeDasharray = railLength.toFixed(2);
+    railProgressPath.style.strokeDashoffset = railLength.toFixed(2);
+
+    railDots = items.map((_, idx) => {
+      const ratio = items.length === 1 ? 0 : idx / (items.length - 1);
+      const point = railProgressPath.getPointAtLength(railLength * ratio);
+      const dot = createSvgEl("circle", {
+        class: "aboutfold__trail-dot",
+        cx: point.x.toFixed(1),
+        cy: point.y.toFixed(1),
+        r: "11",
+      });
+      svg.appendChild(dot);
+      return dot;
+    });
+
+    updateRailState(lastStepProgress);
+  }
+
+  function buildRouteOverlay(routeD) {
+    const svg = createSvgEl("svg", {
+      class: "aboutfold__pattern-route",
+      viewBox: "0 0 2000 100",
+      preserveAspectRatio: "none",
+      "aria-hidden": "true",
+    });
+    const cut = createSvgEl("path", {
+      class: "aboutfold__pattern-cut",
+      d: `${routeD} L 2000 0 L 0 0 Z`,
+    });
+    const base = createSvgEl("path", {
+      class: "aboutfold__pattern-path aboutfold__pattern-path--base",
+      d: routeD,
+    });
+    routeProgressPath = createSvgEl("path", {
+      class: "aboutfold__pattern-path aboutfold__pattern-path--active",
+      d: routeD,
+    });
+
+    svg.append(cut, base, routeProgressPath);
+    pattern.appendChild(svg);
+
+    routeLength = routeProgressPath.getTotalLength();
+    routeProgressPath.style.strokeDasharray = routeLength.toFixed(2);
+    routeProgressPath.style.strokeDashoffset = routeLength.toFixed(2);
+
+  }
+
+  function buildPattern(force = false) {
+    const nextWidth = Math.ceil(pattern.getBoundingClientRect().width || window.innerWidth);
+    if (!force && bars.length && Math.abs(nextWidth - patternWidth) < 16) return;
+
+    patternWidth = Math.max(320, nextWidth);
+    seed = 0x4d4f5354;
+    bars = [];
+    pattern.replaceChildren();
+
+    let x = 0;
+    while (x < patternWidth * 1.025) {
+      const xNorm = clamp(x / patternWidth, 0, 1);
+      const isHairline = rand() > 0.76;
+      const isLightStreak = rand() > 0.89;
+      const width = isHairline
+        ? 0.8 + rand() * 1.8
+        : 2.2 + Math.pow(rand(), 1.45) * 8.2;
+      const sample = clamp(xNorm + (rand() - 0.5) * 0.034, 0, 1);
+      const shade = isLightStreak ? 0.2 + rand() * 0.28 : (rand() - 0.5) * 0.3;
+      const baseAlpha = isLightStreak ? 0.72 + rand() * 0.2 : 0.58 + rand() * 0.34;
+      const baseColor = shadeColor(colorAt(sample), shade);
+      const bar = document.createElement("span");
+
+      bar.className = "aboutfold__bar";
+      bar.style.width = `${width.toFixed(2)}px`;
+      bar.style.backgroundColor = rgbToCss(baseColor);
+      bar.style.opacity = baseAlpha.toFixed(3);
+      pattern.appendChild(bar);
+
+      bars.push({
+        el: bar,
+        xNorm,
+        sample,
+        shade,
+        baseAlpha,
+        phase: rand(),
+      });
+
+      x += width;
+    }
+
+    buildRouteOverlay(buildOrnamentRoutePath());
+    updateRouteState(lastStepProgress);
+  }
+
+  function updatePattern(progress) {
+    const t = reducedMotion ? 0 : progress;
+    for (let i = 0; i < bars.length; i++) {
+      const b = bars[i];
+      const shimmer = Math.sin((b.phase + t * 1.65) * Math.PI * 2);
+      const sweep = Math.cos((b.xNorm * 9.5 - t * 3.2) * Math.PI * 2);
+      const pulse = Math.sin((b.xNorm * 18 + b.phase * 2.4 + t * 4.1) * Math.PI * 2);
+      const sample = clamp(b.sample + shimmer * 0.012 + sweep * 0.018, 0, 1);
+      const color = shadeColor(colorAt(sample), b.shade + shimmer * 0.075 + sweep * 0.065 + pulse * 0.035);
+      const opacity = clamp(b.baseAlpha + shimmer * 0.055 + sweep * 0.04 + pulse * 0.03, 0.42, 1);
+
+      b.el.style.backgroundColor = rgbToCss(color);
+      b.el.style.opacity = opacity.toFixed(3);
+      b.el.style.transform = `scaleX(${(1 + sweep * 0.1 + pulse * 0.045).toFixed(3)})`;
+    }
+  }
+
+  function updateRouteState(stepProgress) {
+    lastStepProgress = stepProgress;
+    if (!routeProgressPath || !routeLength) return;
+
+    const routeProgress = clamp(stepProgress / Math.max(1, items.length - 1), 0, 1);
+    routeProgressPath.style.strokeDashoffset = (routeLength * (1 - routeProgress)).toFixed(2);
+  }
+
+  function updateRailState(stepProgress) {
+    lastStepProgress = stepProgress;
+    if (!railProgressPath || !railLength || !railDots.length) return;
+
+    const railProgress = clamp(stepProgress / Math.max(1, items.length - 1), 0, 1);
+    railProgressPath.style.strokeDashoffset = (railLength * (1 - railProgress)).toFixed(2);
+
+    railDots.forEach((dot, idx) => {
+      const isVisible = stepProgress >= idx - 0.05;
+      const isActive = idx === Math.min(items.length - 1, Math.max(0, Math.floor(stepProgress + 0.2)));
+      dot.classList.toggle("is-visible", isVisible);
+      dot.classList.toggle("is-active", isActive);
+    });
+  }
+
+  buildScrollTrail();
+  buildPattern(true);
+
+  if (reducedMotion) {
+    items.forEach((it) => it.classList.add("is-active", "is-expanded"));
+    updatePattern(0);
+    updateRouteState(items.length - 1);
+    updateRailState(items.length - 1);
+    return;
   }
 
   function update() {
@@ -537,21 +789,9 @@ function setupAboutfold() {
       item.classList.toggle("is-active", isActive);
     });
 
-    // Parametric stripes: hue rotation + opacity wave + vertical scale wave.
-    const t = progress;
-    for (let i = 0; i < bars.length; i++) {
-      const b = bars[i];
-      const wave = Math.sin((b.phase + t) * Math.PI * 2);
-      const wave2 = Math.cos((b.phase * 1.6 + t * 1.8) * Math.PI * 2);
-      const op = Math.max(0.08, Math.min(1, b.baseAlpha + wave * 0.22));
-      const sy = Math.max(0.2, Math.min(1, b.baseHeight + wave2 * 0.18));
-      // Cycle through palette as progress advances.
-      const idxShift = Math.floor(t * 8 + b.phase * 4);
-      const colorIdx = (b.colorIdx + idxShift) % palette.length;
-      b.el.style.opacity = op.toFixed(3);
-      b.el.style.transform = `scaleY(${sy.toFixed(3)})`;
-      b.el.style.backgroundColor = palette[colorIdx];
-    }
+    updatePattern(progress);
+    updateRouteState(stepProgress);
+    updateRailState(stepProgress);
   }
 
   let raf = 0;
@@ -564,7 +804,10 @@ function setupAboutfold() {
   }
 
   window.addEventListener("scroll", schedule, { passive: true });
-  window.addEventListener("resize", schedule, { passive: true });
+  window.addEventListener("resize", () => {
+    buildPattern();
+    schedule();
+  }, { passive: true });
   update();
 }
 
