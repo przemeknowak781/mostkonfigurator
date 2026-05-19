@@ -836,7 +836,7 @@ body.menu-open {
 .mission {
   position: relative;
   isolation: isolate;
-  padding: clamp(140px, 18vh, 220px) var(--container-x);
+  padding: clamp(96px, 13vh, 160px) var(--container-x);
   background: linear-gradient(180deg, var(--navy-deep) 0%, #050810 50%, #070912 100%);
   overflow: hidden;
 }
@@ -978,11 +978,11 @@ body.menu-open {
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 0.44fr) minmax(0, 0.56fr);
+  grid-template-columns: minmax(0, 0.46fr) minmax(0, 0.54fr);
   align-items: center;
   gap: clamp(40px, 6vw, 96px);
-  min-height: 88svh;
-  padding: clamp(120px, 18vh, 200px) var(--container-x);
+  min-height: 100svh;
+  padding: clamp(96px, 12vh, 140px) var(--container-x);
   background:
     radial-gradient(900px 600px at 16% 24%, rgba(255, 97, 44, 0.18), transparent 70%),
     linear-gradient(180deg, var(--navy-deep) 0%, #050810 100%);
@@ -993,7 +993,7 @@ body.menu-open {
   position: relative;
   display: grid;
   place-items: center;
-  font: 600 clamp(220px, 30vw, 460px) / 0.78 "Urbanist", system-ui, sans-serif;
+  font: 600 clamp(180px, 24vw, 360px) / 0.78 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.04em;
   background: linear-gradient(160deg, rgba(255, 176, 119, 0.42), rgba(255, 97, 44, 0.18) 60%, rgba(8, 11, 19, 0.12));
   -webkit-background-clip: text;
@@ -1016,7 +1016,7 @@ body.menu-open {
 
 .brand-intro__index {
   position: absolute;
-  top: clamp(120px, 16vh, 180px);
+  top: clamp(96px, 11vh, 130px);
   right: clamp(40px, 5vw, 80px);
   color: rgba(240, 235, 233, 0.4);
   font: 500 12px / 1 "Montserrat", system-ui, sans-serif;
@@ -1048,9 +1048,9 @@ body.menu-open {
 }
 
 .brand-intro__title {
-  margin: 0 0 40px;
+  margin: 0 0 28px;
   color: var(--light);
-  font: 500 clamp(34px, 4.6vw, 64px) / 1.06 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(30px, 3.8vw, 52px) / 1.08 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
@@ -1060,18 +1060,18 @@ body.menu-open {
 }
 
 .brand-intro__lede {
-  margin: 0 0 24px;
+  margin: 0 0 20px;
   padding-left: clamp(20px, 2vw, 32px);
   border-left: 2px solid rgba(255, 97, 44, 0.55);
   color: rgba(240, 235, 233, 0.84);
-  font: 400 clamp(17px, 1.3vw, 21px) / 1.5 "Outfit", system-ui, sans-serif;
+  font: 400 clamp(15px, 1.1vw, 18px) / 1.55 "Outfit", system-ui, sans-serif;
   text-wrap: pretty;
 }
 
 .brand-intro__signature {
   margin: 0;
   color: var(--light-60);
-  font: italic 400 clamp(15px, 1.1vw, 17px) / 1.6 "Outfit", system-ui, sans-serif;
+  font: italic 400 clamp(14px, 1vw, 16px) / 1.6 "Outfit", system-ui, sans-serif;
   text-wrap: pretty;
   max-width: 540px;
 }
@@ -1093,12 +1093,16 @@ body.menu-open {
 
 .perspective {
   position: relative;
-  padding: clamp(120px, 18vh, 220px) var(--container-x);
+  min-height: 100svh;
+  padding: clamp(88px, 12vh, 140px) var(--container-x);
   background:
     radial-gradient(800px 500px at 50% 30%, rgba(48, 62, 89, 0.32), transparent 70%),
     linear-gradient(180deg, #050810 0%, #070912 100%);
   overflow: hidden;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .perspective__frame {
@@ -1148,9 +1152,9 @@ body.menu-open {
   position: relative;
   z-index: 1;
   max-width: 880px;
-  margin: 0 auto clamp(48px, 7vh, 80px);
+  margin: 0 auto clamp(36px, 5vh, 60px);
   color: var(--light);
-  font: italic 500 clamp(34px, 5vw, 68px) / 1.08 "Urbanist", system-ui, sans-serif;
+  font: italic 500 clamp(30px, 4.2vw, 56px) / 1.1 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
@@ -1182,8 +1186,8 @@ body.menu-open {
 .perspective__triangulation {
   position: relative;
   z-index: 1;
-  max-width: 400px;
-  margin: clamp(48px, 7vh, 80px) auto 0;
+  max-width: 320px;
+  margin: clamp(32px, 4vh, 56px) auto 0;
 }
 
 .perspective__triangulation svg {
@@ -1204,17 +1208,21 @@ body.menu-open {
 
 .track-record {
   position: relative;
-  padding: clamp(120px, 16vh, 200px) var(--container-x);
+  min-height: 100svh;
+  padding: clamp(88px, 11vh, 130px) var(--container-x);
   background:
     radial-gradient(900px 600px at 84% 18%, rgba(255, 97, 44, 0.16), transparent 70%),
     radial-gradient(700px 480px at 10% 86%, rgba(48, 62, 89, 0.2), transparent 72%),
     linear-gradient(180deg, #070912 0%, #050810 50%, #0a0d18 100%);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .track-record__head {
   max-width: 1280px;
-  margin: 0 auto clamp(60px, 9vh, 100px);
+  margin: 0 auto clamp(40px, 6vh, 72px);
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
   gap: clamp(32px, 5vw, 80px);
@@ -1238,9 +1246,9 @@ body.menu-open {
 }
 
 .track-record__title {
-  margin: 16px 0 0;
+  margin: 12px 0 0;
   color: var(--light);
-  font: 500 clamp(36px, 4.6vw, 60px) / 1.04 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(30px, 3.8vw, 52px) / 1.06 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
@@ -1266,8 +1274,8 @@ body.menu-open {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: clamp(40px, 6vh, 72px) clamp(20px, 3vw, 40px);
+  gap: 12px;
+  padding: clamp(28px, 4vh, 48px) clamp(20px, 3vw, 36px);
 }
 
 .big-stat:not(:last-child) {
@@ -1277,13 +1285,13 @@ body.menu-open {
 .big-stat__num {
   margin: 0;
   color: var(--light);
-  font: 500 clamp(72px, 11vw, 180px) / 0.86 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(56px, 8.4vw, 132px) / 0.88 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.025em;
 }
 
 .big-stat__num--word {
-  font-size: clamp(48px, 7vw, 100px);
-  line-height: 0.94;
+  font-size: clamp(40px, 5.6vw, 84px);
+  line-height: 0.96;
 }
 
 .big-stat__num span {
@@ -1322,7 +1330,7 @@ body.menu-open {
 
 .track-record__foot {
   max-width: 760px;
-  margin: clamp(48px, 7vh, 88px) 0 0;
+  margin: clamp(28px, 4vh, 56px) 0 0;
   padding-left: clamp(20px, 3vw, 48px);
   border-left: 2px solid rgba(255, 97, 44, 0.55);
 }
@@ -1353,16 +1361,20 @@ body.menu-open {
 
 .philosophy {
   position: relative;
-  padding: clamp(120px, 16vh, 200px) var(--container-x);
+  min-height: 100svh;
+  padding: clamp(88px, 12vh, 140px) var(--container-x);
   background:
     radial-gradient(900px 600px at 50% 110%, rgba(255, 97, 44, 0.16), transparent 70%),
     linear-gradient(180deg, #0a0d18 0%, #070912 100%);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .philosophy__head {
   max-width: 1180px;
-  margin: 0 auto clamp(56px, 8vh, 96px);
+  margin: 0 auto clamp(40px, 6vh, 72px);
   text-align: center;
 }
 
@@ -1385,48 +1397,64 @@ body.menu-open {
 .philosophy__title {
   margin: 0;
   color: var(--light);
-  font: 500 clamp(36px, 5vw, 64px) / 1.04 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(30px, 4.2vw, 56px) / 1.06 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
 
 .philosophy__stack {
   position: relative;
-  max-width: 980px;
+  max-width: 1320px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(20px, 3vh, 36px);
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 28px);
+  align-items: stretch;
+}
+
+.philosophy__stack::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 6%;
+  right: 6%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 168, 110, 0.32) 20%, rgba(255, 168, 110, 0.32) 80%, transparent);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .philosophy__card {
   position: relative;
-  max-width: 600px;
-  padding: clamp(32px, 4vh, 48px) clamp(32px, 4vw, 56px);
+  z-index: 1;
+  padding: clamp(24px, 3vh, 36px) clamp(24px, 2.6vw, 36px);
   background: linear-gradient(160deg, rgba(240, 235, 233, 0.06), rgba(240, 235, 233, 0.02));
   border: 1px solid rgba(240, 235, 233, 0.1);
-  border-radius: 16px;
+  border-radius: 14px;
   backdrop-filter: blur(22px);
-  box-shadow: 0 32px 80px rgba(4, 6, 12, 0.32);
+  box-shadow: 0 24px 60px rgba(4, 6, 12, 0.32);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .philosophy__card--a {
-  justify-self: start;
+  transform: translateY(-16px);
 }
 
 .philosophy__card--b {
-  justify-self: end;
+  transform: translateY(8px);
   background: linear-gradient(160deg, rgba(255, 97, 44, 0.16), rgba(255, 97, 44, 0.04));
   border-color: rgba(255, 168, 110, 0.38);
 }
 
 .philosophy__card--c {
-  justify-self: center;
+  transform: translateY(-8px);
 }
 
 .philosophy__card-tag {
   display: inline-block;
-  margin: 0 0 14px;
+  margin: 0;
   color: rgba(255, 168, 110, 0.85);
   font: italic 400 13px / 1.2 "Outfit", system-ui, sans-serif;
 }
@@ -1434,7 +1462,7 @@ body.menu-open {
 .philosophy__card p {
   margin: 0;
   color: var(--light);
-  font: 500 clamp(20px, 1.8vw, 26px) / 1.35 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(17px, 1.5vw, 22px) / 1.38 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
 }
 
@@ -1442,14 +1470,17 @@ body.menu-open {
   color: var(--light);
 }
 
-@media (max-width: 720px) {
-  .philosophy__card {
-    max-width: 100%;
+@media (max-width: 860px) {
+  .philosophy__stack {
+    grid-template-columns: 1fr;
+  }
+  .philosophy__stack::before {
+    display: none;
   }
   .philosophy__card--a,
   .philosophy__card--b,
   .philosophy__card--c {
-    justify-self: stretch;
+    transform: none;
   }
 }
 
@@ -1457,12 +1488,16 @@ body.menu-open {
 
 .manifesto {
   position: relative;
-  padding: clamp(120px, 18vh, 220px) var(--container-x);
+  min-height: 100svh;
+  padding: clamp(88px, 12vh, 140px) var(--container-x);
   background:
     radial-gradient(900px 600px at 92% 90%, rgba(255, 176, 119, 0.14), transparent 70%),
     linear-gradient(180deg, #070912 0%, #0a0d18 100%);
   overflow: hidden;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .manifesto__step {
@@ -1482,10 +1517,10 @@ body.menu-open {
 }
 
 .manifesto__title {
-  margin: 0 auto clamp(64px, 9vh, 112px);
+  margin: 0 auto clamp(40px, 6vh, 72px);
   max-width: 1080px;
   color: var(--light);
-  font: 500 clamp(36px, 5.6vw, 72px) / 1.02 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(32px, 4.4vw, 60px) / 1.04 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
@@ -1571,12 +1606,16 @@ body.menu-open {
 
 .expertise-intro {
   position: relative;
-  padding: clamp(120px, 16vh, 200px) var(--container-x);
+  min-height: 100svh;
+  padding: clamp(88px, 11vh, 130px) var(--container-x);
   background:
     radial-gradient(700px 500px at 50% 50%, rgba(255, 97, 44, 0.1), transparent 70%),
     linear-gradient(180deg, #050810 0%, #070912 100%);
   overflow: hidden;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .expertise-intro__eyebrow {
@@ -1588,27 +1627,27 @@ body.menu-open {
 }
 
 .expertise-intro__title {
-  margin: 0 auto 32px;
+  margin: 0 auto 20px;
   max-width: 920px;
   color: var(--light);
-  font: 500 clamp(36px, 5.4vw, 68px) / 1.04 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(30px, 4.2vw, 56px) / 1.06 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
 
 .expertise-intro__lede {
   max-width: 640px;
-  margin: 0 auto clamp(72px, 10vh, 120px);
+  margin: 0 auto clamp(32px, 5vh, 56px);
   color: rgba(240, 235, 233, 0.74);
-  font: 400 clamp(16px, 1.2vw, 19px) / 1.6 "Outfit", system-ui, sans-serif;
+  font: 400 clamp(15px, 1.1vw, 18px) / 1.6 "Outfit", system-ui, sans-serif;
   text-wrap: pretty;
 }
 
 .constellation {
   position: relative;
-  width: min(680px, 100%);
+  width: min(560px, 100%);
   margin: 0 auto;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 0.85;
 }
 
 .constellation__web {
@@ -1688,16 +1727,20 @@ body.menu-open {
 
 .audience-intro {
   position: relative;
-  padding: clamp(120px, 16vh, 200px) var(--container-x);
+  min-height: 100svh;
+  padding: clamp(88px, 11vh, 130px) var(--container-x);
   background:
     radial-gradient(900px 580px at 50% 12%, rgba(255, 97, 44, 0.18), transparent 70%),
     linear-gradient(180deg, #070912 0%, #161822 100%);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .audience-intro__head {
   max-width: 920px;
-  margin: 0 auto clamp(64px, 9vh, 112px);
+  margin: 0 auto clamp(40px, 6vh, 72px);
   text-align: center;
 }
 
@@ -1710,9 +1753,9 @@ body.menu-open {
 }
 
 .audience-intro__title {
-  margin: 0 0 28px;
+  margin: 0 0 20px;
   color: var(--light);
-  font: 500 clamp(40px, 6vw, 80px) / 0.98 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(32px, 4.6vw, 64px) / 1.02 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.01em;
   text-wrap: balance;
 }
@@ -1721,7 +1764,7 @@ body.menu-open {
   max-width: 640px;
   margin: 0 auto;
   color: rgba(240, 235, 233, 0.74);
-  font: 400 clamp(16px, 1.2vw, 19px) / 1.6 "Outfit", system-ui, sans-serif;
+  font: 400 clamp(15px, 1.1vw, 18px) / 1.55 "Outfit", system-ui, sans-serif;
   text-wrap: pretty;
 }
 
@@ -1769,14 +1812,14 @@ body.menu-open {
 .preview__route {
   width: 100%;
   height: auto;
-  max-height: 140px;
+  max-height: 110px;
   margin: 4px 0 8px;
 }
 
 .preview__name {
   margin: 0;
   color: var(--light);
-  font: 500 clamp(28px, 3vw, 40px) / 1 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(24px, 2.4vw, 34px) / 1 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
 }
 
@@ -1796,13 +1839,17 @@ body.menu-open {
 
 .approach {
   position: relative;
-  padding: clamp(120px, 16vh, 200px) var(--container-x);
+  min-height: 100svh;
+  padding: clamp(88px, 11vh, 130px) var(--container-x);
   background: linear-gradient(180deg, #0a0d18 0%, #07090f 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .approach__head {
   max-width: 880px;
-  margin: 0 auto clamp(64px, 9vh, 120px);
+  margin: 0 auto clamp(40px, 6vh, 72px);
   text-align: center;
 }
 
@@ -1838,11 +1885,15 @@ body.menu-open {
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  max-width: 1080px;
+  max-width: 1280px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(28px, 4vw, 56px) clamp(40px, 6vw, 88px);
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 3vw, 36px) clamp(28px, 4vw, 56px);
   counter-reset: approach;
+}
+
+.approach__list::before {
+  display: none;
 }
 
 .approach__list::before {
@@ -1858,26 +1909,27 @@ body.menu-open {
 
 .approach__item {
   position: relative;
-  padding: clamp(24px, 3vh, 36px) 0 clamp(24px, 3vh, 36px) clamp(64px, 7vw, 96px);
+  padding: 16px 0 16px 36px;
+  border-left: 1px solid rgba(255, 168, 110, 0.25);
 }
 
 .approach__item::before {
   content: "";
   position: absolute;
-  left: clamp(24px, 4vw, 48px);
-  top: 36px;
-  width: 14px;
-  height: 14px;
+  left: -5px;
+  top: 24px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #161822;
-  border: 2px solid rgba(255, 168, 110, 0.75);
-  box-shadow: 0 0 0 5px rgba(255, 97, 44, 0.08), 0 0 18px rgba(255, 97, 44, 0.32);
+  border: 2px solid rgba(255, 168, 110, 0.85);
+  box-shadow: 0 0 0 3px rgba(255, 97, 44, 0.08), 0 0 12px rgba(255, 97, 44, 0.45);
 }
 
 .approach__num {
-  position: absolute;
-  left: clamp(64px, 7vw, 96px);
-  top: 18px;
+  display: block;
+  position: static;
+  margin: 0 0 4px;
   color: rgba(255, 168, 110, 0.55);
   font: 500 11px / 1 "Montserrat", system-ui, sans-serif;
   letter-spacing: 0.22em;
@@ -1885,38 +1937,28 @@ body.menu-open {
 }
 
 .approach__step-title {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   color: var(--light);
-  font: 500 clamp(20px, 2vw, 26px) / 1.18 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(17px, 1.5vw, 21px) / 1.22 "Urbanist", system-ui, sans-serif;
   text-wrap: balance;
 }
 
 .approach__item p {
   margin: 0;
   color: rgba(240, 235, 233, 0.72);
-  font: 400 clamp(15px, 1.1vw, 17px) / 1.6 "Outfit", system-ui, sans-serif;
+  font: 400 clamp(13.5px, 0.95vw, 15px) / 1.55 "Outfit", system-ui, sans-serif;
   max-width: 480px;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
+  .approach__list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
   .approach__list {
     grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .approach__list::before {
-    left: 24px;
-    top: 18px;
-    bottom: 18px;
-  }
-  .approach__item {
-    padding-left: 64px;
-  }
-  .approach__item::before {
-    left: 18px;
-    top: 30px;
-  }
-  .approach__num {
-    left: 60px;
   }
 }
 
@@ -1924,7 +1966,7 @@ body.menu-open {
 
 .route-map {
   position: relative;
-  padding: clamp(120px, 14vh, 180px) var(--container-x);
+  padding: clamp(88px, 11vh, 130px) var(--container-x);
   background: #F0EBE9;
   color: #161822;
   overflow: hidden;
@@ -2225,7 +2267,7 @@ body.menu-open {
 
 .route-stage {
   position: relative;
-  padding: clamp(120px, 16vh, 200px) var(--container-x);
+  padding: clamp(88px, 12vh, 140px) var(--container-x);
   background:
     radial-gradient(900px 600px at 12% 16%, var(--stage-glow, rgba(255, 97, 44, 0.16)), transparent 70%),
     linear-gradient(180deg, var(--stage-bg-top, #161822) 0%, var(--stage-bg-bottom, #0a0d15) 100%);
@@ -2282,17 +2324,17 @@ body.menu-open {
 }
 
 .route-stage__title {
-  margin: 0 0 28px;
+  margin: 0 0 22px;
   color: var(--light);
-  font: 500 clamp(38px, 5.4vw, 72px) / 1.04 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(30px, 4.2vw, 56px) / 1.06 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 .route-stage__body {
-  margin: 0 0 36px;
+  margin: 0 0 28px;
   color: rgba(240, 235, 233, 0.78);
-  font: 400 clamp(16px, 1.2vw, 19px) / 1.6 "Outfit", system-ui, sans-serif;
+  font: 400 clamp(15px, 1.05vw, 17px) / 1.6 "Outfit", system-ui, sans-serif;
   text-wrap: pretty;
 }
 
@@ -2443,7 +2485,7 @@ body.menu-open {
 
 /* ---------- FOUNDERS — ASCENDING STAIRCASE ---------- */
 .route-stage--founders {
-  padding: clamp(140px, 18vh, 220px) var(--container-x) clamp(160px, 20vh, 240px);
+  padding: clamp(96px, 13vh, 160px) var(--container-x) clamp(120px, 15vh, 180px);
 }
 
 .route-stage--founders::before {
@@ -2554,7 +2596,7 @@ body.menu-open {
 
 /* ---------- COMPANIES — EDITORIAL HORIZONTAL BANDS ---------- */
 .route-stage--companies {
-  padding: clamp(120px, 16vh, 200px) 0;
+  padding: clamp(88px, 12vh, 140px) 0;
 }
 
 .route-stage--companies .route-stage__inner {
@@ -2678,7 +2720,7 @@ body.menu-open {
 
 /* ---------- INVESTORS — PRECISION GRID / TECHNICAL ---------- */
 .route-stage--investors {
-  padding: clamp(140px, 18vh, 220px) var(--container-x);
+  padding: clamp(96px, 13vh, 160px) var(--container-x);
 }
 
 .route-stage--investors::before {
@@ -2876,7 +2918,7 @@ body.menu-open {
 
 .basecamp {
   position: relative;
-  padding: clamp(120px, 18vh, 220px) var(--container-x);
+  padding: clamp(88px, 12vh, 140px) var(--container-x);
   background: #6A6E86;
   overflow: hidden;
 }
@@ -3001,13 +3043,13 @@ body.menu-open {
 
 .team {
   position: relative;
-  padding: clamp(120px, 16vh, 200px) var(--container-x);
+  padding: clamp(88px, 11vh, 130px) var(--container-x);
   background: linear-gradient(180deg, #07090f 0%, #0a0d18 100%);
 }
 
 .team__head {
   max-width: 880px;
-  margin: 0 auto clamp(56px, 8vh, 96px);
+  margin: 0 auto clamp(40px, 6vh, 72px);
   text-align: center;
 }
 
