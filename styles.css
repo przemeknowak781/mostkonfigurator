@@ -827,7 +827,7 @@ body.menu-open {
 
 .ridge-quote {
   position: absolute;
-  left: var(--container-x);
+  left: calc(var(--container-x) + clamp(14px, 2vw, 39px));
   bottom: clamp(218px, 31vh, 340px);
   z-index: 5;
   max-width: min(520px, 38vw);
@@ -1411,7 +1411,7 @@ body.menu-open {
   bottom: 0;
   left: 0;
   right: 0;
-  height: clamp(78px, 10vh, 102px);
+  height: clamp(140px, 22vh, 240px);
   margin-top: 0;
   display: flex;
   align-items: stretch;
