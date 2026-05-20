@@ -1312,50 +1312,35 @@ function setupCtaPattern() {
 }
 
 function setupParallax() {
-  const images = document.querySelectorAll(".photo-break img, .aud-bleed img, .footer-summit__photo img");
+  const images = Array.from(document.querySelectorAll(".photo-break img, .aud-bleed img, .footer-summit__photo img"));
   if (!images.length) return;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reducedMotion) return;
 
-  const activeItems = [];
-
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const img = entry.target;
-        const index = activeItems.indexOf(img);
-        if (entry.isIntersecting) {
-          if (index === -1) activeItems.push(img);
-        } else {
-          if (index !== -1) activeItems.splice(index, 1);
-        }
-      });
-    }, { rootMargin: "100px 0px" });
-
-    images.forEach((img) => observer.observe(img));
-  } else {
-    images.forEach((img) => activeItems.push(img));
-  }
-
   function tick() {
     const vh = window.innerHeight;
-    for (let i = 0; i < activeItems.length; i++) {
-      const img = activeItems[i];
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
       const parent = img.parentElement;
       if (!parent) continue;
 
       const rect = parent.getBoundingClientRect();
-      const progress = (vh - rect.top) / (vh + rect.height);
-      const clampedProgress = Math.max(0, Math.min(1, progress));
+      // Skip if far outside viewport to avoid unnecessary work
+      if (rect.bottom < -200 || rect.top > vh + 200) continue;
 
-      // Translate range: from +8% to -8% of image height
-      const translateY = (0.5 - clampedProgress) * 16;
+      // progress 0 = entering from bottom, 0.5 = centered, 1 = exiting top
+      const progress = (vh - rect.top) / (vh + rect.height);
+      const clamped = Math.max(0, Math.min(1, progress));
+
+      // Translate ±8% relative to image height
+      const translateY = (0.5 - clamped) * 16;
       img.style.transform = `translate3d(-50%, calc(-50% + ${translateY.toFixed(2)}%), 0)`;
     }
   }
 
   window.updateParallax = tick;
+  tick(); // Apply immediately on load
 }
 
 setupParallax();
