@@ -13,10 +13,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
   </head>
   <body>
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -96,7 +105,7 @@
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-media" aria-hidden="true">
-          <img class="hero-bg" src="background.webp" alt="" />
+          <img class="hero-bg" src="background.webp" alt="" fetchpriority="high" decoding="async" />
           <div class="hero-wash"></div>
           <div class="hero-vignette"></div>
           <div class="hero-noise"></div>
@@ -110,10 +119,10 @@
         <div class="hero-ridges" aria-hidden="true">
           <div class="hero-climbers-sun" aria-hidden="true"></div>
 
-          <img class="hero-ridges__img" src="gora-bez-tla-2000px.svg" alt="" />
+          <img class="hero-ridges__img" src="gora-bez-tla-2000px.svg" alt="" decoding="async" />
 
           <div class="hero-climbers" aria-hidden="true">
-            <img class="hero-climbers__img" src="climbers.svg" alt="" />
+            <img class="hero-climbers__img" src="climbers.svg" alt="" decoding="async" />
           </div>
         </div>
 
@@ -162,7 +171,7 @@
 
       <div class="ridge-edge">
         <svg class="ridge-edge__leaders" viewBox="0 0 2000 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-        <img class="ridge-edge__img" src="gora-bez-tla-2000px.svg" alt="" aria-hidden="true" />
+        <img class="ridge-edge__img" src="gora-bez-tla-2000px.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
         <p class="ridge-quote">
           At MOST, we accompany founders, tech companies, and investors as long-term partners in law and business&nbsp;–
           helping them <strong>protect what matters most, move forward with confidence, and unlock opportunity.</strong>
@@ -340,7 +349,7 @@
               <p class="aboutfold__lede">
                 We work alongside our clients as long-term partners in law and business&nbsp;– supporting them as they build, scale, invest across&nbsp;markets.
               </p>
-              <img class="aboutfold__illu" src="team.svg" alt="" aria-hidden="true" />
+              <img class="aboutfold__illu" src="team.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
             </div>
 
             <div class="aboutfold__rail" aria-hidden="true"></div>
@@ -1200,7 +1209,7 @@
     </main>
 
     <div class="footer-ridge" aria-hidden="true">
-      <img src="footer.svg" alt="" />
+      <img src="footer.svg" alt="" loading="lazy" decoding="async" />
     </div>
 
     <footer class="site-footer">
@@ -1271,6 +1280,5 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
   </body>
 </html>
