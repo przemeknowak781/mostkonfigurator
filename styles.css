@@ -5451,20 +5451,10 @@ body.menu-open {
 .cta-strip {
   position: relative;
   padding: clamp(80px, 11vh, 140px) var(--container-x);
-  background: linear-gradient(90deg, #aeb7c4 0%, #52566e 20%, #513f41 35%, #da5530 57%, #a67b73 73%, #e2e5e5 100%);
   text-align: center;
   overflow: hidden;
   isolation: isolate;
-}
-
-.cta-strip::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.15) 0 1px, transparent 1px 12px, rgba(22, 24, 34, 0.1) 12px 14px, transparent 14px 28px);
-  opacity: 0.6;
-  z-index: 1;
-  pointer-events: none;
+  background: #0a0d18;
 }
 
 .cta-strip::after {
@@ -5472,13 +5462,54 @@ body.menu-open {
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at 50% 50%, rgba(10, 13, 24, 0.82) 0%, rgba(7, 9, 15, 0.94) 80%);
-  z-index: 2;
+  z-index: 1;
   pointer-events: none;
+}
+
+.cta-strip__pattern {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow: hidden;
+  background: linear-gradient(90deg, #aeb7c4 0%, #52566e 20%, #513f41 35%, #da5530 57%, #a67b73 73%, #e2e5e5 100%);
+  contain: layout paint;
+  isolation: isolate;
+}
+
+.cta-strip__pattern::before,
+.cta-strip__pattern::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cta-strip__pattern::before {
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgba(240, 235, 233, 0.18) 0%, transparent 18%, rgba(255, 97, 44, 0.1) 48%, transparent 68%, rgba(240, 235, 233, 0.42) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 34%, rgba(22, 24, 34, 0.06));
+  opacity: 0.62;
+}
+
+.cta-strip__pattern::after {
+  z-index: 3;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 12px, rgba(22, 24, 34, 0.08) 12px 14px, transparent 14px 28px);
+  opacity: 0.38;
+}
+
+.cta-strip__bar {
+  flex: 0 0 auto;
+  height: 100%;
+  will-change: background-color, opacity;
 }
 
 .cta-strip__inner {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   max-width: 720px;
   margin: 0 auto;
 }

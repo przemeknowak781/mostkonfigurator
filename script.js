@@ -1117,6 +1117,199 @@ function setupMemberReadmore() {
   });
 }
 
+function setupCtaPattern() {
+  const sections = document.querySelectorAll(".cta-strip");
+  sections.forEach((section) => {
+    let pattern = section.querySelector("[data-cta-pattern]");
+    if (!pattern) {
+      pattern = document.createElement("div");
+      pattern.className = "cta-strip__pattern";
+      pattern.setAttribute("data-cta-pattern", "");
+      pattern.setAttribute("aria-hidden", "true");
+      section.insertBefore(pattern, section.firstChild);
+    }
+
+    const stripeStops = [
+      { at: 0, color: "#b9c1cd" },
+      { at: 0.055, color: "#7d89a4" },
+      { at: 0.14, color: "#56617f" },
+      { at: 0.24, color: "#555263" },
+      { at: 0.33, color: "#493f48" },
+      { at: 0.41, color: "#865241" },
+      { at: 0.49, color: "#c65f38" },
+      { at: 0.56, color: "#e4532b" },
+      { at: 0.64, color: "#de5e36" },
+      { at: 0.71, color: "#b9877d" },
+      { at: 0.79, color: "#857a7d" },
+      { at: 0.88, color: "#b4b8be" },
+      { at: 1, color: "#e4e7e7" },
+    ];
+
+    stripeStops.forEach((stop) => {
+      stop.rgb = hexToRgb(stop.color);
+    });
+
+    let bars = [];
+    let patternWidth = 0;
+    let seed = 0x4d4f5354;
+    let isIntersecting = false;
+    let animationFrameId = null;
+
+    function rand() {
+      seed |= 0;
+      seed = (seed + 0x6d2b79f5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function hexToRgb(hex) {
+      const val = hex.replace("#", "");
+      return [
+        parseInt(val.slice(0, 2), 16),
+        parseInt(val.slice(2, 4), 16),
+        parseInt(val.slice(4, 6), 16),
+      ];
+    }
+
+    function mixChannel(a, b, t) {
+      return Math.round(a + (b - a) * t);
+    }
+
+    function mixColor(a, b, t) {
+      return [
+        mixChannel(a[0], b[0], t),
+        mixChannel(a[1], b[1], t),
+        mixChannel(a[2], b[2], t),
+      ];
+    }
+
+    function shadeColor(rgb, amount) {
+      const target = amount >= 0 ? 255 : 0;
+      const strength = Math.abs(amount);
+      return rgb.map((channel) => Math.round(channel + (target - channel) * strength));
+    }
+
+    function colorAt(position) {
+      const x = clamp(position, 0, 1);
+      for (let i = 1; i < stripeStops.length; i++) {
+        const prev = stripeStops[i - 1];
+        const next = stripeStops[i];
+        if (x <= next.at) {
+          const t = (x - prev.at) / (next.at - prev.at);
+          return mixColor(prev.rgb, next.rgb, clamp(t, 0, 1));
+        }
+      }
+      return stripeStops[stripeStops.length - 1].rgb;
+    }
+
+    function rgbToCss(rgb) {
+      return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+    }
+
+    function build() {
+      const rect = pattern.getBoundingClientRect();
+      const nextWidth = Math.ceil(rect.width || window.innerWidth);
+      if (bars.length && Math.abs(nextWidth - patternWidth) < 16) return;
+
+      patternWidth = Math.max(320, nextWidth);
+      seed = 0x4d4f5354;
+      bars = [];
+      pattern.replaceChildren();
+
+      let x = 0;
+      while (x < patternWidth * 1.025) {
+        const xNorm = clamp(x / patternWidth, 0, 1);
+        const isHairline = rand() > 0.76;
+        const isLightStreak = rand() > 0.89;
+        const width = isHairline
+          ? 0.8 + rand() * 1.8
+          : 2.2 + Math.pow(rand(), 1.45) * 8.2;
+        const sample = clamp(xNorm + (rand() - 0.5) * 0.034, 0, 1);
+        const shade = isLightStreak ? 0.2 + rand() * 0.28 : (rand() - 0.5) * 0.3;
+        const baseAlpha = isLightStreak ? 0.72 + rand() * 0.2 : 0.58 + rand() * 0.34;
+        const baseColor = shadeColor(colorAt(sample), shade);
+        const bar = document.createElement("span");
+
+        bar.className = "cta-strip__bar";
+        bar.style.width = `${width.toFixed(2)}px`;
+        bar.style.backgroundColor = rgbToCss(baseColor);
+        bar.style.opacity = baseAlpha.toFixed(3);
+        pattern.appendChild(bar);
+
+        bars.push({
+          el: bar,
+          xNorm,
+          sample,
+          shade,
+          baseAlpha,
+          phase: rand(),
+        });
+
+        x += width;
+      }
+    }
+
+    function animate(timestamp) {
+      if (!isIntersecting) return;
+      const t = timestamp / 8000;
+      for (let i = 0; i < bars.length; i++) {
+        const b = bars[i];
+        const shimmer = Math.sin((b.phase + t * 1.65) * Math.PI * 2);
+        const sweep = Math.cos((b.xNorm * 9.5 - t * 3.2) * Math.PI * 2);
+        const pulse = Math.sin((b.xNorm * 18 + b.phase * 2.4 + t * 4.1) * Math.PI * 2);
+        const sample = clamp(b.sample + shimmer * 0.012 + sweep * 0.018, 0, 1);
+        const color = shadeColor(colorAt(sample), b.shade + shimmer * 0.075 + sweep * 0.065 + pulse * 0.035);
+        const opacity = clamp(b.baseAlpha + shimmer * 0.055 + sweep * 0.04 + pulse * 0.03, 0.42, 1);
+
+        const colorKey = (color[0] >> 2) << 16 | (color[1] >> 2) << 8 | (color[2] >> 2);
+        const opacityKey = Math.round(opacity * 25);
+        if (b.lastColorKey !== colorKey) {
+          b.el.style.backgroundColor = rgbToCss(color);
+          b.lastColorKey = colorKey;
+        }
+        if (b.lastOpacityKey !== opacityKey) {
+          b.el.style.opacity = opacity.toFixed(3);
+          b.lastOpacityKey = opacityKey;
+        }
+      }
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        build();
+      }, 100);
+    });
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          isIntersecting = entry.isIntersecting;
+          if (isIntersecting) {
+            build();
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = requestAnimationFrame(animate);
+          } else {
+            cancelAnimationFrame(animationFrameId);
+          }
+        });
+      }, { rootMargin: "200px 0px" });
+      observer.observe(section);
+    } else {
+      isIntersecting = true;
+      build();
+      animationFrameId = requestAnimationFrame(animate);
+    }
+  });
+}
+
 updateScroll();
 setupSectionReveal();
 setupRouteMap();
@@ -1126,6 +1319,7 @@ setupHeroTrail();
 setupAudienceTriptych();
 setupAudienceConnectors();
 setupMemberReadmore();
+setupCtaPattern();
 
 // Defer the expensive aboutfold setup (builds ~550 bars + SVG path computeLength)
 // until the section is near the viewport. Falls back to immediate init.
