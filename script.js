@@ -314,6 +314,7 @@ function updateScroll() {
   }
 
   if (topNav) topNav.classList.toggle("is-scrolled", scrollY > 12);
+  if (window.updateParallax) window.updateParallax();
 }
 
 function setupSectionReveal() {
@@ -1310,6 +1311,54 @@ function setupCtaPattern() {
   });
 }
 
+function setupParallax() {
+  const images = document.querySelectorAll(".photo-break img, .aud-bleed img, .footer-summit__photo img");
+  if (!images.length) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reducedMotion) return;
+
+  const activeItems = [];
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const img = entry.target;
+        const index = activeItems.indexOf(img);
+        if (entry.isIntersecting) {
+          if (index === -1) activeItems.push(img);
+        } else {
+          if (index !== -1) activeItems.splice(index, 1);
+        }
+      });
+    }, { rootMargin: "100px 0px" });
+
+    images.forEach((img) => observer.observe(img));
+  } else {
+    images.forEach((img) => activeItems.push(img));
+  }
+
+  function tick() {
+    const vh = window.innerHeight;
+    for (let i = 0; i < activeItems.length; i++) {
+      const img = activeItems[i];
+      const parent = img.parentElement;
+      if (!parent) continue;
+
+      const rect = parent.getBoundingClientRect();
+      const progress = (vh - rect.top) / (vh + rect.height);
+      const clampedProgress = Math.max(0, Math.min(1, progress));
+
+      // Translate range: from +8% to -8% of image height
+      const translateY = (0.5 - clampedProgress) * 16;
+      img.style.transform = `translate3d(-50%, calc(-50% + ${translateY.toFixed(2)}%), 0)`;
+    }
+  }
+
+  window.updateParallax = tick;
+}
+
+setupParallax();
 updateScroll();
 setupSectionReveal();
 setupRouteMap();
