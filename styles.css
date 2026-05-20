@@ -6196,22 +6196,25 @@ body.menu-open {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* Default / founders: warm orange */
+  /* Default / founders: warm orange-terracotta */
   background:
-    radial-gradient(ellipse 80% 70% at 38% 55%, rgba(218, 85, 48, 0.36) 0%, transparent 70%),
-    linear-gradient(170deg, rgba(8, 11, 19, 0.42) 0%, rgba(8, 11, 19, 0.18) 48%, rgba(8, 11, 19, 0.55) 100%);
+    radial-gradient(ellipse 90% 80% at 35% 60%, rgba(218, 85, 48, 0.68) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(255, 97, 44, 0.28) 0%, transparent 60%),
+    linear-gradient(170deg, rgba(8, 11, 19, 0.52) 0%, rgba(8, 11, 19, 0.12) 48%, rgba(8, 11, 19, 0.64) 100%);
 }
 
 .page--companies .aud-bleed::after {
   background:
-    radial-gradient(ellipse 80% 70% at 38% 55%, rgba(139, 118, 135, 0.38) 0%, transparent 70%),
-    linear-gradient(170deg, rgba(8, 11, 19, 0.42) 0%, rgba(8, 11, 19, 0.18) 48%, rgba(8, 11, 19, 0.55) 100%);
+    radial-gradient(ellipse 90% 80% at 35% 60%, rgba(139, 118, 135, 0.70) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(100, 85, 110, 0.30) 0%, transparent 60%),
+    linear-gradient(170deg, rgba(8, 11, 19, 0.52) 0%, rgba(8, 11, 19, 0.12) 48%, rgba(8, 11, 19, 0.64) 100%);
 }
 
 .page--investors .aud-bleed::after {
   background:
-    radial-gradient(ellipse 80% 70% at 38% 55%, rgba(80, 110, 157, 0.4) 0%, transparent 70%),
-    linear-gradient(170deg, rgba(8, 11, 19, 0.42) 0%, rgba(8, 11, 19, 0.18) 48%, rgba(8, 11, 19, 0.55) 100%);
+    radial-gradient(ellipse 90% 80% at 35% 60%, rgba(80, 110, 157, 0.72) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(60, 90, 140, 0.32) 0%, transparent 60%),
+    linear-gradient(170deg, rgba(8, 11, 19, 0.52) 0%, rgba(8, 11, 19, 0.12) 48%, rgba(8, 11, 19, 0.64) 100%);
 }
 
 
