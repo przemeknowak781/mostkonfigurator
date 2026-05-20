@@ -1103,6 +1103,20 @@ function setupAboutfold() {
   update();
 }
 
+function setupMemberReadmore() {
+  const buttons = document.querySelectorAll("[data-readmore]");
+  buttons.forEach((btn) => {
+    const card = btn.closest(".member");
+    if (!card) return;
+    const label = btn.querySelector("span");
+    btn.addEventListener("click", () => {
+      const isExpanded = card.classList.toggle("is-expanded");
+      btn.setAttribute("aria-expanded", String(isExpanded));
+      if (label) label.textContent = isExpanded ? "Read less" : "Read more";
+    });
+  });
+}
+
 updateScroll();
 setupSectionReveal();
 setupRouteMap();
@@ -1111,6 +1125,7 @@ setupMobileMenu();
 setupHeroTrail();
 setupAudienceTriptych();
 setupAudienceConnectors();
+setupMemberReadmore();
 
 // Defer the expensive aboutfold setup (builds ~550 bars + SVG path computeLength)
 // until the section is near the viewport. Falls back to immediate init.
