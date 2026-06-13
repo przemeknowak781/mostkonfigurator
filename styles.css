@@ -5689,9 +5689,10 @@ body.menu-open {
 
 /* ---------- TEAM EDITORIAL (our-team page) ---------- */
 
+/* Dark stage: the whole team page background is navy, matching the rest of the site. */
 .team-page {
-  background: linear-gradient(180deg, #f7f1ee 0%, #f0e8e3 100%);
-  color: #2a2026;
+  background: #070912;
+  color: var(--light);
 }
 
 .team-page .page-hero {
@@ -5717,7 +5718,11 @@ body.menu-open {
   margin-left: auto;
 }
 
-/* Our-team transition: a light ridge-shaped cut between hero and team. */
+/*
+  Hero to team transition: replace the cream ridge cut with a dark navy
+  continuation so the page-hero flows seamlessly into the dark team section.
+  We still use the ridge-edge--light element but now clip it into the dark stage.
+*/
 .ridge-edge--light {
   --team-ridge-height: clamp(96px, 9.5vw, 170px);
   height: var(--team-ridge-height);
@@ -5732,7 +5737,8 @@ body.menu-open {
   display: block;
   inset: 0;
   z-index: 2;
-  background: #f7f1ee;
+  /* Dark navy replaces old cream -- ridge now merges into the dark stage */
+  background: #070912;
   clip-path: polygon(
     0 78%,
     4% 76%,
@@ -5758,7 +5764,7 @@ body.menu-open {
     100% 100%,
     0 100%
   );
-  filter: drop-shadow(0 -14px 28px rgba(8, 11, 19, 0.14));
+  filter: drop-shadow(0 -14px 28px rgba(8, 11, 19, 0.55));
 }
 
 .ridge-edge--light::after {
@@ -5769,9 +5775,16 @@ body.menu-open {
   display: none;
 }
 
+/* ============================================================
+   TEAM EDITORIAL SECTION
+   ============================================================ */
+
 .team-editorial {
   padding: clamp(86px, 11vh, 136px) var(--container-x) clamp(96px, 13vh, 160px);
   position: relative;
+  background:
+    radial-gradient(ellipse 80% 42% at 50% 0%, rgba(255, 97, 44, 0.06) 0%, transparent 65%),
+    #070912;
 }
 
 .team-editorial__head {
@@ -5782,7 +5795,7 @@ body.menu-open {
 
 .team-editorial__eyebrow {
   margin: 0 0 22px;
-  color: #c75232;
+  color: rgba(255, 168, 110, 0.86);
   font: 500 12px / 1.2 "Montserrat", system-ui, sans-serif;
   letter-spacing: 0.26em;
   text-transform: uppercase;
@@ -5790,7 +5803,7 @@ body.menu-open {
 
 .team-editorial__title {
   margin: 0;
-  color: #1c1419;
+  color: var(--light);
   font: 500 clamp(32px, 4.6vw, 60px) / 1.04 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.01em;
   text-wrap: balance;
@@ -5801,24 +5814,24 @@ body.menu-open {
   max-width: 760px;
   margin: 0 auto;
   padding: 0 clamp(28px, 4vw, 56px);
-  color: #1c1419;
+  color: var(--light);
 }
 
 .team-editorial__quote::before,
 .team-editorial__quote::after {
   position: absolute;
-  color: rgba(199, 82, 50, 0.34);
+  color: rgba(255, 97, 44, 0.28);
   font: 500 clamp(54px, 6vw, 96px) / 0.8 "Urbanist", system-ui, sans-serif;
 }
 
 .team-editorial__quote::before {
-  content: "“";
+  content: "\201C";
   left: 0;
   top: -0.08em;
 }
 
 .team-editorial__quote::after {
-  content: "”";
+  content: "\201D";
   right: 0;
   bottom: -0.45em;
 }
@@ -5835,33 +5848,105 @@ body.menu-open {
 }
 
 .team-editorial__quote span {
-  color: #c75232;
+  color: #FF612C;
 }
 
 .team-editorial__lead {
   max-width: 640px;
   margin: 24px auto 0;
-  color: rgba(28, 20, 25, 0.7);
+  color: var(--light-60);
   font: 400 clamp(15px, 1.2vw, 18px) / 1.55 "Outfit", system-ui, sans-serif;
   text-wrap: pretty;
 }
 
+/* ── Member list container ──────────────────────────── */
+
 .team-editorial__list {
   display: flex;
   flex-direction: column;
-  gap: clamp(80px, 12vh, 140px);
-  max-width: 1240px;
+  gap: 0;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
+/* ── Between-member connecting trail ─────────────────── */
+
+/*
+  A jagged warm line + pulsing waypoint dot connects each member feature,
+  mirroring the site's ascent / stock-chart trail motif.
+*/
+.member-trail {
+  position: relative;
+  height: clamp(64px, 8vw, 108px);
+  margin: clamp(56px, 8vh, 96px) 0;
+  pointer-events: none;
+}
+
+.member-trail::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 78 L46 74 L92 84 L150 60 L196 68 L250 44 L300 56 L356 32 L410 50 L470 38 L540 64 L598 52 L660 70 L712 46 L772 58 L838 34 L902 52 L968 28 L1032 48 L1092 36 L1146 58 L1200 50' stroke='%23FFA86E' stroke-opacity='.55' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  filter: drop-shadow(0 0 5px rgba(255, 168, 110, 0.35));
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.4s var(--ease-out);
+}
+
+.member-trail.is-visible::before {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Waypoint dot — peak of the jagged path near x=968/1200 */
+.member-trail__dot {
+  position: absolute;
+  z-index: 2;
+  left: 80.67%;
+  top: 23.3%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: rgba(255, 168, 110, 0.96);
+  box-shadow:
+    0 0 0 3px rgba(255, 168, 110, 0.16),
+    0 0 12px rgba(255, 168, 110, 0.55),
+    0 0 24px rgba(255, 188, 140, 0.28);
+  opacity: 0;
+  transition: opacity 500ms var(--ease-out) 800ms;
+}
+
+.member-trail.is-visible .member-trail__dot {
+  opacity: 1;
+  animation: trail-point-pulse 3.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .member-trail__dot {
+    animation: none;
+    opacity: 1;
+  }
+  .member-trail::before {
+    clip-path: none;
+    transition: none;
+  }
+}
+
+/* ============================================================
+   MEMBER ARTICLE -- spotlight gallery treatment
+   ============================================================ */
+
 .member {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  gap: clamp(40px, 6vw, 96px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  gap: clamp(48px, 7vw, 112px);
   align-items: center;
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1), transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(36px);
+  transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1), transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -5886,25 +5971,41 @@ body.menu-open {
   direction: ltr;
 }
 
+/* ── Portrait column ─────────────────────────────────── */
+
 .member__photo {
   position: relative;
   aspect-ratio: 6 / 7;
   isolation: isolate;
 }
 
+/*
+  Warm spotlight -- a large radial glow behind the portrait, like hero-glow__sun.
+  Creates the "lit figure on a dark stage" cinematic feel.
+*/
 .member__photo::before {
   content: "";
   position: absolute;
-  inset: -10%;
-  background: radial-gradient(circle at 65% 42%, rgba(255, 97, 44, 0.28) 0%, transparent 62%);
-  filter: blur(14px);
+  inset: -22% -18%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 176, 119, 0.42) 0%,
+    rgba(255, 97, 44, 0.22) 38%,
+    rgba(255, 97, 44, 0) 72%
+  );
+  filter: blur(32px);
   z-index: 0;
   pointer-events: none;
+  border-radius: 50%;
 }
 
+/*
+  Orbit rings -- thin concentric contour ellipses that give each portrait a
+  graphic accent around it, like topographic contour lines.
+*/
 .member__halo {
   position: absolute;
-  inset: 0;
+  inset: -8%;
   z-index: 1;
   pointer-events: none;
 }
@@ -5914,24 +6015,24 @@ body.menu-open {
   inset: 0;
   width: 100%;
   height: 100%;
-  stroke: rgba(199, 82, 50, 0.28);
+  stroke: rgba(255, 168, 110, 0.16);
   fill: none;
   transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1), stroke 300ms ease;
   transform-origin: center center;
 }
 
 .member__curve--outer {
-  stroke: rgba(199, 82, 50, 0.36);
+  stroke: rgba(255, 97, 44, 0.10);
 }
 
 .member:hover .member__curve {
   transform: scale(1.02) rotate(1deg);
-  stroke: rgba(255, 97, 44, 0.5);
+  stroke: rgba(255, 168, 110, 0.30);
 }
 
 .member:hover .member__curve--outer {
   transform: scale(1.04) rotate(-1deg);
-  stroke: rgba(255, 97, 44, 0.6);
+  stroke: rgba(255, 97, 44, 0.20);
 }
 
 .member__waypoint {
@@ -5942,22 +6043,65 @@ body.menu-open {
   overflow: visible;
 }
 
+/*
+  Portrait plate -- the main visual frame.
+  The spotlight behind does the colour work; the plate itself is dark and
+  frames the placeholder so its white background reads as an intentional
+  lit backdrop rather than a stray rectangle.
+*/
 .member__plate {
   position: absolute;
-  inset: 12% 6% 6% 6%;
+  inset: 10% 5% 5% 5%;
   z-index: 2;
-  border-radius: 140px 90px 240px 240px / 120px 95px 280px 280px;
-  overflow: visible;
+  border-radius: 12px 12px 220px 220px / 12px 12px 260px 260px;
+  overflow: hidden;
   isolation: isolate;
-  background: linear-gradient(135deg, rgba(250, 246, 240, 0.85) 0%, rgba(255, 230, 218, 0.6) 100%);
-  box-shadow: 0 16px 48px -12px rgba(28, 20, 25, 0.08);
-  border: 1px solid rgba(199, 82, 50, 0.12);
+  background: linear-gradient(160deg, rgba(18, 22, 38, 0.72) 0%, rgba(7, 9, 18, 0.52) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 168, 110, 0.13),
+    0 24px 64px -16px rgba(0, 0, 0, 0.72),
+    0 0 80px -20px rgba(255, 97, 44, 0.16);
   transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .member:hover .member__plate {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 64px -10px rgba(28, 20, 25, 0.12);
+  transform: translateY(-5px);
+  box-shadow:
+    0 0 0 1px rgba(255, 168, 110, 0.22),
+    0 32px 80px -14px rgba(0, 0, 0, 0.80),
+    0 0 100px -16px rgba(255, 97, 44, 0.24);
+}
+
+/* Dark gradient scrim at base -- anchors figure, hides any white bottom edge */
+.member__plate::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 38%;
+  background: linear-gradient(
+    0deg,
+    rgba(7, 9, 18, 0.92) 0%,
+    rgba(7, 9, 18, 0.54) 52%,
+    transparent 100%
+  );
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Duotone-style warm tint layer over the portrait */
+.member__plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 97, 44, 0.09) 0%,
+    rgba(7, 9, 18, 0.26) 55%,
+    rgba(7, 9, 18, 0.04) 100%
+  );
+  mix-blend-mode: multiply;
+  z-index: 3;
+  pointer-events: none;
 }
 
 .member__portrait {
@@ -5965,28 +6109,52 @@ body.menu-open {
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
-  width: 96%;
+  width: 95%;
   height: auto;
   max-height: 112%;
   object-fit: contain;
   object-position: bottom center;
   z-index: 2;
   pointer-events: none;
-  border-radius: 140px 90px 240px 240px / 120px 95px 280px 280px;
-  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* Desaturate the placeholder so the warm overlay reads cleanly */
+  filter: saturate(0.55) contrast(1.08) brightness(1.04);
+  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), filter 400ms ease;
 }
 
+.member:hover .member__portrait {
+  filter: saturate(0.72) contrast(1.05) brightness(1.07);
+}
 
+/*
+  Large ghosted index numeral -- typographic element bleeding behind the portrait.
+  Barbara (01) gets an especially prominent treatment via .member--01 below.
+*/
 .member__index {
   position: absolute;
-  top: 18px;
-  left: 22px;
-  color: rgba(28, 20, 25, 0.52);
-  font: 500 11px / 1.2 "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  z-index: 3;
+  right: -0.12em;
+  bottom: -0.06em;
+  z-index: 0;
+  color: rgba(255, 168, 110, 0.07);
+  font: 600 clamp(120px, 16vw, 220px) / 1 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.04em;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
 }
+
+/* Reversed members: mirror the numeral to the left side */
+.member--reverse .member__index {
+  right: auto;
+  left: -0.12em;
+}
+
+/* Barbara (01) -- founder/lead: extra-prominent index numeral */
+.member--01 .member__index {
+  color: rgba(255, 168, 110, 0.11);
+  font-size: clamp(140px, 19vw, 260px);
+}
+
+/* ── Body column ─────────────────────────────────────── */
 
 .member__body {
   padding: clamp(8px, 1.5vh, 16px) 0;
@@ -5994,7 +6162,7 @@ body.menu-open {
 
 .member__role {
   margin: 0 0 12px;
-  color: rgba(28, 20, 25, 0.6);
+  color: rgba(255, 168, 110, 0.72);
   font: 500 11px / 1.2 "Montserrat", system-ui, sans-serif;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -6002,9 +6170,9 @@ body.menu-open {
 
 .member__name {
   margin: 0 0 24px;
-  color: #1c1419;
-  font: 500 clamp(30px, 3.6vw, 48px) / 1.05 "Urbanist", system-ui, sans-serif;
-  letter-spacing: -0.01em;
+  color: var(--light);
+  font: 500 clamp(30px, 3.6vw, 52px) / 1.04 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.02em;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -6015,13 +6183,19 @@ body.menu-open {
   display: block;
   width: 42px;
   height: 2px;
-  background: #FF612C;
+  background: linear-gradient(90deg, #FF612C, #FFA86E);
+  border-radius: 1px;
+}
+
+/* Barbara (01) -- larger name */
+.member--01 .member__name {
+  font-size: clamp(34px, 4.2vw, 60px);
 }
 
 .member__bio {
   margin: 0 0 14px;
-  color: rgba(28, 20, 25, 0.78);
-  font: 400 clamp(15px, 1.1vw, 17px) / 1.62 "Outfit", system-ui, sans-serif;
+  color: var(--light-80);
+  font: 400 clamp(15px, 1.1vw, 17px) / 1.66 "Outfit", system-ui, sans-serif;
   max-width: 540px;
 }
 
@@ -6041,7 +6215,7 @@ body.menu-open {
   padding: 0;
   background: transparent;
   border: 0;
-  color: #c75232;
+  color: #FFA86E;
   font: 500 14px / 1.2 "Outfit", system-ui, sans-serif;
   cursor: pointer;
   transition: color 200ms ease, gap 200ms ease;
@@ -6054,7 +6228,7 @@ body.menu-open {
 }
 
 .member__readmore:hover {
-  color: #1c1419;
+  color: var(--light);
   gap: 12px;
 }
 
@@ -6075,7 +6249,7 @@ body.menu-open {
   top: 16px;
   bottom: 8px;
   width: 1.5px;
-  background: rgba(199, 82, 50, 0.24);
+  background: linear-gradient(180deg, rgba(255, 97, 44, 0.55) 0%, rgba(255, 97, 44, 0.08) 100%);
 }
 
 .member__expertise-section::after {
@@ -6086,14 +6260,14 @@ body.menu-open {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #fff;
+  background: #070912;
   border: 2px solid #FF612C;
-  box-shadow: 0 0 8px rgba(255, 97, 44, 0.4);
+  box-shadow: 0 0 8px rgba(255, 97, 44, 0.5);
 }
 
 .member__expertise-label {
   margin: 0 0 14px;
-  color: rgba(28, 20, 25, 0.6);
+  color: var(--light-60);
   font: 500 11px / 1.2 "Montserrat", system-ui, sans-serif;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -6111,9 +6285,20 @@ body.menu-open {
 
 .member__expertise li {
   position: relative;
-  padding: 0;
-  color: rgba(28, 20, 25, 0.82);
+  padding-left: 18px;
+  color: var(--light-80);
   font: 400 14px / 1.5 "Outfit", system-ui, sans-serif;
+}
+
+.member__expertise li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 97, 44, 0.55);
 }
 
 @media (max-width: 980px) {
@@ -8390,3 +8575,257 @@ body.menu-open {
   }
 }
 
+
+/* ============================================================
+   ABOUT PAGE POLISH — hero parity with homepage, photo duotone,
+   scroll reveals
+   ============================================================ */
+
+/* ---------- PAGE HERO (about): homepage-grade atmosphere ---------- */
+
+.page--about .page-hero {
+  min-height: clamp(560px, 78vh, 820px);
+  padding-bottom: clamp(120px, 16vh, 190px);
+}
+
+.page--about .page-hero__bg {
+  object-position: 56% 72%;
+  filter: saturate(0.94) contrast(1.06) brightness(0.74);
+}
+
+.page--about .page-hero__wash {
+  background:
+    radial-gradient(820px 520px at 18% 38%, rgba(255, 97, 44, 0.32), transparent 68%),
+    radial-gradient(700px 460px at 62% 50%, rgba(255, 176, 119, 0.12), transparent 72%),
+    linear-gradient(90deg, rgba(4, 6, 12, 0.86) 0%, rgba(11, 14, 25, 0.58) 38%, rgba(18, 20, 31, 0.24) 72%, rgba(8, 10, 17, 0.34) 100%),
+    linear-gradient(180deg, rgba(8, 11, 19, 0.36) 0%, rgba(8, 11, 19, 0.55) 58%, rgba(8, 11, 19, 0.95) 100%);
+}
+
+.page-hero__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(9, 13, 22, 0.3) 0%, transparent 30%, transparent 100%),
+    radial-gradient(1000px 680px at 86% 96%, rgba(5, 7, 12, 0.58), transparent 62%),
+    radial-gradient(900px 720px at 2% 5%, rgba(8, 10, 18, 0.5), transparent 70%);
+}
+
+.page-hero__noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image:
+    linear-gradient(115deg, transparent 0 48%, rgba(240, 235, 233, 0.04) 49% 50%, transparent 51% 100%),
+    radial-gradient(circle at 20% 30%, rgba(240, 235, 233, 0.1) 0 1px, transparent 1.5px);
+  background-size: 180px 180px, 82px 82px;
+}
+
+.page-hero__haze {
+  position: absolute;
+  inset: 16% -10% -10%;
+  background: radial-gradient(60% 100% at 50% 100%, rgba(255, 97, 44, 0.16), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  animation: hero-haze-drift 12s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.page--about .page-hero__sun {
+  top: 12%;
+  left: 12%;
+  width: clamp(240px, 30vw, 420px);
+  height: clamp(240px, 30vw, 420px);
+  animation: hero-sun-breathe 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Key facts strip pinned to hero foot — mirrors homepage hero-stats */
+.page-hero__meta {
+  position: absolute;
+  left: var(--container-x);
+  right: var(--container-x);
+  bottom: clamp(34px, 6vh, 56px);
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 3vw, 36px);
+  animation-delay: 440ms;
+}
+
+.page-hero__fact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.page-hero__fact strong {
+  color: var(--light);
+  font: 500 clamp(24px, 2.2vw, 34px) / 1 "Urbanist", system-ui, sans-serif;
+}
+
+.page-hero__fact span {
+  color: var(--light-60);
+  font: 500 11px / 1.2 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 860px) {
+  .page-hero__meta {
+    position: static;
+    margin-top: clamp(36px, 7vh, 56px);
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+/* ---------- PHOTO BREAK: warm duotone tied to the palette ---------- */
+
+.page--about .photo-break::after {
+  background:
+    radial-gradient(820px 460px at 16% 80%, rgba(255, 97, 44, 0.18), transparent 66%),
+    linear-gradient(90deg, rgba(8, 11, 19, 0.42) 0%, transparent 45%, rgba(8, 11, 19, 0.28) 100%),
+    linear-gradient(180deg, rgba(8, 11, 19, 0.3) 0%, transparent 35%, rgba(8, 11, 19, 0.62) 100%);
+}
+
+.page--about .photo-break--right::after {
+  background:
+    radial-gradient(820px 460px at 84% 80%, rgba(255, 97, 44, 0.18), transparent 66%),
+    linear-gradient(270deg, rgba(8, 11, 19, 0.42) 0%, transparent 45%, rgba(8, 11, 19, 0.28) 100%),
+    linear-gradient(180deg, rgba(8, 11, 19, 0.3) 0%, transparent 35%, rgba(8, 11, 19, 0.62) 100%);
+}
+
+.page--about .photo-break__index::after {
+  content: "";
+  display: inline-block;
+  width: 44px;
+  height: 1px;
+  margin-left: 12px;
+  vertical-align: middle;
+  background: linear-gradient(90deg, rgba(255, 168, 110, 0.9), transparent);
+}
+
+.page--about .photo-break--right .photo-break__index::after {
+  margin-left: 0;
+  margin-right: 12px;
+  background: linear-gradient(270deg, rgba(255, 168, 110, 0.9), transparent);
+}
+
+/* ---------- SCROLL REVEAL (shared with setupSectionReveal) ---------- */
+
+/* Uses the standalone `translate` property so it composes with any
+   `transform` the element already has (e.g. philosophy card offsets). */
+[data-reveal] {
+  opacity: 0;
+  translate: 0 28px;
+  transition:
+    opacity 760ms var(--ease-out),
+    translate 760ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+}
+
+/* ---------- SECTION TRAIL (stock-chart divider, homepage parity) ----------
+   Reuses the homepage trail's visual language — uneven jagged "stock chart"
+   line in warm orange, soft glow, a pulsing checkpoint dot, and a
+   left-to-right draw-in as the section scrolls into view. Placed at the top
+   of dark sections that follow a photo break, so the line emerges from the
+   image into the content like the hero trail emerges from the ridge. */
+
+.has-trail {
+  position: relative;
+}
+
+.has-trail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(72px, 9vw, 120px);
+  z-index: 2;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 100% 100%;
+  filter: drop-shadow(0 0 5px rgba(255, 168, 110, 0.45));
+  opacity: 0.82;
+  /* draw-in: reveal the line left → right */
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.5s var(--ease-out) var(--reveal-delay, 0ms);
+}
+
+.has-trail.is-visible::before {
+  clip-path: inset(0 0 0 0);
+}
+
+.has-trail--a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 78 L46 74 L92 84 L150 60 L196 68 L250 44 L300 56 L356 32 L410 50 L470 38 L540 64 L598 52 L660 70 L712 46 L772 58 L838 34 L902 52 L968 28 L1032 48 L1092 36 L1146 58 L1200 50' stroke='%23FFA86E' stroke-opacity='.92' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.has-trail--b::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 44 L54 40 L110 52 L168 36 L220 54 L286 42 L342 60 L408 48 L470 66 L532 52 L598 70 L660 56 L726 74 L792 60 L856 78 L922 64 L988 82 L1052 68 L1112 86 L1170 72 L1200 80' stroke='%23FFA86E' stroke-opacity='.92' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Pulsing checkpoint dot riding on the line — mirrors .hero-trail-point */
+.has-trail__dot {
+  position: absolute;
+  z-index: 3;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: rgba(255, 168, 110, 0.98);
+  box-shadow:
+    0 0 0 3px rgba(255, 168, 110, 0.18),
+    0 0 12px rgba(255, 168, 110, 0.6),
+    0 0 26px rgba(255, 188, 140, 0.32);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out) 900ms;
+}
+
+.has-trail.is-visible .has-trail__dot {
+  opacity: 1;
+  animation: trail-point-pulse 3.4s ease-in-out infinite;
+}
+
+/* Dot positions map 1:1 to the stretched SVG (left = x/1200, top = y/120) */
+.has-trail--a .has-trail__dot {
+  /* peak at (968, 28) */
+  left: 80.67%;
+  top: clamp(16px, calc(0.2333 * clamp(72px, 9vw, 120px)), 28px);
+}
+
+.has-trail--b .has-trail__dot {
+  /* peak at (168, 36) */
+  left: 14%;
+  top: clamp(20px, calc(0.3 * clamp(72px, 9vw, 120px)), 36px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-trail::before {
+    clip-path: none;
+    transition: none;
+  }
+  .has-trail__dot {
+    opacity: 1;
+    transition: none;
+  }
+  .has-trail.is-visible .has-trail__dot {
+    animation: none;
+  }
+}

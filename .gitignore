@@ -3,6 +3,7 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+.claude/
 
 # Working / reference files not used by the site
 inspo.png
