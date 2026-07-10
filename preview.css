@@ -335,6 +335,21 @@
   filter: drop-shadow(0 -20px 60px color-mix(in srgb, var(--orange) 18%, transparent));
 }
 
+/* .ridge-edge__img is a vertically-flipped continuation of the SAME
+   artwork, sharing hero-ridges__img's original 104%/-2% scale so the
+   silhouette lines up exactly at the seam between the two sections.
+   hero-ridges__img sits inside the extra .hero-ridges wrapper (itself
+   104%/-2% of .hero), so its 116%/-8% bleed compounds to an effective
+   120.64%/-10.32% of .hero's own width — but .ridge-edge__img is a
+   direct child of .ridge-edge with no such wrapper, so it needs those
+   COMPOUNDED numbers directly, not the raw 116%/-8%, or the two copies
+   render at different scales and the shared outline splits apart right
+   at the seam where they're supposed to meet. */
+.is-design-preview .ridge-edge__img {
+  width: 120.64%;
+  margin-left: -10.32%;
+}
+
 .is-design-preview .ridge-edge {
   background: color-mix(in srgb, var(--navy-deep) 88%, black);
 }
