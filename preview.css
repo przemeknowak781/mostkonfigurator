@@ -1,0 +1,1219 @@
+/* ==========================================================================
+   DESIGN 2.0 — INTERACTIVE PREVIEW
+   Loaded only on index.html. styles.css stays untouched, so subpages keep
+   their exact look. Everything here is driven by CSS custom properties so
+   the color pickers repaint the hero and every sample live.
+   ========================================================================== */
+
+:root {
+  /* New editable tokens (extracted from hardcoded values in styles.css) */
+  --glow: #ffa86e;
+  --accent-founders: #d17e5f;
+  --accent-companies: #9b8b95;
+  --accent-investors: #5b7ab0;
+
+  /* Re-derive the opacity ramps from the editable tokens so a picker
+     change to --light propagates everywhere. */
+  --light-80: color-mix(in srgb, var(--light) 80%, transparent);
+  --light-60: color-mix(in srgb, var(--light) 60%, transparent);
+  --light-28: color-mix(in srgb, var(--light) 28%, transparent);
+  --light-10: color-mix(in srgb, var(--light) 10%, transparent);
+
+  --glow-bright: color-mix(in srgb, var(--glow), white 22%);
+}
+
+/* --------------------------------------------------------------------------
+   HERO + SHARED CHROME: re-express the hardcoded orange/glow literals from
+   styles.css through the editable tokens. Same default rendering, but live.
+   -------------------------------------------------------------------------- */
+
+.is-design-preview ::selection {
+  color: var(--navy);
+  background: var(--orange-soft);
+}
+
+.is-design-preview .scroll-progress {
+  background: linear-gradient(90deg, transparent, var(--orange), var(--orange-soft));
+  box-shadow: 0 0 24px color-mix(in srgb, var(--orange) 45%, transparent);
+}
+
+.is-design-preview .hero-wash {
+  background:
+    radial-gradient(800px 520px at 14% 64%, color-mix(in srgb, var(--orange) 26%, transparent), transparent 66%),
+    radial-gradient(700px 460px at 60% 56%, color-mix(in srgb, var(--orange-soft) 12%, transparent), transparent 72%),
+    linear-gradient(90deg, rgba(4, 6, 12, 0.88) 0%, rgba(11, 14, 25, 0.6) 38%, rgba(18, 20, 31, 0.22) 72%, rgba(8, 10, 17, 0.32) 100%),
+    linear-gradient(180deg, rgba(5, 8, 15, 0.42) 0%, rgba(17, 20, 31, 0.05) 44%, transparent 100%);
+}
+
+.is-design-preview .hero-glow__sun {
+  background:
+    radial-gradient(closest-side, color-mix(in srgb, var(--orange-soft) 42%, transparent) 0%, color-mix(in srgb, var(--orange) 22%, transparent) 38%, transparent 72%);
+}
+
+.is-design-preview .hero-glow__haze {
+  background:
+    radial-gradient(60% 100% at 50% 100%, color-mix(in srgb, var(--orange) 18%, transparent), transparent 70%),
+    linear-gradient(180deg, transparent, transparent);
+}
+
+.is-design-preview .hero-climbers-sun {
+  background:
+    radial-gradient(closest-side,
+      color-mix(in srgb, color-mix(in srgb, var(--orange-soft), white 45%) 50%, transparent) 0%,
+      color-mix(in srgb, color-mix(in srgb, var(--orange-soft), var(--orange) 35%) 38%, transparent) 24%,
+      color-mix(in srgb, var(--orange) 26%, transparent) 52%,
+      transparent 80%);
+}
+
+.is-design-preview .hero-trail__path {
+  stroke: color-mix(in srgb, var(--glow) 95%, transparent);
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--glow) 46%, transparent));
+}
+
+.is-design-preview .hero-trail__leader,
+.is-design-preview .ridge-edge__leaders line {
+  stroke: color-mix(in srgb, var(--glow) 42%, transparent);
+}
+
+.is-design-preview .hero-trail-point,
+.is-design-preview .dp-sample-trail .hero-trail-point {
+  background: color-mix(in srgb, var(--glow) 98%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--glow) 18%, transparent),
+    0 0 12px color-mix(in srgb, var(--glow) 60%, transparent),
+    0 0 26px color-mix(in srgb, var(--glow-bright) 32%, transparent);
+  animation-name: dp-trail-point-pulse;
+}
+
+@keyframes dp-trail-point-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--glow) 18%, transparent),
+      0 0 12px color-mix(in srgb, var(--glow) 60%, transparent),
+      0 0 26px color-mix(in srgb, var(--glow-bright) 32%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px color-mix(in srgb, var(--glow) 26%, transparent),
+      0 0 20px color-mix(in srgb, var(--glow) 82%, transparent),
+      0 0 40px color-mix(in srgb, var(--glow-bright) 48%, transparent);
+  }
+}
+
+.is-design-preview .hero-content .eyebrow {
+  color: color-mix(in srgb, var(--glow-bright) 72%, transparent);
+}
+
+.is-design-preview .hero-ridges__img {
+  filter: drop-shadow(0 -20px 60px color-mix(in srgb, var(--orange) 18%, transparent));
+}
+
+.is-design-preview .ridge-edge {
+  background: color-mix(in srgb, var(--navy-deep) 88%, black);
+}
+
+.is-design-preview .ridge-edge::after {
+  background: var(--navy);
+}
+
+.is-design-preview .ridge-quote::before {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--glow) 95%, transparent), color-mix(in srgb, var(--orange) 42%, transparent));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--glow) 34%, transparent);
+}
+
+.is-design-preview .site-footer__col-title {
+  color: color-mix(in srgb, var(--glow) 72%, transparent);
+}
+
+.is-design-preview .site-footer__divider {
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--glow) 40%, transparent), transparent);
+}
+
+.is-design-preview .site-footer__col a:hover {
+  border-bottom-color: color-mix(in srgb, var(--glow) 60%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   TOP NAV — preview toolbar
+   -------------------------------------------------------------------------- */
+
+.top-nav--preview {
+  gap: clamp(14px, 2vw, 24px);
+}
+
+.dp-nav-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid var(--light-10);
+  border-radius: 40px;
+  color: var(--light-60);
+  font: 500 10px / 1.2 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dp-nav-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--orange) 70%, transparent);
+  animation: dp-badge-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes dp-badge-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.dp-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   BUTTONS
+   -------------------------------------------------------------------------- */
+
+.dp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 10px 22px;
+  border: 1px solid transparent;
+  border-radius: 40px;
+  cursor: pointer;
+  color: var(--light);
+  background: transparent;
+  font: 500 12px / 1.2 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: border-color 240ms ease, background 240ms ease, color 240ms ease, transform 240ms ease, box-shadow 240ms ease;
+}
+
+.dp-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.dp-btn path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dp-btn--primary {
+  color: var(--navy-deep);
+  background: var(--orange);
+  border-color: var(--orange);
+  box-shadow: 0 8px 32px color-mix(in srgb, var(--orange) 32%, transparent);
+}
+
+.dp-btn--primary:hover,
+.dp-btn--primary:focus-visible {
+  background: var(--orange-soft);
+  border-color: var(--orange-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 44px color-mix(in srgb, var(--orange) 44%, transparent);
+}
+
+.dp-btn--ghost {
+  border-color: color-mix(in srgb, var(--light) 55%, transparent);
+}
+
+.dp-btn--ghost:hover,
+.dp-btn--ghost:focus-visible {
+  color: var(--navy);
+  background: var(--light);
+  border-color: var(--light);
+  transform: translateY(-2px);
+}
+
+.dp-btn--reset {
+  width: 42px;
+  padding: 10px;
+  border-color: var(--light-10);
+  color: var(--light-60);
+}
+
+.dp-btn--reset:hover,
+.dp-btn--reset:focus-visible {
+  color: var(--light);
+  border-color: color-mix(in srgb, var(--light) 40%, transparent);
+  transform: rotate(-40deg);
+}
+
+.dp-btn--text {
+  min-height: 0;
+  padding: 8px 4px;
+  color: var(--light-60);
+  letter-spacing: 0.12em;
+}
+
+.dp-btn--text:hover,
+.dp-btn--text:focus-visible {
+  color: var(--light);
+}
+
+.dp-btn--big {
+  min-height: 54px;
+  padding: 14px 32px;
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------------------
+   PREVIEW SECTIONS — shared scaffolding
+   -------------------------------------------------------------------------- */
+
+.dp-section {
+  position: relative;
+  padding: clamp(90px, 12vh, 150px) var(--container-x);
+  background: var(--navy-deep);
+  overflow: hidden;
+}
+
+/* faint horizontal contour lines, same rhythm as the footer */
+.dp-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: linear-gradient(var(--light-10) 1px, transparent 1px);
+  background-size: 100% 96px;
+  opacity: 0.16;
+  mask-image: linear-gradient(180deg, transparent, black 24%, black 82%, transparent);
+  pointer-events: none;
+}
+
+.dp-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dp-head {
+  max-width: 860px;
+  margin: 0 auto clamp(48px, 7vh, 88px);
+  text-align: center;
+}
+
+.dp-eyebrow {
+  margin: 0 0 20px;
+  color: color-mix(in srgb, var(--glow) 72%, transparent);
+  font: 500 clamp(10px, 0.8vw, 12px) / 1.4 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.dp-title {
+  margin: 0;
+  color: var(--light-80);
+  font: 500 clamp(32px, 3.4vw, 58px) / 1.06 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.dp-lede {
+  max-width: 640px;
+  margin: 26px auto 0;
+  color: var(--light-60);
+  font: 400 clamp(15px, 1.15vw, 18px) / 1.6 "Outfit", system-ui, sans-serif;
+  text-wrap: pretty;
+}
+
+.dp-group-label {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  max-width: 1280px;
+  margin: clamp(40px, 6vh, 72px) auto 26px;
+  color: var(--light-60);
+  font: 500 11px / 1.2 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.dp-group-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-image: linear-gradient(90deg, color-mix(in srgb, var(--glow) 42%, transparent) 0 4px, transparent 4px 10px);
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+}
+
+/* --------------------------------------------------------------------------
+   INTRO
+   -------------------------------------------------------------------------- */
+
+.dp-intro {
+  padding-top: clamp(120px, 16vh, 200px);
+}
+
+/* ambient breathing sun in the preview itself */
+.dp-sun {
+  position: absolute;
+  top: -220px;
+  right: -180px;
+  z-index: 0;
+  width: 760px;
+  height: 760px;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, color-mix(in srgb, var(--orange-soft) 26%, transparent) 0%, color-mix(in srgb, var(--orange) 13%, transparent) 40%, transparent 72%);
+  filter: blur(26px);
+  pointer-events: none;
+  animation: hero-sun-breathe 11s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.dp-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 32px);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.dp-step {
+  position: relative;
+  padding: 28px 26px 26px;
+  background: color-mix(in srgb, var(--navy) 72%, transparent);
+  border: 1px solid var(--light-10);
+  border-radius: 18px;
+  text-align: left;
+  transition: border-color 240ms ease, transform 240ms ease;
+}
+
+.dp-step:hover {
+  border-color: color-mix(in srgb, var(--glow) 36%, transparent);
+  transform: translateY(-3px);
+}
+
+.dp-step__num {
+  display: block;
+  margin-bottom: 14px;
+  color: color-mix(in srgb, var(--glow) 80%, transparent);
+  font: 600 15px / 1 "Urbanist", system-ui, sans-serif;
+  letter-spacing: 0.06em;
+}
+
+.dp-step__name {
+  margin: 0 0 8px;
+  color: var(--light);
+  font: 500 18px / 1.25 "Urbanist", system-ui, sans-serif;
+}
+
+.dp-step__copy {
+  margin: 0;
+  color: var(--light-60);
+  font: 400 14px / 1.55 "Outfit", system-ui, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   PALETTE — interactive swatches
+   -------------------------------------------------------------------------- */
+
+.dp-palette {
+  background: var(--navy-deep);
+}
+
+.dp-swatches {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.dp-swatches--segments {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dp-swatch {
+  position: relative;
+  padding: 14px 14px 22px;
+  background: color-mix(in srgb, var(--navy) 66%, transparent);
+  border: 1px solid var(--light-10);
+  border-radius: 20px;
+  transition: border-color 240ms ease, transform 240ms ease, box-shadow 240ms ease;
+}
+
+.dp-swatch:hover {
+  border-color: color-mix(in srgb, var(--glow) 40%, transparent);
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.dp-swatch__chip {
+  position: relative;
+  display: block;
+  height: 116px;
+  border-radius: 12px;
+  background: var(--chip);
+  border: 1px solid color-mix(in srgb, var(--light) 14%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), inset 0 -22px 40px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow 240ms ease;
+}
+
+.dp-swatch__chip input[type="color"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dp-swatch__edit {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1;
+  padding: 5px 12px;
+  border-radius: 40px;
+  background: rgba(8, 11, 19, 0.55);
+  backdrop-filter: blur(6px);
+  color: rgba(240, 235, 233, 0.92);
+  font: 500 9px / 1.2 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 220ms ease, transform 220ms ease;
+  pointer-events: none;
+}
+
+.dp-swatch:hover .dp-swatch__edit,
+.dp-swatch__chip:focus-within .dp-swatch__edit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dp-swatch__route {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 0;
+  width: 100%;
+  height: 64px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.dp-swatch__hex {
+  margin: 14px 2px 2px;
+  color: var(--light-60);
+  font: 500 11px / 1.2 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.dp-swatch__name {
+  margin: 4px 2px 6px;
+  color: var(--light);
+  font: 500 19px / 1.2 "Urbanist", system-ui, sans-serif;
+}
+
+.dp-swatch__role {
+  margin: 0 2px;
+  color: var(--light-60);
+  font: 400 13.5px / 1.5 "Outfit", system-ui, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   TRANSFER — download / upload block
+   -------------------------------------------------------------------------- */
+
+.dp-transfer {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  max-width: 1280px;
+  margin: clamp(64px, 9vh, 110px) auto 0;
+  padding: clamp(32px, 4vw, 56px);
+  background:
+    radial-gradient(520px 300px at 8% 110%, color-mix(in srgb, var(--orange) 14%, transparent), transparent 68%),
+    color-mix(in srgb, var(--navy) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--glow) 22%, transparent);
+  border-radius: 26px;
+  overflow: hidden;
+}
+
+.dp-transfer__line {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange), var(--orange-soft), transparent);
+  opacity: 0.85;
+}
+
+.dp-transfer__copy .dp-eyebrow {
+  margin-bottom: 14px;
+}
+
+.dp-transfer__title {
+  margin: 0 0 16px;
+  color: var(--light);
+  font: 500 clamp(24px, 2.2vw, 36px) / 1.15 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+.dp-transfer__text {
+  margin: 0;
+  color: var(--light-60);
+  font: 400 15px / 1.65 "Outfit", system-ui, sans-serif;
+}
+
+.dp-transfer__text strong {
+  color: var(--light-80);
+  font-weight: 500;
+}
+
+.dp-transfer__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.dp-transfer__actions .dp-btn--text {
+  align-self: center;
+}
+
+/* --------------------------------------------------------------------------
+   TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+
+.dp-type__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.dp-type-card {
+  position: relative;
+  padding: 34px 30px 30px;
+  background: color-mix(in srgb, var(--navy) 66%, transparent);
+  border: 1px solid var(--light-10);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: border-color 240ms ease, transform 240ms ease;
+}
+
+.dp-type-card:hover {
+  border-color: color-mix(in srgb, var(--glow) 36%, transparent);
+  transform: translateY(-4px);
+}
+
+.dp-type-card__glyph {
+  position: absolute;
+  top: -18px;
+  right: 10px;
+  color: var(--light);
+  opacity: 0.05;
+  font-size: 150px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.dp-type-card--urbanist .dp-type-card__glyph { font: 600 150px / 1 "Urbanist", system-ui, sans-serif; }
+.dp-type-card--outfit .dp-type-card__glyph { font: 500 150px / 1 "Outfit", system-ui, sans-serif; }
+.dp-type-card--montserrat .dp-type-card__glyph { font: 500 150px / 1 "Montserrat", system-ui, sans-serif; }
+
+.dp-type-card__specimen {
+  min-height: 148px;
+  margin: 0 0 30px;
+  color: var(--light-80);
+}
+
+.dp-type-card--urbanist .dp-type-card__specimen {
+  font: 500 clamp(22px, 1.8vw, 30px) / 1.15 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+.dp-type-card--outfit .dp-type-card__specimen {
+  font: 400 15px / 1.6 "Outfit", system-ui, sans-serif;
+  color: var(--light-60);
+}
+
+.dp-type-card--montserrat .dp-type-card__specimen {
+  display: flex;
+  align-items: center;
+  font: 500 13px / 1.8 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--glow) 80%, transparent);
+}
+
+.dp-type-card__name {
+  margin: 0 0 4px;
+  padding-top: 20px;
+  border-top: 1px solid var(--light-10);
+  color: var(--light);
+  font: 500 22px / 1.2 "Urbanist", system-ui, sans-serif;
+}
+
+.dp-type-card__role {
+  margin: 0 0 10px;
+  color: color-mix(in srgb, var(--glow) 76%, transparent);
+  font: 500 11px / 1.4 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.dp-type-card__meta {
+  margin: 0;
+  color: var(--light-60);
+  font: 400 13px / 1.55 "Outfit", system-ui, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   DESIGN DECISIONS — live samples
+   -------------------------------------------------------------------------- */
+
+.dp-decisions__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.dp-decision {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 26px;
+  background: color-mix(in srgb, var(--navy) 66%, transparent);
+  border: 1px solid var(--light-10);
+  border-radius: 20px;
+  transition: border-color 240ms ease, transform 240ms ease;
+}
+
+.dp-decision:hover {
+  border-color: color-mix(in srgb, var(--glow) 36%, transparent);
+  transform: translateY(-4px);
+}
+
+.dp-decision__sample {
+  position: relative;
+  height: 190px;
+  margin-bottom: 22px;
+  border-radius: 12px;
+  border: 1px solid var(--light-10);
+  background: var(--navy-deep);
+  overflow: hidden;
+}
+
+.dp-decision__num {
+  margin: 0 12px 6px;
+  color: color-mix(in srgb, var(--glow) 76%, transparent);
+  font: 600 14px / 1 "Urbanist", system-ui, sans-serif;
+  letter-spacing: 0.06em;
+}
+
+.dp-decision__name {
+  margin: 0 12px 8px;
+  color: var(--light);
+  font: 500 21px / 1.2 "Urbanist", system-ui, sans-serif;
+}
+
+.dp-decision__copy {
+  margin: 0 12px;
+  color: var(--light-60);
+  font: 400 14px / 1.6 "Outfit", system-ui, sans-serif;
+}
+
+/* 01 — trail line */
+.dp-sample-trail svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dp-sample-trail__path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--glow) 92%, transparent);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--glow) 46%, transparent));
+  stroke-dasharray: 620;
+  stroke-dashoffset: 620;
+  animation: dp-trail-draw 7s cubic-bezier(0.3, 0, 0.4, 1) infinite;
+}
+
+@keyframes dp-trail-draw {
+  0% { stroke-dashoffset: 620; }
+  46%, 78% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -620; }
+}
+
+.dp-sample-trail__leader {
+  stroke: color-mix(in srgb, var(--glow) 42%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.dp-sample-trail .hero-trail-point {
+  margin: 0;
+  translate: -50% -50%;
+}
+
+/* 02 — breathing sun behind the ridge */
+.dp-sample-sun {
+  background: linear-gradient(180deg, var(--navy-deep) 0%, color-mix(in srgb, var(--navy) 80%, var(--navy-deep)) 100%);
+}
+
+.dp-sample-sun img {
+  position: absolute;
+  left: -6%;
+  right: -6%;
+  bottom: -34%;
+  width: 112%;
+  z-index: 1;
+}
+
+.dp-sample-sun__glow {
+  position: absolute;
+  left: 26%;
+  top: 46%;
+  width: 320px;
+  height: 320px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side,
+      color-mix(in srgb, color-mix(in srgb, var(--orange-soft), white 45%) 52%, transparent) 0%,
+      color-mix(in srgb, var(--orange) 30%, transparent) 46%,
+      transparent 78%);
+  filter: blur(14px);
+  animation: hero-climbers-sun 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* 03 — duotone photographic wash */
+.dp-sample-duotone {
+  background-image: url("background.webp");
+  background-size: cover;
+  background-position: 56% 62%;
+}
+
+.dp-sample-duotone__wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 90% at 18% 78%, color-mix(in srgb, var(--orange) 34%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--navy-deep) 78%, transparent) 0%, color-mix(in srgb, var(--navy-deep) 26%, transparent) 55%, color-mix(in srgb, var(--navy-deep) 62%, transparent) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* 04 — depth planes */
+.dp-sample-surfaces {
+  display: grid;
+  place-items: center;
+  background: var(--navy-deep);
+}
+
+.dp-sample-surfaces__panel {
+  position: absolute;
+  border-radius: 10px;
+  border: 1px solid var(--light-10);
+  display: flex;
+  align-items: flex-end;
+  padding: 10px 14px;
+}
+
+.dp-sample-surfaces__panel i {
+  font: 500 9px / 1.2 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+.dp-sample-surfaces__panel--deep {
+  inset: 14px auto auto 14px;
+  width: 62%;
+  height: 72%;
+  background: var(--navy-deep);
+  color: var(--light-28);
+}
+
+.dp-sample-surfaces__panel--navy {
+  inset: 34% auto auto 26%;
+  width: 56%;
+  height: 52%;
+  background: var(--navy);
+  color: var(--light-60);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+}
+
+.dp-sample-surfaces__panel--light {
+  inset: auto 14px 14px auto;
+  width: 44%;
+  height: 34%;
+  background: var(--light);
+  color: color-mix(in srgb, var(--navy) 78%, transparent);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+/* 05 — pill buttons */
+.dp-sample-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background:
+    radial-gradient(340px 200px at 50% 120%, color-mix(in srgb, var(--orange) 12%, transparent), transparent 70%),
+    var(--navy-deep);
+}
+
+.dp-sample-buttons .nav-cta,
+.dp-sample-buttons .primary-cta {
+  cursor: pointer;
+}
+
+.dp-sample-buttons .nav-cta {
+  padding: 10px 26px;
+}
+
+.dp-sample-buttons__primary {
+  gap: 14px;
+  margin-top: 0;
+  padding: 12px 24px 12px 28px;
+}
+
+/* 06 — numerals + eyebrow */
+.dp-sample-numerals {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--navy-deep);
+}
+
+.dp-sample-numerals__ghost {
+  position: absolute;
+  left: 6px;
+  top: -30px;
+  color: var(--light);
+  opacity: 0.05;
+  font: 600 170px / 1 "Urbanist", system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.dp-sample-numerals__eyebrow {
+  color: color-mix(in srgb, var(--glow) 76%, transparent);
+  font: 500 10px / 1.4 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.dp-sample-numerals__title {
+  color: var(--light-80);
+  font: 500 24px / 1.15 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+/* --------------------------------------------------------------------------
+   AUDIENCE — animated Founders / Companies / Investors tabs
+   -------------------------------------------------------------------------- */
+
+.dp-aud__tabs {
+  display: flex;
+  justify-content: center;
+  gap: clamp(10px, 1.6vw, 18px);
+  max-width: 1080px;
+  margin: 0 auto clamp(36px, 5vh, 56px);
+}
+
+.dp-aud__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 26px;
+  border: 1px solid var(--light-10);
+  border-radius: 40px;
+  background: color-mix(in srgb, var(--navy) 60%, transparent);
+  color: var(--light-60);
+  cursor: pointer;
+  font: 500 13px / 1.2 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: color 260ms ease, border-color 260ms ease, background 260ms ease, transform 260ms ease;
+}
+
+.dp-aud__tab:hover {
+  color: var(--light);
+  transform: translateY(-2px);
+}
+
+.dp-aud__tab-num {
+  font: 600 12px / 1 "Urbanist", system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  opacity: 0.65;
+}
+
+.dp-aud__tab.is-active {
+  color: var(--light);
+  border-color: color-mix(in srgb, var(--aud-tab-accent, var(--glow)) 60%, transparent);
+  background: color-mix(in srgb, var(--aud-tab-accent, var(--glow)) 12%, transparent);
+}
+
+.dp-aud__tab[data-aud-tab="founders"] { --aud-tab-accent: var(--accent-founders); }
+.dp-aud__tab[data-aud-tab="companies"] { --aud-tab-accent: var(--accent-companies); }
+.dp-aud__tab[data-aud-tab="investors"] { --aud-tab-accent: var(--accent-investors); }
+
+.dp-aud__tab-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--aud-tab-accent, var(--glow));
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+}
+
+.dp-aud__tab.is-active .dp-aud__tab-progress {
+  opacity: 0.9;
+  animation: dp-tab-progress var(--dp-aud-interval, 6000ms) linear forwards;
+}
+
+[data-dp-aud].is-manual .dp-aud__tab-progress {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes dp-tab-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.dp-aud__stage {
+  position: relative;
+  max-width: 1180px;
+  min-height: 460px;
+  margin: 0 auto;
+  border: 1px solid var(--light-10);
+  border-radius: 26px;
+  background:
+    radial-gradient(640px 420px at 82% 110%, color-mix(in srgb, var(--aud-accent, var(--glow)) 14%, transparent), transparent 72%),
+    color-mix(in srgb, var(--navy) 72%, transparent);
+  overflow: hidden;
+  transition: background 600ms ease;
+}
+
+.dp-aud__stage[data-active="founders"] { --aud-accent: var(--accent-founders); }
+.dp-aud__stage[data-active="companies"] { --aud-accent: var(--accent-companies); }
+.dp-aud__stage[data-active="investors"] { --aud-accent: var(--accent-investors); }
+
+.dp-aud__ghost {
+  position: absolute;
+  right: -14px;
+  bottom: -54px;
+  z-index: 0;
+  color: var(--aud-accent, var(--light));
+  opacity: 0.07;
+  font: 600 clamp(120px, 16vw, 230px) / 1 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: color 600ms ease;
+}
+
+.dp-aud__panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  padding: clamp(36px, 4.5vw, 64px);
+  opacity: 0;
+  translate: 0 18px;
+  transition: opacity 520ms var(--ease-out), translate 520ms var(--ease-out);
+}
+
+.dp-aud__panel:not(.is-active) {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dp-aud__panel.is-active {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.dp-aud__hint {
+  margin: 0 0 10px;
+  color: color-mix(in srgb, var(--aud-accent, var(--glow)) 88%, white);
+  font: 500 11px / 1.4 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.dp-aud__name {
+  margin: 0 0 18px;
+  color: var(--light);
+  font: 500 clamp(30px, 3vw, 46px) / 1.05 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+.dp-aud__text {
+  margin: 0 0 22px;
+  color: var(--light-60);
+  font: 400 15.5px / 1.65 "Outfit", system-ui, sans-serif;
+}
+
+.dp-aud__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dp-aud__list li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--light-80);
+  font: 400 14.5px / 1.55 "Outfit", system-ui, sans-serif;
+}
+
+.dp-aud__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 10px;
+  height: 1.5px;
+  background: var(--aud-accent, var(--glow));
+  transition: background 600ms ease;
+}
+
+.dp-aud__chart {
+  color: var(--aud-accent, var(--glow));
+  transition: color 600ms ease;
+}
+
+.dp-aud__chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--aud-accent, var(--glow)) 26%, transparent));
+}
+
+.dp-aud__chart .dp-draw {
+  transition: stroke-dashoffset 1100ms cubic-bezier(0.3, 0, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   FOOTER (preview variant) — two columns instead of four
+   -------------------------------------------------------------------------- */
+
+.site-footer--preview .site-footer__top {
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+}
+
+.site-footer--preview .site-footer__lede-text a {
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   TOAST
+   -------------------------------------------------------------------------- */
+
+.dp-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  z-index: 200;
+  padding: 13px 26px;
+  border-radius: 40px;
+  border: 1px solid color-mix(in srgb, var(--glow) 34%, transparent);
+  background: color-mix(in srgb, var(--navy) 92%, black);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+  color: var(--light);
+  font: 400 14px / 1.3 "Outfit", system-ui, sans-serif;
+  opacity: 0;
+  translate: -50% 14px;
+  transition: opacity 320ms var(--ease-out), translate 320ms var(--ease-out);
+  pointer-events: none;
+}
+
+.dp-toast.is-visible {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE (desktop-first; <860px is covered by the mobile blocker)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1240px) {
+  .dp-swatches {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1080px) {
+  .dp-nav-actions .dp-btn--primary span {
+    display: none;
+  }
+  .dp-nav-actions .dp-btn--primary {
+    width: 42px;
+    padding: 10px;
+  }
+  .dp-swatches,
+  .dp-type__grid,
+  .dp-decisions__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dp-transfer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dp-sun,
+  .dp-sample-sun__glow,
+  .dp-sample-trail__path,
+  .dp-nav-badge::before {
+    animation: none;
+  }
+  .dp-sample-trail__path {
+    stroke-dashoffset: 0;
+  }
+  .dp-aud__tab.is-active .dp-aud__tab-progress {
+    animation: none;
+    opacity: 0;
+  }
+}
