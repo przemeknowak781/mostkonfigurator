@@ -42,6 +42,71 @@
   /* Original section backdrop (#0a0d18 → #07090f) re-expressed via tokens */
   --dp-bg-top: color-mix(in srgb, var(--navy) 20%, var(--navy-deep));
   --dp-bg-bottom: color-mix(in srgb, var(--navy-deep) 94%, black);
+
+  /* Document-frame chrome: fixed presentation values, independent of the
+     editable palette, so the "artboard on a canvas" frame reads the same
+     regardless of what colors the investor is trying out inside it. */
+  --dp-gutter-x: clamp(20px, 3.2vw, 56px);
+  --dp-gutter-top: clamp(16px, 2.2vw, 32px);
+  --dp-frame-radius: clamp(14px, 1.4vw, 22px);
+  --dp-frame-line: rgba(20, 16, 24, 0.14);
+  --dp-canvas: #e7e2dc;
+}
+
+/* --------------------------------------------------------------------------
+   DOCUMENT FRAME — the whole preview sits inset on a neutral canvas, like a
+   design document/artboard. Only the elements that are genuinely
+   position: fixed in this page (top-nav, mobile-menu, dp-dock, dp-toast,
+   mobile-block, scroll-progress) live OUTSIDE `.dp-frame` in the DOM, so
+   wrapping <main> + the footer in `.dp-frame` and giving it its own
+   `overflow: hidden` clips only the intentional full-bleed decorative
+   elements (hero-ridges, ridge-edge__img, audience-intro cuts) — it can
+   never clip a fixed-position descendant, because there isn't one inside it.
+   -------------------------------------------------------------------------- */
+
+.is-design-preview {
+  background: var(--dp-canvas);
+}
+
+.is-design-preview .dp-frame {
+  position: relative;
+  margin: var(--dp-gutter-top) var(--dp-gutter-x);
+  background: var(--navy-deep);
+  border: 1px solid var(--dp-frame-line);
+  border-radius: var(--dp-frame-radius);
+  box-shadow: 0 50px 120px rgba(10, 8, 6, 0.28), 0 12px 34px rgba(10, 8, 6, 0.14);
+  overflow: hidden;
+}
+
+/* Nav floats above `.dp-frame` (same DOM level, not nested) so it keeps its
+   normal position: fixed scroll behaviour untouched — it's just re-anchored
+   to the frame's left/right/top instead of the true viewport edges, and
+   its own top corners are rounded to match the frame's, so the two read as
+   one continuous document outline even though they're separate boxes. */
+.is-design-preview .top-nav {
+  inset: var(--dp-gutter-top) var(--dp-gutter-x) auto;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: var(--dp-frame-radius) var(--dp-frame-radius) 0 0;
+  transition: background 320ms var(--ease-out), border-color 320ms ease;
+}
+
+.is-design-preview .top-nav::before {
+  border-radius: var(--dp-frame-radius) var(--dp-frame-radius) 0 0;
+}
+
+.is-design-preview .top-nav.is-scrolled {
+  border-color: var(--dp-frame-line);
+}
+
+/* Progress sliver traces the frame's own top edge instead of the true
+   viewport edge, so it reads as part of the document, not browser chrome. */
+.is-design-preview .scroll-progress {
+  top: var(--dp-gutter-top);
+  left: var(--dp-gutter-x);
+  right: var(--dp-gutter-x);
+  width: auto;
+  border-radius: 999px;
 }
 
 /* --------------------------------------------------------------------------
@@ -1668,7 +1733,7 @@ section.dp-edit-pinned,
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: min(960px, calc(100vw - 48px));
+  max-width: min(960px, calc(100vw - 2 * var(--dp-gutter-x) - 32px));
   pointer-events: none;
 }
 
