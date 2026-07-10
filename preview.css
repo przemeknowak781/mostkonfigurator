@@ -55,14 +55,20 @@
 
 /* --------------------------------------------------------------------------
    DOCUMENT FRAME — the whole preview sits inset on a neutral canvas, like a
-   design document/artboard. Only the elements that are genuinely
-   position: fixed in this page (top-nav, mobile-menu, dp-dock, dp-toast,
-   mobile-block, scroll-progress) live OUTSIDE `.dp-frame` in the DOM, so
-   wrapping <main> + the footer in `.dp-frame` and giving it its own
-   `overflow: hidden` clips only the intentional full-bleed decorative
-   elements (hero-ridges, ridge-edge__img, audience-intro cuts) — it can
-   never clip a fixed-position descendant, because there isn't one inside it.
-   -------------------------------------------------------------------------- */
+   design document/artboard.
+
+   IMPORTANT: this uses `clip-path`, NOT `overflow: hidden`, to round off the
+   frame's content. `.audience-intro__grid` (the expandable triptych) relies
+   on `position: sticky` to pin itself while the user scrolls past it — and
+   per spec, ANY ancestor with a computed `overflow` other than `visible`
+   becomes that sticky element's scrolling reference box. `.dp-frame` wraps
+   `<main>`, so `overflow: hidden` here would silently re-anchor the sticky
+   grid to this non-scrolling div instead of the real document scroll,
+   breaking its pinned range and leaving a huge dead gap where it used to
+   sit. `clip-path` produces the identical rounded-rectangle clip (including
+   the hero's 2% full-bleed mountain silhouette) without being in the set of
+   properties that create a new sticky/containing-block context, so nothing
+   downstream needs to know this frame exists. -------------------------------------------------------------------------- */
 
 .is-design-preview {
   background: var(--dp-canvas);
@@ -75,7 +81,7 @@
   border: 1px solid var(--dp-frame-line);
   border-radius: var(--dp-frame-radius);
   box-shadow: 0 50px 120px rgba(10, 8, 6, 0.28), 0 12px 34px rgba(10, 8, 6, 0.14);
-  overflow: hidden;
+  clip-path: inset(0 round var(--dp-frame-radius));
 }
 
 /* Nav floats above `.dp-frame` (same DOM level, not nested) so it keeps its
