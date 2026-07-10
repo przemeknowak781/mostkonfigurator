@@ -1,33 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
-    <title>MOST - Legal Partner for Growth</title>
+    <title>MOST — Design 2.0 · Interaktywny podgląd</title>
     <meta
       name="description"
-      content="MOST accompanies founders, tech companies, and investors as long-term partners in law and business."
+      content="Interaktywny podgląd designu MOST Partners — paleta kolorów, typografia i decyzje projektowe. Zmieniaj kolory na żywo i pobierz zestaw jako plik JSON."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
         rel="stylesheet"
       />
     </noscript>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="preview.css" />
     <script src="script.js" defer></script>
+    <script src="preview.js" defer></script>
   </head>
-  <body>
+  <body class="is-design-preview">
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
       <symbol id="most-logo" viewBox="0 0 160 58">
         <path d="M46.1176 16.6761V2.64803L25.4118 34.1921H23.0588L2.82353 2.64803V34.8539H0V0.000976562H4L24.2989 31.1793L44.6596 0.000976562H48.9412V16.6761H46.1176Z" />
@@ -47,63 +49,35 @@
 
     <div class="scroll-progress" aria-hidden="true"></div>
 
-    <header class="top-nav" aria-label="Primary navigation">
-      <a class="wordmark" href="/" aria-label="MOST Partners home">
+    <header class="top-nav top-nav--preview" aria-label="Pasek narzędzi podglądu">
+      <a class="wordmark" href="index.html" aria-label="MOST Partners">
         <svg class="wordmark__logo" viewBox="0 0 160 58" role="img" aria-label="MOST Partners">
           <use href="#most-logo" />
         </svg>
       </a>
 
-      <nav class="top-nav__menu top-nav__menu--left" aria-label="Primary sections">
-        <a href="about-us.html">About us</a>
-        <a href="our-team.html">Our Team</a>
-        <a href="contact.html">Contact us</a>
-      </nav>
+      <span class="dp-nav-badge">Design&nbsp;2.0&nbsp;· podgląd</span>
 
-      <nav class="top-nav__menu top-nav__menu--right" aria-label="Audience">
-        <a href="for-founders.html">Founders</a>
-        <a href="for-companies.html">Companies</a>
-        <a href="for-investors.html">Investors</a>
-      </nav>
-
-      <a class="nav-cta" href="contact.html">Contact us</a>
-
-      <button class="icon-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-        <span></span>
-        <span></span>
-      </button>
+      <div class="dp-nav-actions">
+        <button class="dp-btn dp-btn--primary" type="button" data-dp-download>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9M6 8.5l4 4 4-4M4 16h12" /></svg>
+          <span>Pobierz zestaw kolorów</span>
+        </button>
+        <button class="dp-btn dp-btn--ghost" type="button" data-dp-upload>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16V7M6 10.5l4-4 4 4M4 4h12" /></svg>
+          <span>Wczytaj zestaw</span>
+        </button>
+        <button class="dp-btn dp-btn--reset" type="button" data-dp-reset title="Przywróć oryginalne kolory">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 8A6 6 0 1 1 4 11.5M4 5v3.2h3.2" /></svg>
+          <span class="sr-only">Przywróć oryginalne kolory</span>
+        </button>
+      </div>
     </header>
 
-    <div class="mobile-menu" id="mobile-menu" hidden>
-      <div class="mobile-menu__panel">
-        <div class="mobile-menu__top">
-          <a class="wordmark" href="/" aria-label="MOST Partners home">
-            <svg class="wordmark__logo" viewBox="0 0 160 58" role="img" aria-label="MOST">
-              <use href="#most-logo" />
-            </svg>
-            <span class="wordmark__tag">PARTNERS</span>
-          </a>
-          <button class="close-button" type="button" aria-label="Close menu">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6 6l12 12M18 6 6 18" />
-            </svg>
-          </button>
-        </div>
-        <nav class="mobile-menu__links" aria-label="Expanded mobile navigation">
-          <a href="about-us.html">About us</a>
-          <a href="our-team.html">Our Team</a>
-          <a href="contact.html">Contact us</a>
-          <span class="mobile-menu__divider" aria-hidden="true"></span>
-          <a href="for-founders.html">Founders</a>
-          <a href="for-companies.html">Companies</a>
-          <a href="for-investors.html">Investors</a>
-        </nav>
-        <a class="nav-cta" href="contact.html">Contact us</a>
-      </div>
-    </div>
+    <input type="file" accept=".json,application/json" hidden data-dp-file />
 
     <main>
-      <section class="hero" aria-labelledby="hero-title">
+      <section class="hero" aria-labelledby="hero-title" data-edit="hero">
         <div class="hero-media" aria-hidden="true">
           <img class="hero-bg" src="background.webp" alt="" fetchpriority="high" decoding="async" />
           <div class="hero-wash"></div>
@@ -126,7 +100,7 @@
           </div>
         </div>
 
-        <div class="hero-content">
+        <div class="hero-content" data-edit="hero-typo">
           <p class="eyebrow reveal">let's make the most at every stage</p>
           <h1 class="hero-title reveal" id="hero-title">
             Your Legal Partner
@@ -136,7 +110,7 @@
           <p class="hero-tagline reveal">
             Partners in your most ambitious journey.
           </p>
-          <a class="primary-cta reveal" href="contact.html">
+          <a class="primary-cta reveal" href="#design">
             <span>let's start</span>
             <svg viewBox="0 0 20 20" aria-hidden="true">
               <path d="M5 10h10M11 6l4 4-4 4" />
@@ -144,7 +118,7 @@
           </a>
         </div>
 
-        <div class="hero-stats" aria-label="Highlights">
+        <div class="hero-stats" aria-label="Highlights" data-edit="stats">
           <div class="hero-stat">
             <strong>200+</strong>
             <span>Funding rounds closed</span>
@@ -172,10 +146,6 @@
       <div class="ridge-edge">
         <svg class="ridge-edge__leaders" viewBox="0 0 2000 100" preserveAspectRatio="none" aria-hidden="true"></svg>
         <img class="ridge-edge__img" src="gora-bez-tla-2000px.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-        <p class="ridge-quote">
-          At MOST, we accompany founders, tech companies, and investors as long-term partners in law and business&nbsp;–
-          helping them <strong>protect what matters most, move forward with confidence, and unlock opportunity.</strong>
-        </p>
       </div>
 
       <svg class="hero-trail" viewBox="0 0 2000 850" preserveAspectRatio="none" aria-hidden="true">
@@ -187,8 +157,8 @@
 
       <div class="hero-trail-labels" aria-hidden="true"></div>
 
-      <!-- AUDIENCE INTRO: triptych with expandable persona cards (first section after hero) -->
-      <section class="audience-intro" id="for-you" aria-labelledby="audience-intro-title">
+      <!-- AUDIENCE INTRO: original expandable persona cards (triptych) -->
+      <section class="audience-intro" id="for-you" aria-labelledby="audience-intro-title" data-edit="triptych">
         <div class="audience-intro__trail-edge audience-intro__trail-edge--bottom" aria-hidden="true"></div>
         <div class="audience-intro__grid" data-audience-triptych>
           <header class="audience-intro__head">
@@ -211,12 +181,12 @@
             <article class="preview preview--founders is-expanded" data-audience-card>
               <div class="preview__chart" aria-hidden="true">
                 <svg class="preview__route" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
-                  <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(209,126,95,0.18)" stroke-width="1" />
-                  <line x1="20" y1="60" x2="180" y2="60" stroke="rgba(209,126,95,0.12)" stroke-width="1" stroke-dasharray="2 3" />
-                  <line x1="20" y1="20" x2="180" y2="20" stroke="rgba(209,126,95,0.1)" stroke-width="1" stroke-dasharray="2 3" />
-                  <path d="M20 100 C 60 100, 80 60, 110 50 S 160 20, 180 10" stroke="#D17E5F" stroke-width="2" fill="none" stroke-linecap="round" />
-                  <circle cx="20" cy="100" r="4" fill="#D17E5F" />
-                  <circle cx="180" cy="10" r="5" fill="#D17E5F" />
+                  <line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-opacity="0.18" stroke-width="1" />
+                  <line x1="20" y1="60" x2="180" y2="60" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 3" />
+                  <line x1="20" y1="20" x2="180" y2="20" stroke="currentColor" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="2 3" />
+                  <path d="M20 100 C 60 100, 80 60, 110 50 S 160 20, 180 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+                  <circle cx="20" cy="100" r="4" fill="currentColor" />
+                  <circle cx="180" cy="10" r="5" fill="currentColor" />
                 </svg>
               </div>
               <header class="preview__head">
@@ -234,12 +204,8 @@
                   <li>Hire and incentivise the right team&nbsp;— employment, contractors,&nbsp;ESOPs</li>
                   <li>Protect your IP, technology, and&nbsp;product</li>
                 </ul>
-                <a class="preview__cta" href="for-founders.html">
-                  <span>explore the founders route</span>
-                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M11 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </a>
               </div>
-              <button class="preview__toggle" type="button" aria-expanded="true" data-audience-toggle>
+              <button class="preview__toggle" type="button" aria-expanded="true" data-audience-toggle data-edit-ignore>
                 <span class="preview__toggle-label">show less</span>
                 <span class="preview__toggle-icon" aria-hidden="true"></span>
               </button>
@@ -254,13 +220,13 @@
             <article class="preview preview--companies" data-audience-card>
               <div class="preview__chart" aria-hidden="true">
                 <svg class="preview__route" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
-                  <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(155,139,149,0.18)" stroke-width="1" />
-                  <line x1="20" y1="60" x2="180" y2="60" stroke="rgba(155,139,149,0.12)" stroke-width="1" stroke-dasharray="2 3" />
-                  <line x1="20" y1="20" x2="180" y2="20" stroke="rgba(155,139,149,0.1)" stroke-width="1" stroke-dasharray="2 3" />
-                  <path d="M20 60 L 180 60" stroke="#9B8B95" stroke-width="2" fill="none" stroke-linecap="round" />
-                  <rect x="16" y="56" width="8" height="8" fill="#9B8B95" />
-                  <rect x="96" y="56" width="8" height="8" fill="rgba(155,139,149,0.7)" />
-                  <rect x="176" y="56" width="8" height="8" fill="#9B8B95" />
+                  <line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-opacity="0.18" stroke-width="1" />
+                  <line x1="20" y1="60" x2="180" y2="60" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 3" />
+                  <line x1="20" y1="20" x2="180" y2="20" stroke="currentColor" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="2 3" />
+                  <path d="M20 60 L 180 60" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+                  <rect x="16" y="56" width="8" height="8" fill="currentColor" />
+                  <rect x="96" y="56" width="8" height="8" fill="currentColor" fill-opacity="0.7" />
+                  <rect x="176" y="56" width="8" height="8" fill="currentColor" />
                 </svg>
               </div>
               <header class="preview__head">
@@ -278,12 +244,8 @@
                   <li>Manage employment, contractors, and ESOP&nbsp;programs</li>
                   <li>Navigate cross-border expansion and&nbsp;compliance</li>
                 </ul>
-                <a class="preview__cta" href="for-companies.html">
-                  <span>explore the companies route</span>
-                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M11 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </a>
               </div>
-              <button class="preview__toggle" type="button" aria-expanded="false" data-audience-toggle>
+              <button class="preview__toggle" type="button" aria-expanded="false" data-audience-toggle data-edit-ignore>
                 <span class="preview__toggle-label">read more</span>
                 <span class="preview__toggle-icon" aria-hidden="true"></span>
               </button>
@@ -298,13 +260,13 @@
             <article class="preview preview--investors" data-audience-card>
               <div class="preview__chart" aria-hidden="true">
                 <svg class="preview__route" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
-                  <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(91,122,176,0.18)" stroke-width="1" />
-                  <line x1="20" y1="60" x2="180" y2="60" stroke="rgba(91,122,176,0.12)" stroke-width="1" stroke-dasharray="2 3" />
-                  <line x1="20" y1="20" x2="180" y2="20" stroke="rgba(91,122,176,0.1)" stroke-width="1" stroke-dasharray="2 3" />
-                  <path d="M20 100 L 70 100 L 100 70 L 130 70 L 160 30 L 180 30" stroke="#5B7AB0" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-                  <path d="M100 70 L 120 50" stroke="rgba(91,122,176,0.5)" stroke-width="1" fill="none" stroke-dasharray="2 3" />
-                  <circle cx="20" cy="100" r="3" fill="#5B7AB0" />
-                  <circle cx="180" cy="30" r="5" fill="#5B7AB0" />
+                  <line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-opacity="0.18" stroke-width="1" />
+                  <line x1="20" y1="60" x2="180" y2="60" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 3" />
+                  <line x1="20" y1="20" x2="180" y2="20" stroke="currentColor" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="2 3" />
+                  <path d="M20 100 L 70 100 L 100 70 L 130 70 L 160 30 L 180 30" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M100 70 L 120 50" stroke="currentColor" stroke-opacity="0.5" stroke-width="1" fill="none" stroke-dasharray="2 3" />
+                  <circle cx="20" cy="100" r="3" fill="currentColor" />
+                  <circle cx="180" cy="30" r="5" fill="currentColor" />
                 </svg>
               </div>
               <header class="preview__head">
@@ -322,12 +284,8 @@
                   <li>Conduct and respond to due diligence with precision and&nbsp;speed</li>
                   <li>Close investments smoothly across borders and time&nbsp;zones</li>
                 </ul>
-                <a class="preview__cta" href="for-investors.html">
-                  <span>explore the investors route</span>
-                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M11 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </a>
               </div>
-              <button class="preview__toggle" type="button" aria-expanded="false" data-audience-toggle>
+              <button class="preview__toggle" type="button" aria-expanded="false" data-audience-toggle data-edit-ignore>
                 <span class="preview__toggle-label">read more</span>
                 <span class="preview__toggle-icon" aria-hidden="true"></span>
               </button>
@@ -336,240 +294,443 @@
         </div>
       </section>
 
-      <section class="approach" id="how-we-work" aria-labelledby="approach-title">
-        <div class="approach__head">
-          <p class="approach__eyebrow">how we work</p>
-          <h2 class="approach__title" id="approach-title">
-            Driven by a passion for making things&nbsp;happen.
-          </h2>
-        </div>
+      <!-- ===================== DESIGN 2.0 PREVIEW ===================== -->
 
-        <ol class="approach__list">
-          <li class="approach__item">
-            <span class="approach__num">01</span>
-            <h3 class="approach__step-title">Deliver business-driven legal solutions</h3>
-            <p>Always thinking two steps ahead. We focus on what matters now, while anticipating what comes next to protect your future and support your momentum.</p>
+      <section class="dp-section dp-intro" id="design" aria-labelledby="dp-intro-title" data-edit="sections">
+        <div class="dp-sun" aria-hidden="true"></div>
+        <header class="dp-head" data-reveal>
+          <p class="dp-eyebrow">— design 2.0 · podgląd interaktywny —</p>
+          <h2 class="dp-title" id="dp-intro-title">Jeden system.<br />Wasze decyzje.</h2>
+          <p class="dp-lede">
+            To, co widzicie powyżej, oraz próbki poniżej to jeden żywy organizm. Kliknijcie dowolny kolor,
+            a hero, linie tras, poświata słońca i wszystkie elementy przemalują się natychmiast.
+            Możecie też po prostu najechać na dowolny element strony i kliknąć&nbsp;— u dołu pojawi się edytor tego miejsca. Gdy zestaw będzie gotowy&nbsp;— pobierzcie plik i odeślijcie go do&nbsp;nas.
+          </p>
+        </header>
+        <ol class="dp-steps" data-reveal>
+          <li class="dp-step">
+            <span class="dp-step__num">01</span>
+            <p class="dp-step__name">Kliknijcie kolor</p>
+            <p class="dp-step__copy">Każda próbka w palecie otwiera selektor koloru.</p>
           </li>
-          <li class="approach__item">
-            <span class="approach__num">02</span>
-            <h3 class="approach__step-title">Structure legal frameworks to unlock lasting value</h3>
-            <p>We ensure your legal setup works for your business — enabling smooth operations, informed decisions, and sustainable growth.</p>
+          <li class="dp-step">
+            <span class="dp-step__num">02</span>
+            <p class="dp-step__name">Oceńcie na żywo</p>
+            <p class="dp-step__copy">Hero i wszystkie sample aktualizują się od razu.</p>
           </li>
-          <li class="approach__item">
-            <span class="approach__num">03</span>
-            <h3 class="approach__step-title">Draft with clarity, precision, and purpose</h3>
-            <p>Always driven by what matters most. Our documents are designed to be understood, used, and focused on the underlying objectives of your team, your partners, your investors — whoever needs to act on them.</p>
-          </li>
-          <li class="approach__item">
-            <span class="approach__num">04</span>
-            <h3 class="approach__step-title">Negotiate with focus on what matters most</h3>
-            <p>We stay focused on your priorities and outcomes — creating value, protecting your interests, and keeping deals on track.</p>
-          </li>
-          <li class="approach__item">
-            <span class="approach__num">05</span>
-            <h3 class="approach__step-title">Close deals seamlessly</h3>
-            <p>We coordinate across borders, time zones, and teams to keep transactions moving smoothly from negotiation to closing.</p>
-          </li>
-          <li class="approach__item">
-            <span class="approach__num">06</span>
-            <h3 class="approach__step-title">Stay by your side</h3>
-            <p>Your business evolves, and so does our support. We are not just here for the deal — we are your long-term partner in law and business.</p>
+          <li class="dp-step">
+            <span class="dp-step__num">03</span>
+            <p class="dp-step__name">Pobierzcie zestaw</p>
+            <p class="dp-step__copy">Plik JSON z decyzjami wystarczy odesłać mailem.</p>
           </li>
         </ol>
       </section>
 
-      <!-- EXPERTISE VISUAL CARDS: 6 cards in grid (replaces route-map / tagging) -->
-      <section class="expertise-cards" id="expertise" aria-labelledby="expertise-cards-title">
-        <header class="expertise-cards__head">
-          <p class="expertise-cards__eyebrow">— our expertise —</p>
-          <h2 class="expertise-cards__title" id="expertise-cards-title">
-            We integrate legal considerations<br>
-            into business&nbsp;strategy.
-          </h2>
-          <p class="expertise-cards__lede">
-            Six interconnected areas of support&nbsp;— grown with your business, adapted to your&nbsp;stage.
+      <section class="dp-section dp-palette" id="palette" aria-labelledby="dp-palette-title">
+        <header class="dp-head" data-reveal>
+          <p class="dp-eyebrow">— paleta kolorów —</p>
+          <h2 class="dp-title" id="dp-palette-title">Kolory, które budują&nbsp;scenę.</h2>
+          <p class="dp-lede">
+            Nocny granat nieba, światło zachodzącego słońca i chłodny cień gór.
+            Każdy kolor ma jedną, jasno określoną rolę.
           </p>
         </header>
 
-        <ol class="expertise-cards__grid">
-          <li class="ex-card ex-card--01">
-            <div class="ex-card__visual" aria-hidden="true">
-              <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <linearGradient id="exGrad01" x1="0" x2="1" y1="1" y2="0">
-                    <stop offset="0" stop-color="#FF612C" />
-                    <stop offset="1" stop-color="#FFB077" />
-                  </linearGradient>
-                </defs>
-                <path d="M20 90 L60 30 L100 90 Z" fill="none" stroke="url(#exGrad01)" stroke-width="1.6" />
-                <path d="M30 90 L60 50 L90 90" fill="none" stroke="rgba(255,168,110,0.4)" stroke-width="1" stroke-dasharray="2 3" />
-                <circle cx="60" cy="30" r="4" fill="#FF612C" />
-                <circle cx="20" cy="90" r="3" fill="rgba(255,168,110,0.7)" />
-                <circle cx="100" cy="90" r="3" fill="rgba(255,168,110,0.7)" />
+        <p class="dp-group-label" data-reveal>Fundament</p>
+        <div class="dp-swatches" data-reveal>
+          <article class="dp-swatch" data-token="--navy-deep">
+            <label class="dp-swatch__chip" style="--chip: var(--navy-deep)">
+              <input type="color" aria-label="Zmień kolor Deep Navy" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#080B13</p>
+            <h3 class="dp-swatch__name">Deep Navy</h3>
+            <p class="dp-swatch__role">Najgłębsze tło — nocne niebo, baza całej strony.</p>
+          </article>
+          <article class="dp-swatch" data-token="--navy">
+            <label class="dp-swatch__chip" style="--chip: var(--navy)">
+              <input type="color" aria-label="Zmień kolor Navy" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#161822</p>
+            <h3 class="dp-swatch__name">Navy</h3>
+            <p class="dp-swatch__role">Powierzchnie treści — karty, panele, stopka.</p>
+          </article>
+          <article class="dp-swatch" data-token="--light">
+            <label class="dp-swatch__chip" style="--chip: var(--light)">
+              <input type="color" aria-label="Zmień kolor Light" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#F0EBE9</p>
+            <h3 class="dp-swatch__name">Light</h3>
+            <p class="dp-swatch__role">Światło — typografia i jasne akcenty na ciemnym tle.</p>
+          </article>
+          <article class="dp-swatch" data-token="--orange">
+            <label class="dp-swatch__chip" style="--chip: var(--orange)">
+              <input type="color" aria-label="Zmień kolor Orange" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#FF612C</p>
+            <h3 class="dp-swatch__name">Orange</h3>
+            <p class="dp-swatch__role">Sygnał energii — CTA, akcenty, początek trasy.</p>
+          </article>
+          <article class="dp-swatch" data-token="--orange-soft">
+            <label class="dp-swatch__chip" style="--chip: var(--orange-soft)">
+              <input type="color" aria-label="Zmień kolor Orange Soft" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#FFB077</p>
+            <h3 class="dp-swatch__name">Orange Soft</h3>
+            <p class="dp-swatch__role">Ciepły półton — gradienty, zaznaczenia, poświaty.</p>
+          </article>
+          <article class="dp-swatch" data-token="--glow">
+            <label class="dp-swatch__chip" style="--chip: var(--glow)">
+              <input type="color" aria-label="Zmień kolor Trail Glow" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#FFA86E</p>
+            <h3 class="dp-swatch__name">Trail Glow</h3>
+            <p class="dp-swatch__role">Światło szlaku — linie tras, punkty kontrolne, przerywane pomocnicze.</p>
+          </article>
+          <article class="dp-swatch" data-token="--purple-dark">
+            <label class="dp-swatch__chip" style="--chip: var(--purple-dark)">
+              <input type="color" aria-label="Zmień kolor Purple Dark" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#6A6E86</p>
+            <h3 class="dp-swatch__name">Purple Dark</h3>
+            <p class="dp-swatch__role">Chłodny cień gór — tła drugoplanowe, sekcje przejściowe.</p>
+          </article>
+          <article class="dp-swatch" data-token="--purple-light">
+            <label class="dp-swatch__chip" style="--chip: var(--purple-light)">
+              <input type="color" aria-label="Zmień kolor Purple Light" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#8087AD</p>
+            <h3 class="dp-swatch__name">Purple Light</h3>
+            <p class="dp-swatch__role">Mgła o świcie — delikatne wypełnienia i ilustracje.</p>
+          </article>
+        </div>
+
+        <p class="dp-group-label" data-reveal>Akcenty segmentów</p>
+        <div class="dp-swatches dp-swatches--segments" data-reveal>
+          <article class="dp-swatch dp-swatch--segment" data-token="--accent-founders">
+            <label class="dp-swatch__chip" style="--chip: var(--accent-founders)">
+              <input type="color" aria-label="Zmień akcent Founders" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+              <svg class="dp-swatch__route" viewBox="0 0 200 64" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M8 56 C 60 56, 80 34, 110 28 S 170 12, 192 6" fill="none" stroke="rgba(8,11,19,0.55)" stroke-width="2.4" stroke-linecap="round" />
+              </svg>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#D17E5F</p>
+            <h3 class="dp-swatch__name">Founders</h3>
+            <p class="dp-swatch__role">Ciepły — dynamiczna krzywa wzrostu od zera.</p>
+          </article>
+          <article class="dp-swatch dp-swatch--segment" data-token="--accent-companies">
+            <label class="dp-swatch__chip" style="--chip: var(--accent-companies)">
+              <input type="color" aria-label="Zmień akcent Companies" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+              <svg class="dp-swatch__route" viewBox="0 0 200 64" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M8 32 L 192 32" fill="none" stroke="rgba(8,11,19,0.55)" stroke-width="2.4" stroke-linecap="round" />
+                <rect x="30" y="27" width="10" height="10" fill="rgba(8,11,19,0.55)" />
+                <rect x="95" y="27" width="10" height="10" fill="rgba(8,11,19,0.55)" />
+                <rect x="160" y="27" width="10" height="10" fill="rgba(8,11,19,0.55)" />
+              </svg>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#9B8B95</p>
+            <h3 class="dp-swatch__name">Companies</h3>
+            <p class="dp-swatch__role">Neutralny — stabilny, wyrównany kurs skali.</p>
+          </article>
+          <article class="dp-swatch dp-swatch--segment" data-token="--accent-investors">
+            <label class="dp-swatch__chip" style="--chip: var(--accent-investors)">
+              <input type="color" aria-label="Zmień akcent Investors" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+              <svg class="dp-swatch__route" viewBox="0 0 200 64" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M8 56 L 56 56 L 84 38 L 116 38 L 148 14 L 192 14" fill="none" stroke="rgba(8,11,19,0.55)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#5B7AB0</p>
+            <h3 class="dp-swatch__name">Investors</h3>
+            <p class="dp-swatch__role">Chłodny — precyzyjne, schodkowe ruchy kapitału.</p>
+          </article>
+        </div>
+
+        <div class="dp-transfer" data-reveal>
+          <div class="dp-transfer__line" aria-hidden="true"></div>
+          <div class="dp-transfer__copy">
+            <p class="dp-eyebrow">— decyzja w jednym pliku —</p>
+            <h3 class="dp-transfer__title">Zdecydowaliście? Prześlijcie nam swój&nbsp;zestaw.</h3>
+            <p class="dp-transfer__text">
+              „Pobierz zestaw kolorów” zapisze plik <strong>most-design-2.0-kolory.json</strong>
+              z aktualnymi wartościami wszystkich próbek. Wystarczy odesłać go mailem&nbsp;—
+              wdrożymy dokładnie te decyzje. Zapisany plik można też w każdej chwili wczytać
+              i wrócić do pracy nad zestawem.
+            </p>
+          </div>
+          <div class="dp-transfer__actions">
+            <button class="dp-btn dp-btn--primary dp-btn--big" type="button" data-dp-download>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9M6 8.5l4 4 4-4M4 16h12" /></svg>
+              <span>Pobierz zestaw kolorów</span>
+            </button>
+            <button class="dp-btn dp-btn--ghost dp-btn--big" type="button" data-dp-upload>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16V7M6 10.5l4-4 4 4M4 4h12" /></svg>
+              <span>Wczytaj zestaw kolorów</span>
+            </button>
+            <button class="dp-btn dp-btn--text" type="button" data-dp-reset>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 8A6 6 0 1 1 4 11.5M4 5v3.2h3.2" /></svg>
+              <span>Przywróć oryginalne kolory</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="dp-section dp-type" id="typography" aria-labelledby="dp-type-title">
+        <header class="dp-head" data-reveal>
+          <p class="dp-eyebrow">— typografia —</p>
+          <h2 class="dp-title" id="dp-type-title">Dwa głosy, jedna&nbsp;narracja.</h2>
+        </header>
+        <div class="dp-type__grid" data-reveal>
+          <article class="dp-type-card dp-type-card--urbanist" data-edit="type-urbanist">
+            <span class="dp-type-card__glyph" aria-hidden="true">Aa</span>
+            <p class="dp-type-card__specimen">Your Legal Partner for Growth, Funding, and Global Expansion.</p>
+            <h3 class="dp-type-card__name">Urbanist</h3>
+            <p class="dp-type-card__role">Nagłówki i liczby</p>
+            <p class="dp-type-card__meta">500–600 · H1–H3, statystyki, numeracja · ciasny tracking&nbsp;−0.005em</p>
+          </article>
+          <article class="dp-type-card dp-type-card--outfit" data-edit="type-outfit">
+            <span class="dp-type-card__glyph" aria-hidden="true">Aa</span>
+            <p class="dp-type-card__specimen">We accompany founders, tech companies, and investors as long-term partners in law and business — helping them protect what matters most.</p>
+            <p class="dp-type-card__specimen-label">— let's make the most at every stage —</p>
+            <h3 class="dp-type-card__name">Outfit</h3>
+            <p class="dp-type-card__role">Treść, etykiety i sygnały</p>
+            <p class="dp-type-card__meta">400–500 · akapity, listy, nawigacja · etykiety: wersaliki + światło 0.16–0.24em</p>
+          </article>
+        </div>
+
+        <p class="dp-group-label dp-group-label--type" data-reveal>Tokeny tekstu</p>
+        <div class="dp-swatches dp-swatches--type" data-reveal>
+          <article class="dp-swatch" data-token="--light">
+            <label class="dp-swatch__chip" style="--chip: var(--light)">
+              <input type="color" aria-label="Zmień kolor tekstu podstawowego" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#F0EBE9</p>
+            <h3 class="dp-swatch__name">Tekst podstawowy</h3>
+            <p class="dp-swatch__role">Nagłówki i akapity — ten sam token Light co w palecie.</p>
+          </article>
+          <article class="dp-swatch" data-token="--text-accent">
+            <label class="dp-swatch__chip" style="--chip: var(--text-accent)">
+              <input type="color" aria-label="Zmień kolor tekstu akcentowego" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#FFA86E</p>
+            <h3 class="dp-swatch__name">Tekst akcentowy</h3>
+            <p class="dp-swatch__role">Pomarańczowe teksty: eyebrow, numeracja, tytuły kolumn — niezależne od linii tras.</p>
+          </article>
+          <article class="dp-swatch" data-token="--text-caps">
+            <label class="dp-swatch__chip" style="--chip: var(--text-caps)">
+              <input type="color" aria-label="Zmień kolor kapitalików" />
+              <span class="dp-swatch__edit" aria-hidden="true">edytuj</span>
+            </label>
+            <p class="dp-swatch__hex" data-hex>#F0EBE9</p>
+            <h3 class="dp-swatch__name">Kapitaliki</h3>
+            <p class="dp-swatch__role">Neutralne etykiety wersalikami — podpisy statystyk i punktów trasy.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="dp-section dp-decisions" id="decisions" aria-labelledby="dp-decisions-title">
+        <header class="dp-head" data-reveal>
+          <p class="dp-eyebrow">— decyzje projektowe —</p>
+          <h2 class="dp-title" id="dp-decisions-title">Zasady, które trzymają&nbsp;całość.</h2>
+          <p class="dp-lede">Sześć twardych reguł systemu. Każda próbka poniżej jest żywa — reaguje na kolory z&nbsp;palety.</p>
+        </header>
+
+        <div class="dp-decisions__grid">
+          <article class="dp-decision" data-reveal data-edit="d-trail">
+            <div class="dp-decision__sample dp-sample-trail" aria-hidden="true">
+              <svg viewBox="0 0 400 150" preserveAspectRatio="none">
+                <line class="dp-sample-trail__leader" x1="88" y1="94" x2="88" y2="150" />
+                <line class="dp-sample-trail__leader" x1="212" y1="66" x2="212" y2="150" />
+                <line class="dp-sample-trail__leader" x1="330" y1="36" x2="330" y2="150" />
+                <path class="dp-sample-trail__path" d="M0 128 L36 122 L74 130 L112 106 L150 114 L188 88 L226 98 L264 70 L302 80 L340 48 L376 56 L400 40" />
+              </svg>
+              <span class="hero-trail-point" style="left: 53%; top: 44%;"></span>
+            </div>
+            <p class="dp-decision__num">01</p>
+            <h3 class="dp-decision__name">Linia trasy</h3>
+            <p class="dp-decision__copy">Cienka, świetlista linia prowadzi przez całą stronę jak szlak na grani. Punkty kontrolne pulsują jak światła obozów, a przerywane pionowe pomocnicze wiążą dane z trasą.</p>
+          </article>
+
+          <article class="dp-decision" data-reveal data-edit="d-sun">
+            <div class="dp-decision__sample dp-sample-sun" aria-hidden="true">
+              <span class="dp-sample-sun__glow"></span>
+              <img src="gora-bez-tla-2000px.svg" alt="" loading="lazy" decoding="async" />
+            </div>
+            <p class="dp-decision__num">02</p>
+            <h3 class="dp-decision__name">Słońce i poświata</h3>
+            <p class="dp-decision__copy">Animowane overlaye światła: słońce „oddycha” za granią w powolnym, 9-sekundowym rytmie. Ciepło ogrzewa scenę, nigdy nie odciąga uwagi od treści.</p>
+          </article>
+
+          <article class="dp-decision" data-reveal data-edit="d-duotone">
+            <div class="dp-decision__sample dp-sample-duotone" aria-hidden="true">
+              <span class="dp-sample-duotone__wash"></span>
+            </div>
+            <p class="dp-decision__num">03</p>
+            <h3 class="dp-decision__name">Góra jako scena</h3>
+            <p class="dp-decision__copy">Realistyczna fotografia gór spięta duotonowym washem: chłodny granat od góry, ciepły pomarańcz od słońca. Zdjęcie zawsze pracuje pod treścią, nie obok niej.</p>
+          </article>
+
+          <article class="dp-decision" data-reveal data-edit="d-surfaces">
+            <div class="dp-decision__sample dp-sample-surfaces" aria-hidden="true">
+              <span class="dp-sample-surfaces__panel dp-sample-surfaces__panel--deep"><i>Deep Navy · niebo</i></span>
+              <span class="dp-sample-surfaces__panel dp-sample-surfaces__panel--navy"><i>Navy · powierzchnie</i></span>
+              <span class="dp-sample-surfaces__panel dp-sample-surfaces__panel--light"><i>Light · światło</i></span>
+            </div>
+            <p class="dp-decision__num">04</p>
+            <h3 class="dp-decision__name">Trzy plany głębi</h3>
+            <p class="dp-decision__copy">Nocne tło, panele treści i światło typografii. Kontrast między planami — nie ozdobniki — prowadzi wzrok i porządkuje hierarchię.</p>
+          </article>
+
+          <article class="dp-decision" data-reveal data-edit="d-buttons">
+            <div class="dp-decision__sample dp-sample-buttons" aria-hidden="true">
+              <span class="nav-cta">contact us</span>
+              <span class="primary-cta dp-sample-buttons__primary">
+                <span>let's start</span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M11 6l4 4-4 4" /></svg>
+              </span>
+            </div>
+            <p class="dp-decision__num">05</p>
+            <h3 class="dp-decision__name">Przyciski pill</h3>
+            <p class="dp-decision__copy">Zaokrąglone obrysy i wersaliki z szerokim światłem liter. Spokojne w spoczynku, jednoznaczne po najechaniu — wypełniają się światłem.</p>
+          </article>
+
+          <article class="dp-decision" data-reveal data-edit="d-numerals">
+            <div class="dp-decision__sample dp-sample-numerals" aria-hidden="true">
+              <span class="dp-sample-numerals__exnum">01</span>
+              <span class="dp-sample-numerals__eyebrow">— for every stage —</span>
+              <span class="dp-sample-numerals__title">Three routes.<br />One partner.</span>
+              <span class="dp-sample-numerals__rule"></span>
+            </div>
+            <p class="dp-decision__num">06</p>
+            <h3 class="dp-decision__name">Numeracja i eyebrow</h3>
+            <p class="dp-decision__copy">Wyciszone numery w rogu karty porządkują narrację jak kilometraż szlaku. Eyebrow ujęty w pauzy „—” wyznacza rytm każdej sekcji.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="dp-section dp-aud" id="segments" aria-labelledby="dp-aud-title" data-dp-aud data-edit="segments">
+        <header class="dp-head" data-reveal>
+          <p class="dp-eyebrow">— zakładki segmentów —</p>
+          <h2 class="dp-title" id="dp-aud-title">Segmenty w&nbsp;akcji.</h2>
+          <p class="dp-lede">Każdy segment ma własny akcent z palety i własny kształt trasy. Zakładki przełączają się same — kliknięcie zatrzymuje pokaz.</p>
+        </header>
+
+        <div class="dp-aud__tabs" role="tablist" aria-label="Segmenty klientów" data-reveal>
+          <button class="dp-aud__tab is-active" type="button" role="tab" id="dp-tab-founders" aria-controls="dp-panel-founders" aria-selected="true" data-aud-tab="founders">
+            <span class="dp-aud__tab-num">01</span>
+            <span class="dp-aud__tab-name">Founders</span>
+            <span class="dp-aud__tab-progress" aria-hidden="true"></span>
+          </button>
+          <button class="dp-aud__tab" type="button" role="tab" id="dp-tab-companies" aria-controls="dp-panel-companies" aria-selected="false" data-aud-tab="companies">
+            <span class="dp-aud__tab-num">02</span>
+            <span class="dp-aud__tab-name">Companies</span>
+            <span class="dp-aud__tab-progress" aria-hidden="true"></span>
+          </button>
+          <button class="dp-aud__tab" type="button" role="tab" id="dp-tab-investors" aria-controls="dp-panel-investors" aria-selected="false" data-aud-tab="investors">
+            <span class="dp-aud__tab-num">03</span>
+            <span class="dp-aud__tab-name">Investors</span>
+            <span class="dp-aud__tab-progress" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="dp-aud__stage" data-active="founders" data-reveal>
+          <section class="dp-aud__panel is-active" role="tabpanel" id="dp-panel-founders" aria-labelledby="dp-tab-founders" data-aud-panel="founders">
+            <div class="dp-aud__copy">
+              <p class="dp-aud__hint">building from&nbsp;zero</p>
+              <h3 class="dp-aud__name">Founders</h3>
+              <p class="dp-aud__text">
+                You make decisions quickly and carry the weight of building something from zero.
+                We make sure the legal side keeps pace&nbsp;— giving you clarity, confidence, and
+                space to focus on what you are&nbsp;building.
+              </p>
+              <ul class="dp-aud__list">
+                <li>Form your company correctly, plan founders' agreements and cap&nbsp;tables</li>
+                <li>Raise funding and negotiate fair, predictable&nbsp;terms</li>
+                <li>Hire and incentivise the right team&nbsp;— employment, contractors,&nbsp;ESOPs</li>
+                <li>Protect your IP, technology, and&nbsp;product</li>
+              </ul>
+            </div>
+            <div class="dp-aud__chart" aria-hidden="true">
+              <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
+                <line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-opacity="0.18" stroke-width="1" />
+                <line x1="20" y1="60" x2="180" y2="60" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 3" />
+                <line x1="20" y1="20" x2="180" y2="20" stroke="currentColor" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="2 3" />
+                <path class="dp-draw" d="M20 100 C 60 100, 80 60, 110 50 S 160 20, 180 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+                <circle cx="20" cy="100" r="4" fill="currentColor" />
+                <circle cx="180" cy="10" r="5" fill="currentColor" />
               </svg>
             </div>
-            <p class="ex-card__num">01</p>
-            <h3 class="ex-card__name">Company setup &amp; structuring</h3>
-            <p class="ex-card__copy">Set up and structure businesses&nbsp;— locally and internationally&nbsp;— so you are ready to scale and raise capital.</p>
-            <ul class="ex-card__list">
-              <li>Company incorporation</li>
-              <li>Founders' agreements</li>
-              <li>Cap table planning</li>
-              <li>Group structuring &amp; reorganisation</li>
-              <li>Investor-ready legal frameworks</li>
-            </ul>
-          </li>
+          </section>
 
-          <li class="ex-card ex-card--02">
-            <div class="ex-card__visual" aria-hidden="true">
-              <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <linearGradient id="exGrad02" x1="0" x2="1" y1="1" y2="0">
-                    <stop offset="0" stop-color="#FF612C" />
-                    <stop offset="1" stop-color="#FFB077" />
-                  </linearGradient>
-                </defs>
-                <circle cx="40" cy="50" r="14" fill="none" stroke="url(#exGrad02)" stroke-width="1.6" />
-                <circle cx="80" cy="50" r="14" fill="none" stroke="rgba(255,168,110,0.55)" stroke-width="1.4" />
-                <path d="M20 96 C 20 76, 60 76, 60 96" fill="none" stroke="url(#exGrad02)" stroke-width="1.6" />
-                <path d="M60 96 C 60 76, 100 76, 100 96" fill="none" stroke="rgba(255,168,110,0.55)" stroke-width="1.4" />
-                <line x1="40" y1="20" x2="40" y2="36" stroke="rgba(255,168,110,0.45)" stroke-width="1" stroke-dasharray="2 3" />
-                <line x1="80" y1="20" x2="80" y2="36" stroke="rgba(255,168,110,0.45)" stroke-width="1" stroke-dasharray="2 3" />
+          <section class="dp-aud__panel" role="tabpanel" id="dp-panel-companies" aria-labelledby="dp-tab-companies" data-aud-panel="companies" hidden>
+            <div class="dp-aud__copy">
+              <p class="dp-aud__hint">scaling with&nbsp;confidence</p>
+              <h3 class="dp-aud__name">Companies</h3>
+              <p class="dp-aud__text">
+                As your company grows, the legal challenges grow with it&nbsp;— more clients, more
+                people, more markets, more complexity. We build the structures that keep you
+                running smoothly and&nbsp;investment-ready.
+              </p>
+              <ul class="dp-aud__list">
+                <li>Strong legal foundations for operations and&nbsp;scale</li>
+                <li>Raise capital with clean, investor-aligned&nbsp;documentation</li>
+                <li>Manage employment, contractors, and ESOP&nbsp;programs</li>
+                <li>Navigate cross-border expansion and&nbsp;compliance</li>
+              </ul>
+            </div>
+            <div class="dp-aud__chart" aria-hidden="true">
+              <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
+                <line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-opacity="0.18" stroke-width="1" />
+                <line x1="20" y1="60" x2="180" y2="60" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 3" />
+                <line x1="20" y1="20" x2="180" y2="20" stroke="currentColor" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="2 3" />
+                <path class="dp-draw" d="M20 60 L 180 60" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+                <rect x="16" y="56" width="8" height="8" fill="currentColor" />
+                <rect x="96" y="56" width="8" height="8" fill="currentColor" fill-opacity="0.7" />
+                <rect x="176" y="56" width="8" height="8" fill="currentColor" />
               </svg>
             </div>
-            <p class="ex-card__num">02</p>
-            <h3 class="ex-card__name">Hiring &amp; incentive programs</h3>
-            <p class="ex-card__copy">Cover the legal side of hiring, equity plans, and working with contractors&nbsp;— so you build the right team with confidence.</p>
-            <ul class="ex-card__list">
-              <li>Employment law &amp; contracts</li>
-              <li>Contractor, advisor &amp; consultant agreements</li>
-              <li>ESOPs &amp; VSOPs design</li>
-              <li>Cross-border hiring &amp; compliance</li>
-              <li>Handbooks &amp; onboarding</li>
-            </ul>
-          </li>
+          </section>
 
-          <li class="ex-card ex-card--03">
-            <div class="ex-card__visual" aria-hidden="true">
-              <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <linearGradient id="exGrad03" x1="0" x2="1" y1="1" y2="0">
-                    <stop offset="0" stop-color="#FF612C" />
-                    <stop offset="1" stop-color="#FFB077" />
-                  </linearGradient>
-                </defs>
-                <path d="M16 96 L40 70 L60 84 L84 50 L104 30" stroke="url(#exGrad03)" stroke-width="2" fill="none" stroke-linecap="round" />
-                <line x1="16" y1="96" x2="104" y2="96" stroke="rgba(255,168,110,0.25)" stroke-width="1" />
-                <circle cx="16" cy="96" r="3" fill="rgba(255,168,110,0.7)" />
-                <circle cx="40" cy="70" r="3" fill="rgba(255,168,110,0.7)" />
-                <circle cx="60" cy="84" r="3" fill="rgba(255,168,110,0.7)" />
-                <circle cx="84" cy="50" r="3" fill="rgba(255,168,110,0.7)" />
-                <circle cx="104" cy="30" r="5" fill="#FF612C" />
+          <section class="dp-aud__panel" role="tabpanel" id="dp-panel-investors" aria-labelledby="dp-tab-investors" data-aud-panel="investors" hidden>
+            <div class="dp-aud__copy">
+              <p class="dp-aud__hint">deploying capital</p>
+              <h3 class="dp-aud__name">Investors</h3>
+              <p class="dp-aud__text">
+                Your focus is on finding opportunities, assessing risk, and generating returns.
+                We manage the legal side of structuring, negotiating, and closing deals&nbsp;—
+                giving you clarity, speed, and confidence at every&nbsp;step.
+              </p>
+              <ul class="dp-aud__list">
+                <li>Structure deals clearly and with future scalability in&nbsp;mind</li>
+                <li>Negotiate balanced, investor-aligned&nbsp;terms</li>
+                <li>Conduct and respond to due diligence with precision and&nbsp;speed</li>
+                <li>Close investments smoothly across borders and time&nbsp;zones</li>
+              </ul>
+            </div>
+            <div class="dp-aud__chart" aria-hidden="true">
+              <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
+                <line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-opacity="0.18" stroke-width="1" />
+                <line x1="20" y1="60" x2="180" y2="60" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 3" />
+                <line x1="20" y1="20" x2="180" y2="20" stroke="currentColor" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="2 3" />
+                <path class="dp-draw" d="M20 100 L 70 100 L 100 70 L 130 70 L 160 30 L 180 30" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M100 70 L 120 50" stroke="currentColor" stroke-opacity="0.5" stroke-width="1" fill="none" stroke-dasharray="2 3" />
+                <circle cx="20" cy="100" r="3" fill="currentColor" />
+                <circle cx="180" cy="30" r="5" fill="currentColor" />
               </svg>
             </div>
-            <p class="ex-card__num">03</p>
-            <h3 class="ex-card__name">Fundraising, VC &amp; M&amp;A</h3>
-            <p class="ex-card__copy">Through every stage of fundraising and lead M&amp;A transactions&nbsp;— so deals are clear, fair, and future-proof.</p>
-            <ul class="ex-card__list">
-              <li>SAFEs, convertibles &amp; term sheets</li>
-              <li>Equity rounds (pre-seed → Series&nbsp;A/B+)</li>
-              <li>Venture debt &amp; credit facilities</li>
-              <li>Investor negotiations &amp; governance</li>
-              <li>Due diligence (buy- &amp; sell-side)</li>
-              <li>M&amp;A, SPAs &amp; earn-outs</li>
-            </ul>
-          </li>
-
-          <li class="ex-card ex-card--04">
-            <div class="ex-card__visual" aria-hidden="true">
-              <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <linearGradient id="exGrad04" x1="0" x2="1" y1="1" y2="0">
-                    <stop offset="0" stop-color="#FF612C" />
-                    <stop offset="1" stop-color="#FFB077" />
-                  </linearGradient>
-                </defs>
-                <rect x="22" y="24" width="48" height="64" fill="none" stroke="url(#exGrad04)" stroke-width="1.5" />
-                <rect x="52" y="40" width="48" height="64" fill="none" stroke="rgba(255,168,110,0.6)" stroke-width="1.3" />
-                <line x1="30" y1="40" x2="62" y2="40" stroke="rgba(255,168,110,0.45)" stroke-width="1" />
-                <line x1="30" y1="52" x2="62" y2="52" stroke="rgba(255,168,110,0.35)" stroke-width="1" />
-                <line x1="30" y1="64" x2="54" y2="64" stroke="rgba(255,168,110,0.25)" stroke-width="1" />
-                <line x1="60" y1="56" x2="92" y2="56" stroke="rgba(255,168,110,0.45)" stroke-width="1" />
-                <line x1="60" y1="68" x2="92" y2="68" stroke="rgba(255,168,110,0.35)" stroke-width="1" />
-                <line x1="60" y1="80" x2="84" y2="80" stroke="rgba(255,168,110,0.25)" stroke-width="1" />
-              </svg>
-            </div>
-            <p class="ex-card__num">04</p>
-            <h3 class="ex-card__name">Commercial contracts &amp; operations</h3>
-            <p class="ex-card__copy">From everyday agreements to commercial partnerships&nbsp;— contracts that support your product, platform, and&nbsp;operations.</p>
-            <ul class="ex-card__list">
-              <li>Day-to-day corporate affairs &amp; governance</li>
-              <li>Services agreements &amp; licensing</li>
-              <li>Terms of use &amp; privacy policies</li>
-              <li>Client, partner &amp; supplier agreements</li>
-              <li>Joint ventures &amp; collaborations</li>
-              <li>GDPR &amp; data protection</li>
-            </ul>
-          </li>
-
-          <li class="ex-card ex-card--05">
-            <div class="ex-card__visual" aria-hidden="true">
-              <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <linearGradient id="exGrad05" x1="0" x2="1" y1="1" y2="0">
-                    <stop offset="0" stop-color="#FF612C" />
-                    <stop offset="1" stop-color="#FFB077" />
-                  </linearGradient>
-                </defs>
-                <path d="M60 16 L92 36 V72 C 92 92, 60 104, 60 104 C 60 104, 28 92, 28 72 V36 Z" fill="none" stroke="url(#exGrad05)" stroke-width="1.6" />
-                <path d="M48 62 L57 72 L74 50" fill="none" stroke="url(#exGrad05)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-            <p class="ex-card__num">05</p>
-            <h3 class="ex-card__name">IP &amp; technology</h3>
-            <p class="ex-card__copy">Protect what you build&nbsp;— covering IP ownership, licensing, confidentiality, and open-source risk.</p>
-            <ul class="ex-card__list">
-              <li>IP strategy &amp; ownership structuring</li>
-              <li>Software licensing &amp; IP assignment</li>
-              <li>NDAs &amp; confidentiality</li>
-              <li>Trademark filings</li>
-              <li>Open-source risk analysis</li>
-            </ul>
-          </li>
-
-          <li class="ex-card ex-card--06">
-            <div class="ex-card__visual" aria-hidden="true">
-              <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <linearGradient id="exGrad06" x1="0" x2="1" y1="1" y2="0">
-                    <stop offset="0" stop-color="#FF612C" />
-                    <stop offset="1" stop-color="#FFB077" />
-                  </linearGradient>
-                </defs>
-                <circle cx="60" cy="60" r="40" fill="none" stroke="url(#exGrad06)" stroke-width="1.6" />
-                <ellipse cx="60" cy="60" rx="14" ry="40" fill="none" stroke="rgba(255,168,110,0.6)" stroke-width="1.2" />
-                <line x1="20" y1="60" x2="100" y2="60" stroke="rgba(255,168,110,0.6)" stroke-width="1.2" />
-                <line x1="60" y1="20" x2="60" y2="100" stroke="rgba(255,168,110,0.35)" stroke-width="1" stroke-dasharray="2 3" />
-                <circle cx="60" cy="60" r="3" fill="#FF612C" />
-              </svg>
-            </div>
-            <p class="ex-card__num">06</p>
-            <h3 class="ex-card__name">Global expansion</h3>
-            <p class="ex-card__copy">Guide your international growth&nbsp;— foreign entities, global contracts, and cross-border compliance.</p>
-            <ul class="ex-card__list">
-              <li>Legal structuring for international growth</li>
-              <li>Foreign entities &amp; subsidiaries</li>
-              <li>Coordination with local counsel</li>
-              <li>Cross-border contracts &amp; risk allocation</li>
-              <li>Tax &amp; employment alignment</li>
-              <li>Market entry strategies</li>
-            </ul>
-          </li>
-        </ol>
-
-        <footer class="expertise-cards__foot">
-          <p>Not sure where you land? <a href="contact.html">Start a conversation</a>&nbsp;— we will help map your next step.</p>
-        </footer>
+          </section>
+        </div>
       </section>
 
     </main>
@@ -579,19 +740,18 @@
       <img class="footer-ridge__overlay" src="footer.svg" alt="" loading="lazy" decoding="async" />
     </div>
 
-    <footer class="site-footer">
+    <footer class="site-footer site-footer--preview" data-edit="footer">
       <div class="site-footer__inner">
         <div class="site-footer__lede">
           <p class="site-footer__lede-eyebrow">— let's make the most —</p>
           <p class="site-footer__lede-text">
-            Long-term partners in law and business.<br>
-            <a href="contact.html">Start a conversation</a>&nbsp;— we'll meet you at your next step.
+            Long-term partners in law and business.
           </p>
         </div>
 
         <div class="site-footer__top">
           <div class="site-footer__brand">
-            <a class="wordmark" href="index.html" aria-label="MOST Partners home">
+            <a class="wordmark" href="index.html" aria-label="MOST Partners">
               <svg class="wordmark__logo" viewBox="0 0 160 58" role="img" aria-label="MOST Partners">
                 <use href="#most-logo" />
               </svg>
@@ -599,32 +759,11 @@
             <p>Long-term partners in law and business.</p>
           </div>
 
-          <nav class="site-footer__col" aria-label="Pages">
-            <p class="site-footer__col-title">Pages</p>
-            <ul>
-              <li><a href="about-us.html">About us</a></li>
-              <li><a href="index.html#expertise">Our Expertise</a></li>
-              <li><a href="our-team.html">Our Team</a></li>
-              <li><a href="index.html#how-we-work">How we work</a></li>
-              <li><a href="contact.html">Contact us</a></li>
-            </ul>
-          </nav>
-
-          <nav class="site-footer__col" aria-label="Segments">
-            <p class="site-footer__col-title">Segments</p>
-            <ul>
-              <li><a href="for-founders.html">For Founders</a></li>
-              <li><a href="for-companies.html">For Companies</a></li>
-              <li><a href="for-investors.html">For Investors</a></li>
-            </ul>
-          </nav>
-
           <div class="site-footer__col">
             <p class="site-footer__col-title">Contact</p>
             <ul>
-              <li><a href="mailto:bemost@mostpartners.com">bemost@mostpartners.com</a></li>
+              <li><a href="mailto:bemost@mostpartners.com" data-edit-ignore>bemost@mostpartners.com</a></li>
               <li>Bracka 20, 00-028 Warsaw, Poland</li>
-              <li><a class="site-footer__social" href="#" aria-label="LinkedIn"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h3v11H3V6Zm1.5-3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM8 6h3v1.5c.5-1 1.6-1.7 3-1.7 2.2 0 3 1.4 3 3.8V17h-3v-6c0-1.4-.4-2-1.4-2-1 0-1.6.7-1.6 2v6H8V6Z" fill="currentColor"/></svg></a></li>
             </ul>
           </div>
         </div>
@@ -638,20 +777,43 @@
             <li>REGON: 526603932</li>
           </ul>
           <ul class="site-footer__legal">
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms &amp; Conditions</a></li>
+            <li>Privacy Policy</li>
+            <li>Terms &amp; Conditions</li>
           </ul>
         </div>
       </div>
     </footer>
 
+    <div class="dp-dock" data-dp-dock hidden>
+      <button class="dp-dock__peek" type="button" data-dock-peek>
+        <span class="dp-dock__dot" aria-hidden="true"></span>
+        <span class="dp-dock__peek-label" data-dock-peek-label></span>
+        <span class="dp-dock__peek-hint">kliknij, aby edytować</span>
+      </button>
+      <section class="dp-dock__panel" data-dock-panel aria-label="Edytor elementu" hidden>
+        <header class="dp-dock__head">
+          <span class="dp-dock__dot" aria-hidden="true"></span>
+          <div class="dp-dock__titles">
+            <h3 class="dp-dock__title" data-dock-title></h3>
+            <p class="dp-dock__desc" data-dock-desc></p>
+          </div>
+          <button class="dp-dock__close" type="button" aria-label="Zamknij edytor" data-dock-close>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+          </button>
+        </header>
+        <div class="dp-dock__controls" data-dock-controls></div>
+      </section>
+    </div>
+
+    <div class="dp-toast" role="status" aria-live="polite" data-dp-toast></div>
+
     <div class="mobile-block" role="alertdialog" aria-modal="true" aria-labelledby="mobile-block-title">
       <div class="mobile-block__panel">
         <p class="mobile-block__eyebrow">construction in progress</p>
         <p class="mobile-block__title" id="mobile-block-title">
-          Mówiłem żeby nie otwierać jeszcze na mobilce&nbsp;😤
+          Podgląd designu działa tylko na&nbsp;desktopie&nbsp;🏔️
         </p>
-        <p class="mobile-block__hint">Wróć z desktopa.</p>
+        <p class="mobile-block__hint">Wróć z większego ekranu.</p>
       </div>
     </div>
 
