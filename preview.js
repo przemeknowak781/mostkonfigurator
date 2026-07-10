@@ -28,8 +28,6 @@
     { cssVar: "--accent-founders", name: "Akcent — Founders" },
     { cssVar: "--accent-companies", name: "Akcent — Companies" },
     { cssVar: "--accent-investors", name: "Akcent — Investors" },
-    { cssVar: "--dp-canvas", name: "Tło marginesu" },
-    { cssVar: "--dp-frame-line", name: "Linia ramki" },
   ];
 
   const OVERLAYS = [

@@ -49,8 +49,8 @@
   --dp-gutter-x: clamp(20px, 3.2vw, 56px);
   --dp-gutter-top: clamp(16px, 2.2vw, 32px);
   --dp-frame-radius: clamp(14px, 1.4vw, 22px);
-  --dp-frame-line: #4a443d;
-  --dp-canvas: #2a2622;
+  --dp-frame-line: #45474b;
+  --dp-canvas: #232427;
 }
 
 /* --------------------------------------------------------------------------
@@ -85,24 +85,33 @@
 }
 
 /* Nav floats above `.dp-frame` (same DOM level, not nested) so it keeps its
-   normal position: fixed scroll behaviour untouched — it's just re-anchored
-   to the frame's left/right/top instead of the true viewport edges, and
-   its own top corners are rounded to match the frame's, so the two read as
-   one continuous document outline even though they're separate boxes. */
+   normal position: fixed scroll behaviour untouched. At rest (page top) it
+   sits inset with the frame's gutter, rounded to match the frame's top
+   corners, reading as the document's own title bar. Once the page scrolls,
+   it snaps flush to the true top of the window — a conventional sticky nav
+   — rather than keeping the decorative margin, which only makes sense
+   while the frame's top edge is actually in view. */
 .is-design-preview .top-nav {
   inset: var(--dp-gutter-top) var(--dp-gutter-x) auto;
   border: 1px solid transparent;
   border-bottom: none;
   border-radius: var(--dp-frame-radius) var(--dp-frame-radius) 0 0;
-  transition: background 320ms var(--ease-out), border-color 320ms ease;
+  transition: background 320ms var(--ease-out), border-color 320ms ease, inset 320ms var(--ease-out), border-radius 320ms var(--ease-out);
 }
 
 .is-design-preview .top-nav::before {
   border-radius: var(--dp-frame-radius) var(--dp-frame-radius) 0 0;
+  transition: opacity 360ms var(--ease-out), border-radius 320ms var(--ease-out);
 }
 
 .is-design-preview .top-nav.is-scrolled {
-  border-color: var(--dp-frame-line);
+  inset: 0 0 auto;
+  border-color: transparent;
+  border-radius: 0;
+}
+
+.is-design-preview .top-nav.is-scrolled::before {
+  border-radius: 0;
 }
 
 /* Progress sliver traces the frame's own top edge instead of the true
@@ -313,7 +322,16 @@
   color: color-mix(in srgb, var(--text-caps) 60%, transparent);
 }
 
+/* The mountain artwork (and the trail line drawn on top of it, via the JS
+   CTM mapping in script.js) naturally tapers to nothing a little before its
+   own right edge — invisible at the true viewport edge pre-frame, but
+   obvious now that a crisp frame border sits close by. Widening the bleed
+   pushes that tapering tail past the frame's clip-path, so what's visible
+   at the edge is a fuller, still-bright cross-section of the artwork
+   instead of its fade-out tip. */
 .is-design-preview .hero-ridges__img {
+  width: 116%;
+  margin-left: -8%;
   filter: drop-shadow(0 -20px 60px color-mix(in srgb, var(--orange) 18%, transparent));
 }
 
@@ -349,7 +367,14 @@
    -------------------------------------------------------------------------- */
 
 .is-design-preview .ridge-edge::before {
-  display: none;
+  background-image:
+    linear-gradient(180deg, color-mix(in srgb, var(--navy-deep) 55%, transparent) 0%, color-mix(in srgb, var(--navy-deep) 10%, transparent) 45%, color-mix(in srgb, var(--navy-deep) 62%, transparent) 100%),
+    radial-gradient(55% 70% at 18% 82%, color-mix(in srgb, var(--orange) 22%, transparent), transparent 72%),
+    url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2400&q=70");
+  background-size: cover, cover, cover;
+  background-position: center, center, 50% 38%;
+  transform: translate3d(0, calc((var(--ridge-progress, 0.5) - 0.5) * 12vh), 0);
+  filter: saturate(0.82) contrast(1.06) brightness(0.6);
 }
 
 /* Both this and the footer ridge are decorative (pointer-events: none in
@@ -408,6 +433,17 @@
 .is-design-preview .audience-intro__trail-edge--bottom,
 .is-design-preview .audience-intro::after {
   opacity: min(72%, var(--ov-trail, 100%));
+}
+
+/* .audience-intro::after's path data exits its own 0-160 viewBox a little
+   before x=1200 (by design, tapering the line to nothing) — invisible at
+   the true viewport edge pre-frame, but now landing well short of the
+   frame's visible right border. Stretching the pattern wider than its
+   container pushes that early exit past the clip (backgrounds are always
+   clipped to their own box, so no extra overflow rule is needed), leaving
+   a fuller, still-bright piece of the line visible at the true edge. */
+.is-design-preview .audience-intro::after {
+  background-size: 116% 100%;
 }
 
 /* --------------------------------------------------------------------------
@@ -774,11 +810,6 @@
 
 .dp-swatches--segments {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.dp-swatches--frame {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-width: 780px;
 }
 
 .dp-swatch {
