@@ -23,16 +23,23 @@
     { cssVar: "--glow", name: "Trail Glow" },
     { cssVar: "--purple-dark", name: "Purple Dark" },
     { cssVar: "--purple-light", name: "Purple Light" },
+    { cssVar: "--text-accent", name: "Tekst akcentowy" },
+    { cssVar: "--text-caps", name: "Kapitaliki" },
     { cssVar: "--accent-founders", name: "Akcent — Founders" },
     { cssVar: "--accent-companies", name: "Akcent — Companies" },
     { cssVar: "--accent-investors", name: "Akcent — Investors" },
   ];
 
   const OVERLAYS = [
-    { cssVar: "--ov-sun", name: "Poświata słońca — intensywność" },
-    { cssVar: "--ov-wash", name: "Wash fotografii — intensywność" },
-    { cssVar: "--ov-trail", name: "Linia trasy — intensywność" },
+    { cssVar: "--ov-sun", name: "Poświata słońca — intensywność", min: 0, max: 100, unit: "%" },
+    { cssVar: "--ov-wash", name: "Wash fotografii — intensywność", min: 0, max: 100, unit: "%" },
+    { cssVar: "--ov-trail", name: "Linia trasy — intensywność", min: 0, max: 100, unit: "%" },
+    { cssVar: "--anim-speed", name: "Oddychanie — prędkość", min: 25, max: 400, unit: "" },
+    { cssVar: "--anim-depth", name: "Oddychanie — głębokość pulsu", min: 0, max: 150, unit: "" },
   ];
+
+  const OVERLAY_BY_VAR = {};
+  OVERLAYS.forEach((overlay) => (OVERLAY_BY_VAR[overlay.cssVar] = overlay));
 
   const TOKEN_NAMES = {};
   TOKENS.forEach((t) => (TOKEN_NAMES[t.cssVar] = t.name));
@@ -40,6 +47,8 @@
     "--ov-sun": "Słońce — intensywność",
     "--ov-wash": "Wash — intensywność",
     "--ov-trail": "Trasa — intensywność",
+    "--anim-speed": "Oddychanie — prędkość",
+    "--anim-depth": "Oddychanie — głębokość",
   };
 
   /* ---------- value helpers ---------- */
@@ -66,14 +75,15 @@
     return null;
   }
 
-  /* Accepts 0–1 numbers, 0–100 numbers, and "63%" strings → 0–1 or null. */
-  function normalizeAlpha(value) {
+  /* Accepts ratio numbers, percent numbers, and "63%" strings → ratio or null.
+     maxRatio widens the accepted range for settings like animation speed. */
+  function normalizeAlpha(value, maxRatio = 1) {
     if (value === null || value === undefined || value === "") return null;
     const str = String(value).trim();
     const num = parseFloat(str);
     if (!Number.isFinite(num)) return null;
-    const scaled = str.includes("%") || num > 1 ? num / 100 : num;
-    return Math.max(0, Math.min(1, scaled));
+    const scaled = str.includes("%") || num > maxRatio ? num / 100 : num;
+    return Math.max(0, Math.min(maxRatio, scaled));
   }
 
   function readTokenValue(cssVar) {
@@ -82,9 +92,19 @@
   }
 
   function readAlphaValue(cssVar) {
+    const entry = OVERLAY_BY_VAR[cssVar] || { min: 0, max: 100 };
     const raw = getComputedStyle(rootEl).getPropertyValue(cssVar);
-    const parsed = normalizeAlpha(raw);
-    return parsed === null ? 1 : parsed;
+    const parsed = normalizeAlpha(raw, entry.max / 100);
+    const ratio = parsed === null ? 1 : parsed;
+    return Math.max(entry.min / 100, Math.min(entry.max / 100, ratio));
+  }
+
+  function setOverlayValue(cssVar, ratio) {
+    const entry = OVERLAY_BY_VAR[cssVar];
+    if (!entry) return;
+    const clamped = Math.max(entry.min / 100, Math.min(entry.max / 100, ratio));
+    const pct = Math.round(clamped * 100);
+    rootEl.style.setProperty(cssVar, entry.unit === "%" ? pct + "%" : String(pct / 100));
   }
 
   /* ---------- state ---------- */
@@ -229,13 +249,18 @@
     });
 
     document.querySelectorAll("[data-alpha]").forEach((card) => {
-      const alpha = readAlphaValue(card.dataset.alpha);
+      const cssVar = card.dataset.alpha;
+      const entry = OVERLAY_BY_VAR[cssVar] || { min: 0, max: 100 };
+      const alpha = readAlphaValue(cssVar);
       const range = card.querySelector('input[type="range"]');
       const pctLabel = card.querySelector("[data-alpha-value]");
       const pct = Math.round(alpha * 100);
       if (range) {
+        range.min = String(entry.min);
+        range.max = String(entry.max);
         range.value = String(pct);
-        range.style.setProperty("--fill", pct + "%");
+        const fill = ((pct - entry.min) / Math.max(1, entry.max - entry.min)) * 100;
+        range.style.setProperty("--fill", fill.toFixed(1) + "%");
       }
       if (pctLabel) pctLabel.textContent = pct + "%";
     });
@@ -266,19 +291,21 @@
     if (!range || boundControls.has(range)) return;
     boundControls.add(range);
     const cssVar = card.dataset.alpha;
+    const entry = OVERLAY_BY_VAR[cssVar] || { min: 0, max: 100, unit: "%" };
     const pctLabel = card.querySelector("[data-alpha-value]");
 
     range.addEventListener("input", () => {
-      const pct = Math.max(0, Math.min(100, parseInt(range.value, 10) || 0));
-      rootEl.style.setProperty(cssVar, pct + "%");
-      range.style.setProperty("--fill", pct + "%");
+      const pct = Math.max(entry.min, Math.min(entry.max, parseInt(range.value, 10) || 0));
+      rootEl.style.setProperty(cssVar, entry.unit === "%" ? pct + "%" : String(pct / 100));
+      const fill = ((pct - entry.min) / Math.max(1, entry.max - entry.min)) * 100;
+      range.style.setProperty("--fill", fill.toFixed(1) + "%");
       if (pctLabel) pctLabel.textContent = pct + "%";
       syncControls();
     });
 
     range.addEventListener("change", () => {
       persist();
-      showToast("Przezroczystość zapisana w podglądzie");
+      showToast("Ustawienie zapisane w podglądzie");
     });
   }
 
@@ -341,7 +368,9 @@
     const map = {};
     Object.keys(source).forEach((key) => {
       const cssVar = key.startsWith("--") ? key : "--" + key;
-      const alpha = normalizeAlpha(source[key]);
+      const entry = OVERLAY_BY_VAR[cssVar];
+      if (!entry) return;
+      const alpha = normalizeAlpha(source[key], entry.max / 100);
       if (alpha !== null) map[cssVar] = alpha;
     });
     return map;
@@ -360,7 +389,7 @@
     });
     OVERLAYS.forEach((overlay) => {
       if (overlay.cssVar in overlayMap) {
-        rootEl.style.setProperty(overlay.cssVar, Math.round(overlayMap[overlay.cssVar] * 100) + "%");
+        setOverlayValue(overlay.cssVar, overlayMap[overlay.cssVar]);
         applied += 1;
       }
     });
@@ -445,23 +474,23 @@
     const EDITABLES = {
       hero: {
         label: "Scena hero",
-        desc: "Niebo, słońce, wash i linia trasy. Te same tokeny działają w całym systemie.",
-        controls: [color("--navy-deep"), color("--orange"), color("--orange-soft"), alpha("--ov-sun"), alpha("--ov-wash"), alpha("--ov-trail")],
+        desc: "Niebo, słońce, wash, linia trasy i oddychanie światła. Te same tokeny działają w całym systemie.",
+        controls: [color("--navy-deep"), color("--orange"), color("--orange-soft"), alpha("--ov-sun"), alpha("--ov-wash"), alpha("--ov-trail"), alpha("--anim-speed"), alpha("--anim-depth")],
       },
       "hero-typo": {
         label: "Typografia sceny",
-        desc: "Światło tekstu i sygnał eyebrow — wspólne dla całej strony.",
-        controls: [color("--light"), color("--glow"), color("--orange")],
+        desc: "Światło tekstu i akcent eyebrow — wspólne dla całej strony.",
+        controls: [color("--light"), color("--text-accent")],
       },
       stats: {
         label: "Statystyki hero",
-        desc: "Liczby w Urbanist i etykiety w Outfit — kolor światła z palety.",
-        controls: [color("--light"), color("--glow")],
+        desc: "Liczby w świetle i kapitaliki etykiet — tokeny tekstu.",
+        controls: [color("--light"), color("--text-caps")],
       },
-      quote: {
-        label: "Cytat na grani",
-        desc: "Tekst w świetle i linia akcentu w kolorach szlaku.",
-        controls: [color("--light"), color("--glow"), color("--orange")],
+      triptych: {
+        label: "Trasy klientów — karty",
+        desc: "Rozwijane karty segmentów: akcenty tras i światło szlaku łączników.",
+        controls: [color("--accent-founders"), color("--accent-companies"), color("--accent-investors"), color("--glow")],
       },
       sections: {
         label: "Sekcje podglądu",
@@ -475,8 +504,8 @@
       },
       "type-outfit": {
         label: "Outfit — treść i etykiety",
-        desc: "Głos treści oraz etykiet z wersalikami. Sygnał w kolorze szlaku.",
-        controls: [color("--light"), color("--glow")],
+        desc: "Głos treści oraz etykiet z wersalikami — tokeny tekstu.",
+        controls: [color("--light"), color("--text-accent"), color("--text-caps")],
       },
       "d-trail": {
         label: "Linia trasy",
@@ -485,8 +514,8 @@
       },
       "d-sun": {
         label: "Słońce i poświata",
-        desc: "Animowany blask za granią — kolory i intensywność.",
-        controls: [color("--orange-soft"), color("--orange"), alpha("--ov-sun")],
+        desc: "Animowany blask za granią — kolory, intensywność i rytm oddychania.",
+        controls: [color("--orange-soft"), color("--orange"), alpha("--ov-sun"), alpha("--anim-speed"), alpha("--anim-depth")],
       },
       "d-duotone": {
         label: "Góra jako scena",
@@ -505,8 +534,8 @@
       },
       "d-numerals": {
         label: "Numeracja i eyebrow",
-        desc: "Wyciszone numery i sygnały w kolorze szlaku.",
-        controls: [color("--glow"), color("--light")],
+        desc: "Wyciszone numery i sygnały w kolorze tekstu akcentowego.",
+        controls: [color("--text-accent"), color("--light")],
       },
       segments: {
         label: "Segmenty klientów",
@@ -515,8 +544,8 @@
       },
       footer: {
         label: "Stopka",
-        desc: "Powierzchnia navy, tytuły w kolorze szlaku, treść w świetle.",
-        controls: [color("--navy"), color("--glow"), color("--light")],
+        desc: "Powierzchnia navy, tytuły w tekście akcentowym, treść w świetle.",
+        controls: [color("--navy"), color("--text-accent"), color("--light")],
       },
     };
 
@@ -568,12 +597,13 @@
           wrap.className = "dp-dock__control dp-dock__control--alpha";
           wrap.setAttribute("data-alpha", control.cssVar);
           const name = OVERLAY_NAMES[control.cssVar] || control.cssVar;
+          const entry = OVERLAY_BY_VAR[control.cssVar] || { min: 0, max: 100 };
           wrap.innerHTML =
             '<div class="dp-dock__control-meta">' +
             '<span class="dp-dock__control-name">' + name + "</span>" +
             '<span class="dp-dock__control-pct" data-alpha-value></span>' +
             "</div>" +
-            '<input class="dp-overlay__range" type="range" min="0" max="100" step="1" aria-label="Przezroczystość: ' + name + '" />';
+            '<input class="dp-overlay__range" type="range" min="' + entry.min + '" max="' + entry.max + '" step="1" aria-label="' + name + '" />';
         }
 
         controlsEl.appendChild(wrap);

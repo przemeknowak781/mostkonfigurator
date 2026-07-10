@@ -14,6 +14,8 @@
 :root {
   /* Editable tokens extracted from hardcoded values in styles.css */
   --glow: #ffa86e;
+  --text-accent: #ffa86e;
+  --text-caps: #f0ebe9;
   --accent-founders: #d17e5f;
   --accent-companies: #9b8b95;
   --accent-investors: #5b7ab0;
@@ -23,6 +25,10 @@
   --ov-wash: 100%;
   --ov-trail: 100%;
 
+  /* Breathing animation: speed multiplier and pulse depth (1 = original) */
+  --anim-speed: 1;
+  --anim-depth: 1;
+
   /* Re-derive the opacity ramps from the editable tokens so a picker
      change to --light propagates everywhere. */
   --light-80: color-mix(in srgb, var(--light) 80%, transparent);
@@ -31,6 +37,7 @@
   --light-10: color-mix(in srgb, var(--light) 10%, transparent);
 
   --glow-bright: color-mix(in srgb, var(--glow), white 22%);
+  --text-accent-bright: color-mix(in srgb, var(--text-accent), white 22%);
 
   /* Original section backdrop (#0a0d18 → #07090f) re-expressed via tokens */
   --dp-bg-top: color-mix(in srgb, var(--navy) 20%, var(--navy-deep));
@@ -50,7 +57,10 @@
 .is-design-preview .hero-trail-label span,
 .is-design-preview .site-footer__col-title,
 .is-design-preview .site-footer__lede-eyebrow,
-.is-design-preview .mobile-block__eyebrow {
+.is-design-preview .mobile-block__eyebrow,
+.is-design-preview .audience-intro__eyebrow,
+.is-design-preview .preview__num,
+.is-design-preview .preview__toggle {
   font-family: "Outfit", system-ui, sans-serif;
 }
 
@@ -81,6 +91,83 @@
    so one opacity token dims the whole sunlight overlay. */
 .is-design-preview .hero-glow {
   opacity: var(--ov-sun, 100%);
+}
+
+/* Breathing keyframes re-authored around the editable pulse: --anim-depth
+   scales how far each frame swings away from the 50% peak (1 = original,
+   0 = steady glow, 1.5 = deep pulse); --anim-speed divides the duration. */
+@keyframes dp-breathe-sun {
+  0%, 100% {
+    opacity: calc(1 - 0.62 * var(--anim-depth, 1));
+    transform: translate(calc(3.4% - 3.4% * var(--anim-depth, 1)), calc(-2.6% + 2.6% * var(--anim-depth, 1))) scale(calc(1.24 - 0.4 * var(--anim-depth, 1)));
+  }
+  35% {
+    opacity: calc(1 - 0.18 * var(--anim-depth, 1));
+    transform: translate(calc(3.4% - 1.6% * var(--anim-depth, 1)), calc(-2.6% + 1.2% * var(--anim-depth, 1))) scale(calc(1.24 - 0.16 * var(--anim-depth, 1)));
+  }
+  50% {
+    opacity: 1;
+    transform: translate(3.4%, -2.6%) scale(1.24);
+  }
+  68% {
+    opacity: calc(1 - 0.22 * var(--anim-depth, 1));
+    transform: translate(calc(3.4% - 1.8% * var(--anim-depth, 1)), calc(-2.6% + 1.4% * var(--anim-depth, 1))) scale(calc(1.24 - 0.2 * var(--anim-depth, 1)));
+  }
+}
+
+@keyframes dp-breathe-climbers {
+  0%, 100% {
+    opacity: calc(1 - 0.58 * var(--anim-depth, 1));
+    transform: scale(calc(1.28 - 0.46 * var(--anim-depth, 1))) translate(calc(1.4% - 2.4% * var(--anim-depth, 1)), calc(-1.6% + 2.6% * var(--anim-depth, 1)));
+  }
+  35% {
+    opacity: calc(1 - 0.2 * var(--anim-depth, 1));
+    transform: scale(calc(1.28 - 0.22 * var(--anim-depth, 1))) translate(calc(1.4% - 0.9% * var(--anim-depth, 1)), calc(-1.6% + 1% * var(--anim-depth, 1)));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.28) translate(1.4%, -1.6%);
+  }
+  68% {
+    opacity: calc(1 - 0.22 * var(--anim-depth, 1));
+    transform: scale(calc(1.28 - 0.24 * var(--anim-depth, 1))) translate(calc(1.4% - 1% * var(--anim-depth, 1)), calc(-1.6% + 1.2% * var(--anim-depth, 1)));
+  }
+}
+
+@keyframes dp-breathe-haze {
+  0%, 100% {
+    opacity: calc(1 - 0.82 * var(--anim-depth, 1));
+    transform: scale(calc(1.06 - 0.06 * var(--anim-depth, 1)));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+.is-design-preview .hero-glow__sun {
+  animation-name: dp-breathe-sun;
+  animation-duration: calc(9s / clamp(0.25, var(--anim-speed, 1), 4));
+}
+
+.is-design-preview .hero-glow__haze {
+  animation-name: dp-breathe-haze;
+  animation-duration: calc(12s / clamp(0.25, var(--anim-speed, 1), 4));
+}
+
+.is-design-preview .hero-climbers-sun {
+  animation-name: dp-breathe-climbers;
+  animation-duration: calc(6.5s / clamp(0.25, var(--anim-speed, 1), 4));
+}
+
+.is-design-preview .dp-sun {
+  animation-name: dp-breathe-sun;
+  animation-duration: calc(11s / clamp(0.25, var(--anim-speed, 1), 4));
+}
+
+.is-design-preview .dp-sample-sun__glow {
+  animation-name: dp-breathe-climbers;
+  animation-duration: calc(6.5s / clamp(0.25, var(--anim-speed, 1), 4));
 }
 
 .is-design-preview .hero-glow__sun {
@@ -146,7 +233,13 @@
 }
 
 .is-design-preview .hero-content .eyebrow {
-  color: color-mix(in srgb, var(--glow-bright) 72%, transparent);
+  color: color-mix(in srgb, var(--text-accent-bright) 72%, transparent);
+}
+
+/* uppercase labels follow the caps token */
+.is-design-preview .hero-stat span,
+.is-design-preview .hero-trail-label span {
+  color: color-mix(in srgb, var(--text-caps) 60%, transparent);
 }
 
 .is-design-preview .hero-ridges__img {
@@ -166,8 +259,9 @@
   box-shadow: 0 0 18px color-mix(in srgb, var(--glow) 34%, transparent);
 }
 
-.is-design-preview .site-footer__col-title {
-  color: color-mix(in srgb, var(--glow) 72%, transparent);
+.is-design-preview .site-footer__col-title,
+.is-design-preview .site-footer__lede-eyebrow {
+  color: color-mix(in srgb, var(--text-accent) 72%, transparent);
 }
 
 .is-design-preview .site-footer__divider {
@@ -175,7 +269,64 @@
 }
 
 .is-design-preview .site-footer__col a:hover {
-  border-bottom-color: color-mix(in srgb, var(--glow) 60%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--text-accent) 60%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   RIDGE EDGE — clean cut into the next section: no photo, no quote,
+   just the flipped silhouette closing the hero scene.
+   -------------------------------------------------------------------------- */
+
+.is-design-preview .ridge-edge::before {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   AUDIENCE TRIPTYCH (original expandable cards) — wired to the tokens
+   -------------------------------------------------------------------------- */
+
+.is-design-preview .preview--founders { --accent: var(--accent-founders); }
+.is-design-preview .preview--companies { --accent: var(--accent-companies); }
+.is-design-preview .preview--investors { --accent: var(--accent-investors); }
+
+.is-design-preview .audience-col--founders { --col-accent: var(--accent-founders); }
+.is-design-preview .audience-col--companies { --col-accent: var(--accent-companies); }
+.is-design-preview .audience-col--investors { --col-accent: var(--accent-investors); }
+
+.is-design-preview .preview__route {
+  color: var(--accent, var(--glow));
+}
+
+.is-design-preview .audience-intro__eyebrow {
+  color: color-mix(in srgb, var(--text-accent) 65%, transparent);
+}
+
+.is-design-preview .audience-intro::before {
+  background:
+    radial-gradient(900px 580px at 50% 12%, color-mix(in srgb, color-mix(in srgb, var(--orange) 18%, transparent) var(--ov-wash, 100%), transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--navy-deep) 92%, black) 0%, var(--navy) 100%);
+}
+
+.is-design-preview .audience-col__connector::before {
+  background: repeating-linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--glow) 42%, transparent) 0 2px,
+    transparent 2px 6px
+  );
+}
+
+.is-design-preview .audience-col__trail-marker,
+.is-design-preview .audience-col__card-marker {
+  background: color-mix(in srgb, var(--glow) 98%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--glow) 18%, transparent),
+    0 0 12px color-mix(in srgb, var(--glow) 60%, transparent),
+    0 0 26px color-mix(in srgb, var(--glow-bright) 32%, transparent);
+}
+
+.is-design-preview .audience-intro__trail-edge--bottom,
+.is-design-preview .audience-intro::after {
+  opacity: min(72%, var(--ov-trail, 100%));
 }
 
 /* --------------------------------------------------------------------------
@@ -350,7 +501,7 @@
 
 .dp-eyebrow {
   margin: 0 0 22px;
-  color: color-mix(in srgb, var(--glow) 84%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 84%, transparent);
   font: 500 12px / 1.2 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -458,7 +609,7 @@
 .dp-step__num {
   display: block;
   margin: 0 0 6px;
-  color: color-mix(in srgb, var(--glow) 55%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 55%, transparent);
   font: 500 11px / 1 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -616,7 +767,7 @@
 
 .dp-swatch__hex {
   margin: 14px 4px 4px;
-  color: color-mix(in srgb, var(--glow) 62%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 62%, transparent);
   font: 500 11px / 1 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -747,7 +898,7 @@
 
 .dp-overlay__hex {
   margin: 0;
-  color: color-mix(in srgb, var(--glow) 62%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 62%, transparent);
   font: 500 11px / 1 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -946,7 +1097,7 @@
   top: -14px;
   right: 12px;
   z-index: 0;
-  color: color-mix(in srgb, var(--glow) 14%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 14%, transparent);
   font-size: 130px;
   line-height: 1;
   pointer-events: none;
@@ -974,7 +1125,7 @@
 
 .dp-type-card__specimen-label {
   margin: 0 0 8px;
-  color: color-mix(in srgb, var(--glow) 84%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 84%, transparent);
   font: 500 12px / 1.6 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -990,7 +1141,7 @@
 
 .dp-type-card__role {
   margin: 0 0 10px;
-  color: color-mix(in srgb, var(--glow) 55%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 55%, transparent);
   font: 500 11px / 1.4 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -1000,6 +1151,15 @@
   margin: 0;
   color: color-mix(in srgb, var(--light) 74%, transparent);
   font: 400 13px / 1.55 "Outfit", system-ui, sans-serif;
+}
+
+.dp-group-label--type,
+.dp-swatches--type {
+  max-width: 1100px;
+}
+
+.dp-swatches--type {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 /* --------------------------------------------------------------------------
@@ -1032,7 +1192,7 @@
 
 .dp-decision__num {
   margin: 0 8px 6px;
-  color: color-mix(in srgb, var(--glow) 55%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 55%, transparent);
   font: 500 11px / 1 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -1226,13 +1386,13 @@
   position: absolute;
   top: 18px;
   right: 22px;
-  color: color-mix(in srgb, var(--glow) 32%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 32%, transparent);
   font: 500 clamp(28px, 2.4vw, 38px) / 1 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.01em;
 }
 
 .dp-sample-numerals__eyebrow {
-  color: color-mix(in srgb, var(--glow) 65%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 65%, transparent);
   font: 500 11px / 1.4 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.36em;
   text-transform: uppercase;
@@ -1654,7 +1814,7 @@ section.dp-edit-pinned,
 
 .dp-dock__control-hex,
 .dp-dock__control-pct {
-  color: color-mix(in srgb, var(--glow) 62%, transparent);
+  color: color-mix(in srgb, var(--text-accent) 62%, transparent);
   font: 500 10px / 1 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.2em;
   text-transform: uppercase;
