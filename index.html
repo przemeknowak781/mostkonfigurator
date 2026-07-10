@@ -15,12 +15,12 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&family=Urbanist:wght@500;600&display=swap"
         rel="stylesheet"
       />
     </noscript>
@@ -322,6 +322,69 @@
           </article>
         </div>
 
+        <p class="dp-group-label" data-reveal>Overlaye światła</p>
+        <div class="dp-overlays" data-reveal>
+          <article class="dp-overlay" data-token="--orange-soft" data-alpha="--ov-sun">
+            <div class="dp-overlay__preview dp-overlay__preview--sun" aria-hidden="true">
+              <span class="dp-overlay__sun"></span>
+              <img src="gora-bez-tla-2000px.svg" alt="" loading="lazy" decoding="async" />
+            </div>
+            <div class="dp-overlay__head">
+              <h3 class="dp-overlay__name">Poświata słońca</h3>
+              <p class="dp-overlay__hex" data-hex>#FFB077</p>
+            </div>
+            <p class="dp-overlay__role">Animowany blask „oddychający” za granią. Kolor współdzielony z Orange&nbsp;Soft.</p>
+            <div class="dp-overlay__controls">
+              <label class="dp-overlay__chip" style="--chip: var(--orange-soft)">
+                <input type="color" aria-label="Zmień kolor poświaty słońca" />
+              </label>
+              <input class="dp-overlay__range" type="range" min="0" max="100" value="100" step="1" aria-label="Przezroczystość poświaty słońca" />
+              <span class="dp-overlay__pct" data-alpha-value>100%</span>
+            </div>
+          </article>
+
+          <article class="dp-overlay" data-token="--orange" data-alpha="--ov-wash">
+            <div class="dp-overlay__preview dp-overlay__preview--wash" aria-hidden="true">
+              <span class="dp-overlay__wash"></span>
+            </div>
+            <div class="dp-overlay__head">
+              <h3 class="dp-overlay__name">Wash fotografii</h3>
+              <p class="dp-overlay__hex" data-hex>#FF612C</p>
+            </div>
+            <p class="dp-overlay__role">Ciepły nalot na zdjęciach gór — spina fotografię z paletą. Kolor współdzielony z&nbsp;Orange.</p>
+            <div class="dp-overlay__controls">
+              <label class="dp-overlay__chip" style="--chip: var(--orange)">
+                <input type="color" aria-label="Zmień kolor washu fotografii" />
+              </label>
+              <input class="dp-overlay__range" type="range" min="0" max="100" value="100" step="1" aria-label="Przezroczystość washu fotografii" />
+              <span class="dp-overlay__pct" data-alpha-value>100%</span>
+            </div>
+          </article>
+
+          <article class="dp-overlay" data-token="--glow" data-alpha="--ov-trail">
+            <div class="dp-overlay__preview dp-overlay__preview--trail" aria-hidden="true">
+              <svg viewBox="0 0 400 110" preserveAspectRatio="none">
+                <line class="dp-overlay__leader" x1="120" y1="60" x2="120" y2="110" />
+                <line class="dp-overlay__leader" x1="290" y1="30" x2="290" y2="110" />
+                <path class="dp-overlay__path" d="M0 92 L48 86 L96 94 L144 72 L192 80 L240 56 L288 64 L336 38 L400 44" />
+              </svg>
+              <span class="hero-trail-point" style="left: 30%; top: 55%;"></span>
+            </div>
+            <div class="dp-overlay__head">
+              <h3 class="dp-overlay__name">Linia trasy</h3>
+              <p class="dp-overlay__hex" data-hex>#FFA86E</p>
+            </div>
+            <p class="dp-overlay__role">Świetlisty szlak z punktami kontrolnymi. Kolor współdzielony z Trail&nbsp;Glow.</p>
+            <div class="dp-overlay__controls">
+              <label class="dp-overlay__chip" style="--chip: var(--glow)">
+                <input type="color" aria-label="Zmień kolor linii trasy" />
+              </label>
+              <input class="dp-overlay__range" type="range" min="0" max="100" value="100" step="1" aria-label="Przezroczystość linii trasy" />
+              <span class="dp-overlay__pct" data-alpha-value>100%</span>
+            </div>
+          </article>
+        </div>
+
         <div class="dp-transfer" data-reveal>
           <div class="dp-transfer__line" aria-hidden="true"></div>
           <div class="dp-transfer__copy">
@@ -354,7 +417,7 @@
       <section class="dp-section dp-type" id="typography" aria-labelledby="dp-type-title">
         <header class="dp-head" data-reveal>
           <p class="dp-eyebrow">— typografia —</p>
-          <h2 class="dp-title" id="dp-type-title">Trzy głosy, jedna&nbsp;narracja.</h2>
+          <h2 class="dp-title" id="dp-type-title">Dwa głosy, jedna&nbsp;narracja.</h2>
         </header>
         <div class="dp-type__grid" data-reveal>
           <article class="dp-type-card dp-type-card--urbanist">
@@ -362,21 +425,15 @@
             <p class="dp-type-card__specimen">Your Legal Partner for Growth, Funding, and Global Expansion.</p>
             <h3 class="dp-type-card__name">Urbanist</h3>
             <p class="dp-type-card__role">Nagłówki i liczby</p>
-            <p class="dp-type-card__meta">500–600 · H1–H3, statystyki, duże numery · ciasny tracking&nbsp;−0.005em</p>
+            <p class="dp-type-card__meta">500–600 · H1–H3, statystyki, numeracja · ciasny tracking&nbsp;−0.005em</p>
           </article>
           <article class="dp-type-card dp-type-card--outfit">
             <span class="dp-type-card__glyph" aria-hidden="true">Aa</span>
             <p class="dp-type-card__specimen">We accompany founders, tech companies, and investors as long-term partners in law and business — helping them protect what matters most.</p>
+            <p class="dp-type-card__specimen-label">— let's make the most at every stage —</p>
             <h3 class="dp-type-card__name">Outfit</h3>
-            <p class="dp-type-card__role">Treść i opisy</p>
-            <p class="dp-type-card__meta">400–500 · akapity, listy, nawigacja · interlinia&nbsp;1.5</p>
-          </article>
-          <article class="dp-type-card dp-type-card--montserrat">
-            <span class="dp-type-card__glyph" aria-hidden="true">Aa</span>
-            <p class="dp-type-card__specimen">— let's make the most at every stage —</p>
-            <h3 class="dp-type-card__name">Montserrat</h3>
-            <p class="dp-type-card__role">Etykiety i sygnały</p>
-            <p class="dp-type-card__meta">500 · eyebrow, CTA, podpisy · wersaliki, światło 0.16–0.22em</p>
+            <p class="dp-type-card__role">Treść, etykiety i sygnały</p>
+            <p class="dp-type-card__meta">400–500 · akapity, listy, nawigacja · etykiety: wersaliki + światło 0.16–0.24em</p>
           </article>
         </div>
       </section>
@@ -444,18 +501,19 @@
             </div>
             <p class="dp-decision__num">05</p>
             <h3 class="dp-decision__name">Przyciski pill</h3>
-            <p class="dp-decision__copy">Zaokrąglone obrysy, wersaliki Montserrat i szerokie światło liter. Spokojne w spoczynku, jednoznaczne po najechaniu — wypełniają się światłem.</p>
+            <p class="dp-decision__copy">Zaokrąglone obrysy i wersaliki z szerokim światłem liter. Spokojne w spoczynku, jednoznaczne po najechaniu — wypełniają się światłem.</p>
           </article>
 
           <article class="dp-decision" data-reveal>
             <div class="dp-decision__sample dp-sample-numerals" aria-hidden="true">
-              <span class="dp-sample-numerals__ghost">01</span>
+              <span class="dp-sample-numerals__exnum">01</span>
               <span class="dp-sample-numerals__eyebrow">— for every stage —</span>
-              <span class="dp-sample-numerals__title">Three routes. One partner.</span>
+              <span class="dp-sample-numerals__title">Three routes.<br />One partner.</span>
+              <span class="dp-sample-numerals__rule"></span>
             </div>
             <p class="dp-decision__num">06</p>
             <h3 class="dp-decision__name">Numeracja i eyebrow</h3>
-            <p class="dp-decision__copy">Duże, wyciszone numery porządkują narrację jak kilometraż szlaku. Eyebrow ujęty w pauzy „—” wyznacza rytm każdej sekcji.</p>
+            <p class="dp-decision__copy">Wyciszone numery w rogu karty porządkują narrację jak kilometraż szlaku. Eyebrow ujęty w pauzy „—” wyznacza rytm każdej sekcji.</p>
           </article>
         </div>
       </section>
@@ -486,8 +544,6 @@
         </div>
 
         <div class="dp-aud__stage" data-active="founders" data-reveal>
-          <span class="dp-aud__ghost" aria-hidden="true" data-aud-ghost>Founders</span>
-
           <section class="dp-aud__panel is-active" role="tabpanel" id="dp-panel-founders" aria-labelledby="dp-tab-founders" data-aud-panel="founders">
             <div class="dp-aud__copy">
               <p class="dp-aud__hint">building from&nbsp;zero</p>

@@ -1,7 +1,7 @@
 /* =========================================================================
-   DESIGN 2.0 — INTERACTIVE PREVIEW
-   Color pickers wired to CSS custom properties, JSON export/import of the
-   color set, and the animated Founders / Companies / Investors switcher.
+   DESIGN — INTERACTIVE PREVIEW
+   Color pickers + overlay opacity sliders wired to CSS custom properties,
+   JSON export/import of the full set, and the animated audience switcher.
    ========================================================================= */
 
 (function () {
@@ -25,7 +25,13 @@
     { cssVar: "--accent-investors", name: "Akcent — Investors" },
   ];
 
-  /* ---------- color helpers ---------- */
+  const OVERLAYS = [
+    { cssVar: "--ov-sun", name: "Poświata słońca — intensywność" },
+    { cssVar: "--ov-wash", name: "Wash fotografii — intensywność" },
+    { cssVar: "--ov-trail", name: "Linia trasy — intensywność" },
+  ];
+
+  /* ---------- value helpers ---------- */
 
   function normalizeHex(value) {
     if (!value) return null;
@@ -49,9 +55,25 @@
     return null;
   }
 
+  /* Accepts 0–1 numbers, 0–100 numbers, and "63%" strings → 0–1 or null. */
+  function normalizeAlpha(value) {
+    if (value === null || value === undefined || value === "") return null;
+    const str = String(value).trim();
+    const num = parseFloat(str);
+    if (!Number.isFinite(num)) return null;
+    const scaled = str.includes("%") || num > 1 ? num / 100 : num;
+    return Math.max(0, Math.min(1, scaled));
+  }
+
   function readTokenValue(cssVar) {
     const raw = getComputedStyle(rootEl).getPropertyValue(cssVar);
     return normalizeHex(raw);
+  }
+
+  function readAlphaValue(cssVar) {
+    const raw = getComputedStyle(rootEl).getPropertyValue(cssVar);
+    const parsed = normalizeAlpha(raw);
+    return parsed === null ? 1 : parsed;
   }
 
   /* ---------- state ---------- */
@@ -69,9 +91,20 @@
     return out;
   }
 
+  function currentOverlays() {
+    const out = {};
+    OVERLAYS.forEach((overlay) => {
+      out[overlay.cssVar] = readAlphaValue(overlay.cssVar);
+    });
+    return out;
+  }
+
   function persist() {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(currentColors()));
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ colors: currentColors(), overlays: currentOverlays() })
+      );
     } catch (err) {
       /* private mode etc. — live preview still works */
     }
@@ -86,47 +119,6 @@
     }
   }
 
-  /* ---------- swatch UI ---------- */
-
-  const swatches = Array.from(document.querySelectorAll(".dp-swatch[data-token]"));
-
-  function syncSwatchUI() {
-    swatches.forEach((swatch) => {
-      const cssVar = swatch.dataset.token;
-      const hex = readTokenValue(cssVar);
-      if (!hex) return;
-      const input = swatch.querySelector('input[type="color"]');
-      const hexLabel = swatch.querySelector("[data-hex]");
-      if (input) input.value = hex;
-      if (hexLabel) hexLabel.textContent = hex.toUpperCase();
-    });
-  }
-
-  function setToken(cssVar, hex, { save = true } = {}) {
-    const normalized = normalizeHex(hex);
-    if (!normalized) return false;
-    rootEl.style.setProperty(cssVar, normalized);
-    if (save) persist();
-    return true;
-  }
-
-  swatches.forEach((swatch) => {
-    const cssVar = swatch.dataset.token;
-    const input = swatch.querySelector('input[type="color"]');
-    const hexLabel = swatch.querySelector("[data-hex]");
-    if (!input) return;
-
-    input.addEventListener("input", () => {
-      rootEl.style.setProperty(cssVar, input.value);
-      if (hexLabel) hexLabel.textContent = input.value.toUpperCase();
-    });
-
-    input.addEventListener("change", () => {
-      persist();
-      showToast("Kolor zapisany w podglądzie");
-    });
-  });
-
   /* ---------- toast ---------- */
 
   const toastEl = document.querySelector("[data-dp-toast]");
@@ -140,20 +132,86 @@
     toastTimer = window.setTimeout(() => toastEl.classList.remove("is-visible"), 2600);
   }
 
+  /* ---------- color + alpha UI (palette swatches AND overlay cards) ---------- */
+
+  const colorCards = Array.from(document.querySelectorAll("[data-token]"));
+  const alphaCards = Array.from(document.querySelectorAll("[data-alpha]"));
+
+  function syncControls() {
+    colorCards.forEach((card) => {
+      const hex = readTokenValue(card.dataset.token);
+      if (!hex) return;
+      const input = card.querySelector('input[type="color"]');
+      const hexLabel = card.querySelector("[data-hex]");
+      if (input) input.value = hex;
+      if (hexLabel) hexLabel.textContent = hex.toUpperCase();
+    });
+
+    alphaCards.forEach((card) => {
+      const alpha = readAlphaValue(card.dataset.alpha);
+      const range = card.querySelector('input[type="range"]');
+      const pctLabel = card.querySelector("[data-alpha-value]");
+      const pct = Math.round(alpha * 100);
+      if (range) {
+        range.value = String(pct);
+        range.style.setProperty("--fill", pct + "%");
+      }
+      if (pctLabel) pctLabel.textContent = pct + "%";
+    });
+  }
+
+  colorCards.forEach((card) => {
+    const cssVar = card.dataset.token;
+    const input = card.querySelector('input[type="color"]');
+    if (!input) return;
+
+    input.addEventListener("input", () => {
+      rootEl.style.setProperty(cssVar, input.value);
+      syncControls(); /* the same token can live on a palette swatch AND an overlay card */
+    });
+
+    input.addEventListener("change", () => {
+      persist();
+      showToast("Kolor zapisany w podglądzie");
+    });
+  });
+
+  alphaCards.forEach((card) => {
+    const cssVar = card.dataset.alpha;
+    const range = card.querySelector('input[type="range"]');
+    const pctLabel = card.querySelector("[data-alpha-value]");
+    if (!range) return;
+
+    range.addEventListener("input", () => {
+      const pct = Math.max(0, Math.min(100, parseInt(range.value, 10) || 0));
+      rootEl.style.setProperty(cssVar, pct + "%");
+      range.style.setProperty("--fill", pct + "%");
+      if (pctLabel) pctLabel.textContent = pct + "%";
+    });
+
+    range.addEventListener("change", () => {
+      persist();
+      showToast("Przezroczystość zapisana w podglądzie");
+    });
+  });
+
   /* ---------- download / upload / reset ---------- */
 
   function downloadColorSet() {
-    const colors = currentColors();
     const names = {};
     TOKENS.forEach((token) => {
       names[token.cssVar] = token.name;
     });
+    OVERLAYS.forEach((overlay) => {
+      names[overlay.cssVar] = overlay.name;
+    });
 
     const payload = {
-      project: "MOST Partners — Design 2.0",
-      format: "most-color-set@1",
+      project: "MOST Partners — Design Preview",
+      format: "most-color-set@2",
       exportedAt: new Date().toISOString(),
-      colors,
+      colors: currentColors(),
+      overlays: currentOverlays(),
       names,
     };
 
@@ -183,28 +241,53 @@
     return map;
   }
 
-  function applyColorMap(map, { save = true } = {}) {
-    if (!map) return 0;
+  function extractOverlayMap(parsed) {
+    if (!parsed || typeof parsed !== "object") return null;
+    const source = parsed.overlays && typeof parsed.overlays === "object" ? parsed.overlays : parsed;
+    const map = {};
+    Object.keys(source).forEach((key) => {
+      const cssVar = key.startsWith("--") ? key : "--" + key;
+      const alpha = normalizeAlpha(source[key]);
+      if (alpha !== null) map[cssVar] = alpha;
+    });
+    return map;
+  }
+
+  function applySet(parsed, { save = true } = {}) {
+    const colorMap = extractColorMap(parsed) || {};
+    const overlayMap = extractOverlayMap(parsed) || {};
     let applied = 0;
+
     TOKENS.forEach((token) => {
-      if (map[token.cssVar] && setToken(token.cssVar, map[token.cssVar], { save: false })) {
+      if (colorMap[token.cssVar]) {
+        rootEl.style.setProperty(token.cssVar, colorMap[token.cssVar]);
         applied += 1;
       }
     });
-    if (applied && save) persist();
-    if (applied) syncSwatchUI();
+    OVERLAYS.forEach((overlay) => {
+      if (overlay.cssVar in overlayMap) {
+        rootEl.style.setProperty(overlay.cssVar, Math.round(overlayMap[overlay.cssVar] * 100) + "%");
+        applied += 1;
+      }
+    });
+
+    if (applied) {
+      syncControls();
+      if (save) persist();
+    }
     return applied;
   }
 
-  function resetColors() {
+  function resetAll() {
     TOKENS.forEach((token) => rootEl.style.removeProperty(token.cssVar));
+    OVERLAYS.forEach((overlay) => rootEl.style.removeProperty(overlay.cssVar));
     try {
       window.localStorage.removeItem(STORAGE_KEY);
     } catch (err) {
       /* noop */
     }
-    syncSwatchUI();
-    showToast("Przywrócono oryginalne kolory Design 2.0");
+    syncControls();
+    showToast("Przywrócono oryginalne kolory i overlaye");
   }
 
   const fileInput = document.querySelector("[data-dp-file]");
@@ -223,11 +306,11 @@
       reader.onload = () => {
         try {
           const parsed = JSON.parse(String(reader.result));
-          const applied = applyColorMap(extractColorMap(parsed));
+          const applied = applySet(parsed);
           if (applied) {
-            showToast("Wczytano zestaw: zaktualizowano " + applied + " " + (applied === 1 ? "kolor" : applied < 5 ? "kolory" : "kolorów"));
+            showToast("Wczytano zestaw: zaktualizowano " + applied + " " + (applied === 1 ? "wartość" : applied < 5 ? "wartości" : "wartości"));
           } else {
-            showToast("Ten plik nie zawiera rozpoznawalnych kolorów");
+            showToast("Ten plik nie zawiera rozpoznawalnych wartości");
           }
         } catch (err) {
           showToast("Nie udało się odczytać pliku — to nie jest poprawny JSON");
@@ -239,13 +322,13 @@
 
   document.querySelectorAll("[data-dp-download]").forEach((btn) => btn.addEventListener("click", downloadColorSet));
   document.querySelectorAll("[data-dp-upload]").forEach((btn) => btn.addEventListener("click", requestUpload));
-  document.querySelectorAll("[data-dp-reset]").forEach((btn) => btn.addEventListener("click", resetColors));
+  document.querySelectorAll("[data-dp-reset]").forEach((btn) => btn.addEventListener("click", resetAll));
 
-  /* ---------- boot colors: saved set wins over defaults ---------- */
+  /* ---------- boot: saved set wins over defaults ---------- */
 
   const saved = readPersisted();
-  if (saved) applyColorMap(saved, { save: false });
-  syncSwatchUI();
+  if (saved) applySet(saved, { save: false });
+  syncControls();
 
   /* ---------- animated audience tabs ---------- */
 
@@ -256,12 +339,11 @@
     const tabs = Array.from(section.querySelectorAll("[data-aud-tab]"));
     const panels = Array.from(section.querySelectorAll("[data-aud-panel]"));
     const stage = section.querySelector(".dp-aud__stage");
-    const ghost = section.querySelector("[data-aud-ghost]");
     if (!tabs.length || !panels.length || !stage) return;
 
     const INTERVAL_MS = 6000;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    stage.parentElement.style.setProperty("--dp-aud-interval", INTERVAL_MS + "ms");
+    section.style.setProperty("--dp-aud-interval", INTERVAL_MS + "ms");
 
     const order = tabs.map((tab) => tab.dataset.audTab);
     let activeKey = order[0];
@@ -304,19 +386,17 @@
       panels.forEach((panel) => {
         const isActive = panel.dataset.audPanel === key;
         panel.classList.toggle("is-active", isActive);
+        panel.hidden = false;
         if (isActive) {
-          panel.hidden = false;
+          panel.removeAttribute("aria-hidden");
           if (!reducedMotion) drawRoutes(panel);
         } else {
-          /* keep in DOM for the crossfade, hide from a11y tree */
-          panel.hidden = false;
+          /* keep in DOM for the crossfade, hide from the a11y tree */
           panel.setAttribute("aria-hidden", "true");
         }
-        if (isActive) panel.removeAttribute("aria-hidden");
       });
 
       stage.dataset.active = key;
-      if (ghost) ghost.textContent = key.charAt(0).toUpperCase() + key.slice(1);
 
       if (fromUser) {
         manual = true;

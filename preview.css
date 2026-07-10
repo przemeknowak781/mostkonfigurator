@@ -1,16 +1,27 @@
 /* ==========================================================================
-   DESIGN 2.0 — INTERACTIVE PREVIEW
-   Loaded only on index.html. styles.css stays untouched, so subpages keep
-   their exact look. Everything here is driven by CSS custom properties so
-   the color pickers repaint the hero and every sample live.
+   DESIGN — INTERACTIVE PREVIEW (homepage only)
+   Loaded only on index.html; styles.css stays untouched so subpages keep
+   their exact look. Every rule below reuses the ORIGINAL homepage component
+   vocabulary (ex-card, preview card, approach item, nav-cta pill, trail
+   lines, breathing sun) and is driven by CSS custom properties so the
+   pickers repaint the hero and every sample live.
+
+   Overlay opacity: each light overlay exposes a percentage token
+   (--ov-sun / --ov-wash / --ov-trail, default 100%) used either as element
+   opacity or as the outer percentage of a nested color-mix().
    ========================================================================== */
 
 :root {
-  /* New editable tokens (extracted from hardcoded values in styles.css) */
+  /* Editable tokens extracted from hardcoded values in styles.css */
   --glow: #ffa86e;
   --accent-founders: #d17e5f;
   --accent-companies: #9b8b95;
   --accent-investors: #5b7ab0;
+
+  /* Overlay intensities (percentages; 100% = original design) */
+  --ov-sun: 100%;
+  --ov-wash: 100%;
+  --ov-trail: 100%;
 
   /* Re-derive the opacity ramps from the editable tokens so a picker
      change to --light propagates everywhere. */
@@ -20,6 +31,27 @@
   --light-10: color-mix(in srgb, var(--light) 10%, transparent);
 
   --glow-bright: color-mix(in srgb, var(--glow), white 22%);
+
+  /* Original section backdrop (#0a0d18 → #07090f) re-expressed via tokens */
+  --dp-bg-top: color-mix(in srgb, var(--navy) 20%, var(--navy-deep));
+  --dp-bg-bottom: color-mix(in srgb, var(--navy-deep) 94%, black);
+}
+
+/* --------------------------------------------------------------------------
+   NO MONTSERRAT — the label voice on this page is Outfit.
+   These selectors cover every Montserrat rule that applies to elements
+   present on the preview page.
+   -------------------------------------------------------------------------- */
+
+.is-design-preview .eyebrow,
+.is-design-preview .nav-cta,
+.is-design-preview .primary-cta,
+.is-design-preview .hero-stat span,
+.is-design-preview .hero-trail-label span,
+.is-design-preview .site-footer__col-title,
+.is-design-preview .site-footer__lede-eyebrow,
+.is-design-preview .mobile-block__eyebrow {
+  font-family: "Outfit", system-ui, sans-serif;
 }
 
 /* --------------------------------------------------------------------------
@@ -39,10 +71,16 @@
 
 .is-design-preview .hero-wash {
   background:
-    radial-gradient(800px 520px at 14% 64%, color-mix(in srgb, var(--orange) 26%, transparent), transparent 66%),
-    radial-gradient(700px 460px at 60% 56%, color-mix(in srgb, var(--orange-soft) 12%, transparent), transparent 72%),
+    radial-gradient(800px 520px at 14% 64%, color-mix(in srgb, color-mix(in srgb, var(--orange) 26%, transparent) var(--ov-wash, 100%), transparent), transparent 66%),
+    radial-gradient(700px 460px at 60% 56%, color-mix(in srgb, color-mix(in srgb, var(--orange-soft) 12%, transparent) var(--ov-wash, 100%), transparent), transparent 72%),
     linear-gradient(90deg, rgba(4, 6, 12, 0.88) 0%, rgba(11, 14, 25, 0.6) 38%, rgba(18, 20, 31, 0.22) 72%, rgba(8, 10, 17, 0.32) 100%),
     linear-gradient(180deg, rgba(5, 8, 15, 0.42) 0%, rgba(17, 20, 31, 0.05) 44%, transparent 100%);
+}
+
+/* Sun + haze live inside .hero-glow (no animation on the container itself),
+   so one opacity token dims the whole sunlight overlay. */
+.is-design-preview .hero-glow {
+  opacity: var(--ov-sun, 100%);
 }
 
 .is-design-preview .hero-glow__sun {
@@ -56,13 +94,21 @@
     linear-gradient(180deg, transparent, transparent);
 }
 
+/* The climbers' sun animates its own opacity, so intensity is folded into
+   the gradient stops instead (nested color-mix scaled by --ov-sun). */
 .is-design-preview .hero-climbers-sun {
   background:
     radial-gradient(closest-side,
-      color-mix(in srgb, color-mix(in srgb, var(--orange-soft), white 45%) 50%, transparent) 0%,
-      color-mix(in srgb, color-mix(in srgb, var(--orange-soft), var(--orange) 35%) 38%, transparent) 24%,
-      color-mix(in srgb, var(--orange) 26%, transparent) 52%,
+      color-mix(in srgb, color-mix(in srgb, color-mix(in srgb, var(--orange-soft), white 45%) 50%, transparent) var(--ov-sun, 100%), transparent) 0%,
+      color-mix(in srgb, color-mix(in srgb, color-mix(in srgb, var(--orange-soft), var(--orange) 35%) 38%, transparent) var(--ov-sun, 100%), transparent) 24%,
+      color-mix(in srgb, color-mix(in srgb, var(--orange) 26%, transparent) var(--ov-sun, 100%), transparent) 52%,
       transparent 80%);
+}
+
+.is-design-preview .hero-trail,
+.is-design-preview .hero-trail-points,
+.is-design-preview .ridge-edge__leaders {
+  opacity: var(--ov-trail, 100%);
 }
 
 .is-design-preview .hero-trail__path {
@@ -75,8 +121,7 @@
   stroke: color-mix(in srgb, var(--glow) 42%, transparent);
 }
 
-.is-design-preview .hero-trail-point,
-.is-design-preview .dp-sample-trail .hero-trail-point {
+.is-design-preview .hero-trail-point {
   background: color-mix(in srgb, var(--glow) 98%, transparent);
   box-shadow:
     0 0 0 3px color-mix(in srgb, var(--glow) 18%, transparent),
@@ -134,7 +179,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   TOP NAV — preview toolbar
+   TOP NAV — preview toolbar (nav-cta pill vocabulary)
    -------------------------------------------------------------------------- */
 
 .top-nav--preview {
@@ -149,7 +194,7 @@
   border: 1px solid var(--light-10);
   border-radius: 40px;
   color: var(--light-60);
-  font: 500 10px / 1.2 "Montserrat", system-ui, sans-serif;
+  font: 500 10px / 1.2 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -157,8 +202,8 @@
 
 .dp-nav-badge::before {
   content: "";
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--orange);
   box-shadow: 0 0 10px color-mix(in srgb, var(--orange) 70%, transparent);
@@ -178,7 +223,8 @@
 }
 
 /* --------------------------------------------------------------------------
-   BUTTONS
+   BUTTONS — the original pill (nav-cta) and inline-link (preview__cta)
+   typologies, nothing else.
    -------------------------------------------------------------------------- */
 
 .dp-btn {
@@ -187,22 +233,30 @@
   justify-content: center;
   gap: 10px;
   min-height: 42px;
-  padding: 10px 22px;
-  border: 1px solid transparent;
+  padding: 10px 24px;
+  border: 1px solid color-mix(in srgb, var(--light) 55%, transparent);
   border-radius: 40px;
   cursor: pointer;
   color: var(--light);
   background: transparent;
-  font: 500 12px / 1.2 "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.16em;
+  font: 500 12px / 1.2 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   white-space: nowrap;
   transition: border-color 240ms ease, background 240ms ease, color 240ms ease, transform 240ms ease, box-shadow 240ms ease;
 }
 
+.dp-btn:hover,
+.dp-btn:focus-visible {
+  color: var(--navy);
+  background: var(--light);
+  border-color: var(--light);
+  transform: translateY(-2px);
+}
+
 .dp-btn svg {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   flex-shrink: 0;
 }
 
@@ -214,87 +268,73 @@
   stroke-linejoin: round;
 }
 
+/* Primary keeps the same pill, signalled with the orange accent —
+   the same way the site uses orange for “here, now”. */
 .dp-btn--primary {
-  color: var(--navy-deep);
-  background: var(--orange);
-  border-color: var(--orange);
-  box-shadow: 0 8px 32px color-mix(in srgb, var(--orange) 32%, transparent);
+  border-color: color-mix(in srgb, var(--orange) 75%, transparent);
+  background: color-mix(in srgb, var(--navy) 22%, transparent);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--orange) 22%, transparent);
 }
 
 .dp-btn--primary:hover,
 .dp-btn--primary:focus-visible {
-  background: var(--orange-soft);
-  border-color: var(--orange-soft);
-  transform: translateY(-2px);
-  box-shadow: 0 14px 44px color-mix(in srgb, var(--orange) 44%, transparent);
-}
-
-.dp-btn--ghost {
-  border-color: color-mix(in srgb, var(--light) 55%, transparent);
-}
-
-.dp-btn--ghost:hover,
-.dp-btn--ghost:focus-visible {
   color: var(--navy);
   background: var(--light);
   border-color: var(--light);
-  transform: translateY(-2px);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--orange) 34%, transparent);
 }
 
+/* Round icon button, mirroring the site's .close-button */
 .dp-btn--reset {
   width: 42px;
   padding: 10px;
+  color: var(--light);
+  background: color-mix(in srgb, var(--light) 7%, transparent);
   border-color: var(--light-10);
-  color: var(--light-60);
 }
 
 .dp-btn--reset:hover,
 .dp-btn--reset:focus-visible {
-  color: var(--light);
-  border-color: color-mix(in srgb, var(--light) 40%, transparent);
-  transform: rotate(-40deg);
+  color: var(--navy);
+  background: var(--light);
+  border-color: var(--light);
+  transform: translateY(-2px) rotate(-40deg);
 }
 
+/* Inline text action — the original .preview__cta underline link */
 .dp-btn--text {
   min-height: 0;
-  padding: 8px 4px;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--glow) 55%, transparent);
+  border-radius: 0;
   color: var(--light-60);
-  letter-spacing: 0.12em;
+  font: 500 11px / 1.2 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.22em;
 }
 
 .dp-btn--text:hover,
 .dp-btn--text:focus-visible {
-  color: var(--light);
+  color: color-mix(in srgb, var(--glow) 90%, white);
+  background: transparent;
+  border-bottom-color: var(--glow);
+  transform: none;
 }
 
 .dp-btn--big {
-  min-height: 54px;
-  padding: 14px 32px;
-  font-size: 13px;
+  min-height: 48px;
+  padding: 12px 30px;
 }
 
 /* --------------------------------------------------------------------------
-   PREVIEW SECTIONS — shared scaffolding
+   PREVIEW SECTIONS — original section scaffolding (expertise-cards recipe)
    -------------------------------------------------------------------------- */
 
 .dp-section {
   position: relative;
-  padding: clamp(90px, 12vh, 150px) var(--container-x);
-  background: var(--navy-deep);
+  padding: clamp(96px, 12vh, 144px) var(--container-x);
+  background: linear-gradient(180deg, var(--dp-bg-top) 0%, var(--dp-bg-bottom) 100%);
   overflow: hidden;
-}
-
-/* faint horizontal contour lines, same rhythm as the footer */
-.dp-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-image: linear-gradient(var(--light-10) 1px, transparent 1px);
-  background-size: 100% 96px;
-  opacity: 0.16;
-  mask-image: linear-gradient(180deg, transparent, black 24%, black 82%, transparent);
-  pointer-events: none;
 }
 
 .dp-section > * {
@@ -303,43 +343,44 @@
 }
 
 .dp-head {
-  max-width: 860px;
-  margin: 0 auto clamp(48px, 7vh, 88px);
+  max-width: 880px;
+  margin: 0 auto clamp(48px, 7vh, 80px);
   text-align: center;
 }
 
 .dp-eyebrow {
-  margin: 0 0 20px;
-  color: color-mix(in srgb, var(--glow) 72%, transparent);
-  font: 500 clamp(10px, 0.8vw, 12px) / 1.4 "Montserrat", system-ui, sans-serif;
+  margin: 0 0 22px;
+  color: color-mix(in srgb, var(--glow) 84%, transparent);
+  font: 500 12px / 1.2 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.24em;
   text-transform: uppercase;
 }
 
 .dp-title {
   margin: 0;
-  color: var(--light-80);
-  font: 500 clamp(32px, 3.4vw, 58px) / 1.06 "Urbanist", system-ui, sans-serif;
+  color: var(--light);
+  font: 500 clamp(30px, 4vw, 56px) / 1.06 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
 
 .dp-lede {
-  max-width: 640px;
-  margin: 26px auto 0;
-  color: var(--light-60);
-  font: 400 clamp(15px, 1.15vw, 18px) / 1.6 "Outfit", system-ui, sans-serif;
+  max-width: 620px;
+  margin: 22px auto 0;
+  color: var(--light-80);
+  font: 400 clamp(15px, 1.1vw, 17px) / 1.55 "Outfit", system-ui, sans-serif;
   text-wrap: pretty;
 }
 
+/* Group label + dashed leader line (the audience connector vocabulary) */
 .dp-group-label {
   display: flex;
   align-items: center;
   gap: 18px;
-  max-width: 1280px;
-  margin: clamp(40px, 6vh, 72px) auto 26px;
-  color: var(--light-60);
-  font: 500 11px / 1.2 "Montserrat", system-ui, sans-serif;
+  max-width: 1320px;
+  margin: clamp(40px, 6vh, 72px) auto 24px;
+  color: color-mix(in srgb, var(--glow) 55%, transparent);
+  font: 500 11px / 1 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
@@ -348,9 +389,11 @@
   content: "";
   flex: 1;
   height: 1px;
-  background-image: linear-gradient(90deg, color-mix(in srgb, var(--glow) 42%, transparent) 0 4px, transparent 4px 10px);
-  background-size: 10px 1px;
-  background-repeat: repeat-x;
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--glow) 42%, transparent) 0 2px,
+    transparent 2px 6px
+  );
 }
 
 /* --------------------------------------------------------------------------
@@ -358,10 +401,10 @@
    -------------------------------------------------------------------------- */
 
 .dp-intro {
-  padding-top: clamp(120px, 16vh, 200px);
+  padding-top: clamp(120px, 16vh, 190px);
 }
 
-/* ambient breathing sun in the preview itself */
+/* Ambient breathing sun in the preview itself (hero decision, reused) */
 .dp-sun {
   position: absolute;
   top: -220px;
@@ -371,71 +414,129 @@
   height: 760px;
   border-radius: 50%;
   background:
-    radial-gradient(closest-side, color-mix(in srgb, var(--orange-soft) 26%, transparent) 0%, color-mix(in srgb, var(--orange) 13%, transparent) 40%, transparent 72%);
+    radial-gradient(closest-side,
+      color-mix(in srgb, color-mix(in srgb, var(--orange-soft) 26%, transparent) var(--ov-sun, 100%), transparent) 0%,
+      color-mix(in srgb, color-mix(in srgb, var(--orange) 13%, transparent) var(--ov-sun, 100%), transparent) 40%,
+      transparent 72%);
   filter: blur(26px);
   pointer-events: none;
   animation: hero-sun-breathe 11s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
+/* Steps in the original approach-item typology: left rule + glowing waypoint */
 .dp-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 2.4vw, 32px);
-  max-width: 1080px;
+  gap: clamp(20px, 3vw, 36px) clamp(28px, 4vw, 56px);
+  max-width: 1160px;
   margin: 0 auto;
   padding: 0;
   list-style: none;
-  counter-reset: none;
 }
 
 .dp-step {
   position: relative;
-  padding: 28px 26px 26px;
-  background: color-mix(in srgb, var(--navy) 72%, transparent);
-  border: 1px solid var(--light-10);
-  border-radius: 18px;
-  text-align: left;
-  transition: border-color 240ms ease, transform 240ms ease;
+  padding: 14px 0 14px 32px;
+  border-left: 1px solid color-mix(in srgb, var(--glow) 25%, transparent);
 }
 
-.dp-step:hover {
-  border-color: color-mix(in srgb, var(--glow) 36%, transparent);
-  transform: translateY(-3px);
+.dp-step::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 20px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 2px solid color-mix(in srgb, var(--glow) 85%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--orange) 8%, transparent),
+    0 0 12px color-mix(in srgb, var(--orange) 45%, transparent);
 }
 
 .dp-step__num {
   display: block;
-  margin-bottom: 14px;
-  color: color-mix(in srgb, var(--glow) 80%, transparent);
-  font: 600 15px / 1 "Urbanist", system-ui, sans-serif;
-  letter-spacing: 0.06em;
+  margin: 0 0 6px;
+  color: color-mix(in srgb, var(--glow) 55%, transparent);
+  font: 500 11px / 1 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
 .dp-step__name {
   margin: 0 0 8px;
   color: var(--light);
-  font: 500 18px / 1.25 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(17px, 1.5vw, 21px) / 1.22 "Urbanist", system-ui, sans-serif;
 }
 
 .dp-step__copy {
   margin: 0;
-  color: var(--light-60);
-  font: 400 14px / 1.55 "Outfit", system-ui, sans-serif;
+  color: rgba(240, 235, 233, 0.72);
+  color: color-mix(in srgb, var(--light) 72%, transparent);
+  font: 400 clamp(13.5px, 0.95vw, 15px) / 1.55 "Outfit", system-ui, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   CARD — the original ex-card recipe, shared by swatches, type specimens,
+   decisions and overlay controls.
+   -------------------------------------------------------------------------- */
+
+.dp-swatch,
+.dp-type-card,
+.dp-decision,
+.dp-overlay {
+  position: relative;
+  background:
+    radial-gradient(520px 360px at 100% 0%, color-mix(in srgb, var(--orange) 6%, transparent), transparent 70%),
+    color-mix(in srgb, var(--light) 2.5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--light) 8%, transparent);
+  border-radius: 14px;
+  transition: border-color 280ms ease, transform 280ms ease, background 280ms ease;
+  overflow: hidden;
+}
+
+.dp-swatch::before,
+.dp-type-card::before,
+.dp-decision::before,
+.dp-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(color-mix(in srgb, var(--glow) 4%, transparent) 1px, transparent 1px);
+  background-size: 100% 32px;
+  mask-image: linear-gradient(180deg, transparent, black 50%);
+  pointer-events: none;
+}
+
+.dp-swatch > *,
+.dp-type-card > *,
+.dp-decision > *,
+.dp-overlay > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dp-swatch:hover,
+.dp-type-card:hover,
+.dp-decision:hover,
+.dp-overlay:hover {
+  border-color: color-mix(in srgb, var(--glow) 36%, transparent);
+  background:
+    radial-gradient(520px 360px at 100% 0%, color-mix(in srgb, var(--orange) 12%, transparent), transparent 70%),
+    color-mix(in srgb, var(--light) 4%, transparent);
+  transform: translateY(-4px);
 }
 
 /* --------------------------------------------------------------------------
    PALETTE — interactive swatches
    -------------------------------------------------------------------------- */
 
-.dp-palette {
-  background: var(--navy-deep);
-}
-
 .dp-swatches {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 26px);
-  max-width: 1280px;
+  gap: clamp(20px, 2.4vw, 28px);
+  max-width: 1320px;
   margin: 0 auto;
 }
 
@@ -444,28 +545,16 @@
 }
 
 .dp-swatch {
-  position: relative;
-  padding: 14px 14px 22px;
-  background: color-mix(in srgb, var(--navy) 66%, transparent);
-  border: 1px solid var(--light-10);
-  border-radius: 20px;
-  transition: border-color 240ms ease, transform 240ms ease, box-shadow 240ms ease;
-}
-
-.dp-swatch:hover {
-  border-color: color-mix(in srgb, var(--glow) 40%, transparent);
-  transform: translateY(-4px);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  padding: 12px 12px 22px;
 }
 
 .dp-swatch__chip {
   position: relative;
   display: block;
-  height: 116px;
-  border-radius: 12px;
+  height: 104px;
+  border-radius: 10px;
   background: var(--chip);
-  border: 1px solid color-mix(in srgb, var(--light) 14%, transparent);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), inset 0 -22px 40px rgba(0, 0, 0, 0.12);
+  border: 1px solid color-mix(in srgb, var(--light) 12%, transparent);
   cursor: pointer;
   overflow: hidden;
   transition: box-shadow 240ms ease;
@@ -492,7 +581,7 @@
   background: rgba(8, 11, 19, 0.55);
   backdrop-filter: blur(6px);
   color: rgba(240, 235, 233, 0.92);
-  font: 500 9px / 1.2 "Montserrat", system-ui, sans-serif;
+  font: 500 9px / 1.2 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   opacity: 0;
@@ -512,33 +601,264 @@
   inset: auto 0 0;
   z-index: 0;
   width: 100%;
-  height: 64px;
+  height: 60px;
   pointer-events: none;
   opacity: 0.85;
 }
 
 .dp-swatch__hex {
-  margin: 14px 2px 2px;
-  color: var(--light-60);
-  font: 500 11px / 1.2 "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.14em;
+  margin: 14px 4px 4px;
+  color: color-mix(in srgb, var(--glow) 62%, transparent);
+  font: 500 11px / 1 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
 .dp-swatch__name {
-  margin: 4px 2px 6px;
+  margin: 2px 4px 6px;
   color: var(--light);
-  font: 500 19px / 1.2 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(19px, 1.5vw, 22px) / 1.15 "Urbanist", system-ui, sans-serif;
 }
 
 .dp-swatch__role {
-  margin: 0 2px;
-  color: var(--light-60);
+  margin: 0 4px;
+  color: color-mix(in srgb, var(--light) 74%, transparent);
   font: 400 13.5px / 1.5 "Outfit", system-ui, sans-serif;
 }
 
 /* --------------------------------------------------------------------------
-   TRANSFER — download / upload block
+   OVERLAYS — color + transparency controls for the light overlays
+   -------------------------------------------------------------------------- */
+
+.dp-overlays {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 28px);
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.dp-overlay {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 12px 20px;
+}
+
+.dp-overlay__preview {
+  position: relative;
+  height: 130px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--light) 8%, transparent);
+  background: var(--dp-bg-bottom);
+  overflow: hidden;
+}
+
+.dp-overlay__preview--sun img {
+  position: absolute;
+  left: -6%;
+  right: -6%;
+  bottom: -46%;
+  width: 112%;
+  z-index: 1;
+}
+
+.dp-overlay__sun {
+  position: absolute;
+  left: 32%;
+  top: 52%;
+  width: 240px;
+  height: 240px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side,
+      color-mix(in srgb, color-mix(in srgb, color-mix(in srgb, var(--orange-soft), white 45%) 52%, transparent) var(--ov-sun, 100%), transparent) 0%,
+      color-mix(in srgb, color-mix(in srgb, var(--orange) 30%, transparent) var(--ov-sun, 100%), transparent) 46%,
+      transparent 78%);
+  filter: blur(12px);
+  animation: hero-climbers-sun 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.dp-overlay__preview--wash {
+  background-image: url("background.webp");
+  background-size: cover;
+  background-position: 56% 62%;
+}
+
+.dp-overlay__wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 90% at 18% 78%, color-mix(in srgb, color-mix(in srgb, var(--orange) 34%, transparent) var(--ov-wash, 100%), transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--navy-deep) 72%, transparent) 0%, color-mix(in srgb, var(--navy-deep) 24%, transparent) 55%, color-mix(in srgb, var(--navy-deep) 58%, transparent) 100%);
+  mix-blend-mode: multiply;
+}
+
+.dp-overlay__preview--trail svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: var(--ov-trail, 100%);
+}
+
+.dp-overlay__preview--trail .hero-trail-point {
+  margin: 0;
+  translate: -50% -50%;
+  opacity: var(--ov-trail, 100%);
+}
+
+.dp-overlay__path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--glow) 92%, transparent);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--glow) 46%, transparent));
+}
+
+.dp-overlay__leader {
+  stroke: color-mix(in srgb, var(--glow) 42%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.dp-overlay__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 4px 6px;
+}
+
+.dp-overlay__name {
+  margin: 0;
+  color: var(--light);
+  font: 500 clamp(18px, 1.4vw, 21px) / 1.15 "Urbanist", system-ui, sans-serif;
+}
+
+.dp-overlay__hex {
+  margin: 0;
+  color: color-mix(in srgb, var(--glow) 62%, transparent);
+  font: 500 11px / 1 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.dp-overlay__role {
+  flex: 1;
+  margin: 0 4px 16px;
+  color: color-mix(in srgb, var(--light) 74%, transparent);
+  font: 400 13.5px / 1.5 "Outfit", system-ui, sans-serif;
+}
+
+.dp-overlay__controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 4px;
+  padding-top: 14px;
+  border-top: 1px solid color-mix(in srgb, var(--glow) 18%, transparent);
+}
+
+.dp-overlay__chip {
+  position: relative;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--chip);
+  border: 1px solid color-mix(in srgb, var(--light) 14%, transparent);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.dp-overlay__chip input[type="color"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dp-overlay__pct {
+  flex-shrink: 0;
+  min-width: 44px;
+  text-align: right;
+  color: var(--light-60);
+  font: 500 11px / 1 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+}
+
+/* Range slider styled with the trail vocabulary: a thin route line and a
+   glowing checkpoint dot as the thumb. --fill is kept in sync by JS. */
+.dp-overlay__range {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 22px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.dp-overlay__range::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--glow) 85%, transparent) var(--fill, 100%),
+    var(--light-10) var(--fill, 100%)
+  );
+}
+
+.dp-overlay__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  margin-top: -5.5px;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--glow) 98%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--glow) 18%, transparent),
+    0 0 12px color-mix(in srgb, var(--glow) 60%, transparent);
+}
+
+.dp-overlay__range::-moz-range-track {
+  height: 2px;
+  border-radius: 2px;
+  background: var(--light-10);
+}
+
+.dp-overlay__range::-moz-range-progress {
+  height: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--glow) 85%, transparent);
+}
+
+.dp-overlay__range::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--glow) 98%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--glow) 18%, transparent),
+    0 0 12px color-mix(in srgb, var(--glow) 60%, transparent);
+}
+
+.dp-overlay__range:focus-visible {
+  outline: 1px dashed color-mix(in srgb, var(--glow) 42%, transparent);
+  outline-offset: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   TRANSFER — download / upload block (original preview-card recipe)
    -------------------------------------------------------------------------- */
 
 .dp-transfer {
@@ -547,44 +867,42 @@
   grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
   gap: clamp(28px, 4vw, 64px);
   align-items: center;
-  max-width: 1280px;
-  margin: clamp(64px, 9vh, 110px) auto 0;
-  padding: clamp(32px, 4vw, 56px);
-  background:
-    radial-gradient(520px 300px at 8% 110%, color-mix(in srgb, var(--orange) 14%, transparent), transparent 68%),
-    color-mix(in srgb, var(--navy) 82%, transparent);
-  border: 1px solid color-mix(in srgb, var(--glow) 22%, transparent);
-  border-radius: 26px;
+  max-width: 1320px;
+  margin: clamp(56px, 8vh, 96px) auto 0;
+  padding: clamp(28px, 3.4vh, 44px) clamp(24px, 3vw, 48px);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--light) 4%, transparent), color-mix(in srgb, var(--light) 1%, transparent));
+  border: 1px solid var(--light-10);
+  border-radius: 16px;
   overflow: hidden;
 }
 
 .dp-transfer__line {
   position: absolute;
   inset: 0 0 auto;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--orange), var(--orange-soft), transparent);
-  opacity: 0.85;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--glow) 38%, transparent), transparent);
 }
 
 .dp-transfer__copy .dp-eyebrow {
   margin-bottom: 14px;
+  text-align: left;
 }
 
 .dp-transfer__title {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   color: var(--light);
-  font: 500 clamp(24px, 2.2vw, 36px) / 1.15 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(22px, 2vw, 30px) / 1.15 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
 }
 
 .dp-transfer__text {
   margin: 0;
-  color: var(--light-60);
-  font: 400 15px / 1.65 "Outfit", system-ui, sans-serif;
+  color: color-mix(in srgb, var(--light) 74%, transparent);
+  font: 400 14px / 1.6 "Outfit", system-ui, sans-serif;
 }
 
 .dp-transfer__text strong {
-  color: var(--light-80);
+  color: var(--light);
   font-weight: 500;
 }
 
@@ -605,143 +923,123 @@
 
 .dp-type__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 26px);
-  max-width: 1280px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 28px);
+  max-width: 1100px;
   margin: 0 auto;
 }
 
 .dp-type-card {
-  position: relative;
-  padding: 34px 30px 30px;
-  background: color-mix(in srgb, var(--navy) 66%, transparent);
-  border: 1px solid var(--light-10);
-  border-radius: 20px;
-  overflow: hidden;
-  transition: border-color 240ms ease, transform 240ms ease;
-}
-
-.dp-type-card:hover {
-  border-color: color-mix(in srgb, var(--glow) 36%, transparent);
-  transform: translateY(-4px);
+  padding: clamp(28px, 3.4vh, 40px) clamp(24px, 2.4vw, 32px);
 }
 
 .dp-type-card__glyph {
   position: absolute;
-  top: -18px;
-  right: 10px;
-  color: var(--light);
-  opacity: 0.05;
-  font-size: 150px;
+  top: -14px;
+  right: 12px;
+  z-index: 0;
+  color: color-mix(in srgb, var(--glow) 14%, transparent);
+  font-size: 130px;
   line-height: 1;
   pointer-events: none;
 }
 
-.dp-type-card--urbanist .dp-type-card__glyph { font: 600 150px / 1 "Urbanist", system-ui, sans-serif; }
-.dp-type-card--outfit .dp-type-card__glyph { font: 500 150px / 1 "Outfit", system-ui, sans-serif; }
-.dp-type-card--montserrat .dp-type-card__glyph { font: 500 150px / 1 "Montserrat", system-ui, sans-serif; }
+.dp-type-card--urbanist .dp-type-card__glyph { font: 600 130px / 1 "Urbanist", system-ui, sans-serif; }
+.dp-type-card--outfit .dp-type-card__glyph { font: 500 130px / 1 "Outfit", system-ui, sans-serif; }
 
 .dp-type-card__specimen {
-  min-height: 148px;
-  margin: 0 0 30px;
+  min-height: 120px;
+  margin: 0 0 8px;
   color: var(--light-80);
 }
 
 .dp-type-card--urbanist .dp-type-card__specimen {
-  font: 500 clamp(22px, 1.8vw, 30px) / 1.15 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(22px, 1.9vw, 30px) / 1.15 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
 }
 
 .dp-type-card--outfit .dp-type-card__specimen {
-  font: 400 15px / 1.6 "Outfit", system-ui, sans-serif;
-  color: var(--light-60);
+  min-height: 84px;
+  font: 400 14px / 1.6 "Outfit", system-ui, sans-serif;
+  color: color-mix(in srgb, var(--light) 72%, transparent);
 }
 
-.dp-type-card--montserrat .dp-type-card__specimen {
-  display: flex;
-  align-items: center;
-  font: 500 13px / 1.8 "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.22em;
+.dp-type-card__specimen-label {
+  margin: 0 0 8px;
+  color: color-mix(in srgb, var(--glow) 84%, transparent);
+  font: 500 12px / 1.6 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--glow) 80%, transparent);
 }
 
 .dp-type-card__name {
-  margin: 0 0 4px;
-  padding-top: 20px;
-  border-top: 1px solid var(--light-10);
+  margin: 22px 0 4px;
+  padding-top: 18px;
+  border-top: 1px solid color-mix(in srgb, var(--glow) 18%, transparent);
   color: var(--light);
-  font: 500 22px / 1.2 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(20px, 1.6vw, 24px) / 1.15 "Urbanist", system-ui, sans-serif;
 }
 
 .dp-type-card__role {
   margin: 0 0 10px;
-  color: color-mix(in srgb, var(--glow) 76%, transparent);
-  font: 500 11px / 1.4 "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.18em;
+  color: color-mix(in srgb, var(--glow) 55%, transparent);
+  font: 500 11px / 1.4 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
 .dp-type-card__meta {
   margin: 0;
-  color: var(--light-60);
+  color: color-mix(in srgb, var(--light) 74%, transparent);
   font: 400 13px / 1.55 "Outfit", system-ui, sans-serif;
 }
 
 /* --------------------------------------------------------------------------
-   DESIGN DECISIONS — live samples
+   DESIGN DECISIONS — live samples in the ex-card recipe
    -------------------------------------------------------------------------- */
 
 .dp-decisions__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 26px);
-  max-width: 1280px;
+  gap: clamp(20px, 2.4vw, 28px);
+  max-width: 1320px;
   margin: 0 auto;
 }
 
 .dp-decision {
   display: flex;
   flex-direction: column;
-  padding: 14px 14px 26px;
-  background: color-mix(in srgb, var(--navy) 66%, transparent);
-  border: 1px solid var(--light-10);
-  border-radius: 20px;
-  transition: border-color 240ms ease, transform 240ms ease;
-}
-
-.dp-decision:hover {
-  border-color: color-mix(in srgb, var(--glow) 36%, transparent);
-  transform: translateY(-4px);
+  padding: 12px 12px 24px;
 }
 
 .dp-decision__sample {
   position: relative;
-  height: 190px;
-  margin-bottom: 22px;
-  border-radius: 12px;
-  border: 1px solid var(--light-10);
-  background: var(--navy-deep);
+  height: 180px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--light) 8%, transparent);
+  background: var(--dp-bg-bottom);
   overflow: hidden;
 }
 
 .dp-decision__num {
-  margin: 0 12px 6px;
-  color: color-mix(in srgb, var(--glow) 76%, transparent);
-  font: 600 14px / 1 "Urbanist", system-ui, sans-serif;
-  letter-spacing: 0.06em;
+  margin: 0 8px 6px;
+  color: color-mix(in srgb, var(--glow) 55%, transparent);
+  font: 500 11px / 1 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
 .dp-decision__name {
-  margin: 0 12px 8px;
+  margin: 0 8px 8px;
   color: var(--light);
-  font: 500 21px / 1.2 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(20px, 1.6vw, 24px) / 1.15 "Urbanist", system-ui, sans-serif;
 }
 
 .dp-decision__copy {
-  margin: 0 12px;
-  color: var(--light-60);
-  font: 400 14px / 1.6 "Outfit", system-ui, sans-serif;
+  margin: 0 8px;
+  color: color-mix(in srgb, var(--light) 74%, transparent);
+  font: 400 14px / 1.55 "Outfit", system-ui, sans-serif;
 }
 
 /* 01 — trail line */
@@ -750,6 +1048,13 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  opacity: var(--ov-trail, 100%);
+}
+
+.dp-sample-trail .hero-trail-point {
+  margin: 0;
+  translate: -50% -50%;
+  opacity: var(--ov-trail, 100%);
 }
 
 .dp-sample-trail__path {
@@ -776,14 +1081,9 @@
   stroke-dasharray: 2 4;
 }
 
-.dp-sample-trail .hero-trail-point {
-  margin: 0;
-  translate: -50% -50%;
-}
-
 /* 02 — breathing sun behind the ridge */
 .dp-sample-sun {
-  background: linear-gradient(180deg, var(--navy-deep) 0%, color-mix(in srgb, var(--navy) 80%, var(--navy-deep)) 100%);
+  background: linear-gradient(180deg, var(--dp-bg-bottom) 0%, color-mix(in srgb, var(--navy) 80%, var(--navy-deep)) 100%);
 }
 
 .dp-sample-sun img {
@@ -805,8 +1105,8 @@
   border-radius: 50%;
   background:
     radial-gradient(closest-side,
-      color-mix(in srgb, color-mix(in srgb, var(--orange-soft), white 45%) 52%, transparent) 0%,
-      color-mix(in srgb, var(--orange) 30%, transparent) 46%,
+      color-mix(in srgb, color-mix(in srgb, color-mix(in srgb, var(--orange-soft), white 45%) 52%, transparent) var(--ov-sun, 100%), transparent) 0%,
+      color-mix(in srgb, color-mix(in srgb, var(--orange) 30%, transparent) var(--ov-sun, 100%), transparent) 46%,
       transparent 78%);
   filter: blur(14px);
   animation: hero-climbers-sun 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
@@ -823,7 +1123,7 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(70% 90% at 18% 78%, color-mix(in srgb, var(--orange) 34%, transparent), transparent 70%),
+    radial-gradient(70% 90% at 18% 78%, color-mix(in srgb, color-mix(in srgb, var(--orange) 34%, transparent) var(--ov-wash, 100%), transparent), transparent 70%),
     linear-gradient(180deg, color-mix(in srgb, var(--navy-deep) 78%, transparent) 0%, color-mix(in srgb, var(--navy-deep) 26%, transparent) 55%, color-mix(in srgb, var(--navy-deep) 62%, transparent) 100%);
   mix-blend-mode: multiply;
 }
@@ -832,7 +1132,7 @@
 .dp-sample-surfaces {
   display: grid;
   place-items: center;
-  background: var(--navy-deep);
+  background: var(--dp-bg-bottom);
 }
 
 .dp-sample-surfaces__panel {
@@ -845,7 +1145,7 @@
 }
 
 .dp-sample-surfaces__panel i {
-  font: 500 9px / 1.2 "Montserrat", system-ui, sans-serif;
+  font: 500 9px / 1.2 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-style: normal;
@@ -877,7 +1177,7 @@
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
 }
 
-/* 05 — pill buttons */
+/* 05 — pill buttons (real .nav-cta / .primary-cta components) */
 .dp-sample-buttons {
   display: flex;
   flex-direction: column;
@@ -886,7 +1186,7 @@
   gap: 18px;
   background:
     radial-gradient(340px 200px at 50% 120%, color-mix(in srgb, var(--orange) 12%, transparent), transparent 70%),
-    var(--navy-deep);
+    var(--dp-bg-bottom);
 }
 
 .dp-sample-buttons .nav-cta,
@@ -904,64 +1204,72 @@
   padding: 12px 24px 12px 28px;
 }
 
-/* 06 — numerals + eyebrow */
+/* 06 — numerals + eyebrow (ex-card corner numeral vocabulary) */
 .dp-sample-numerals {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   gap: 10px;
-  background: var(--navy-deep);
+  padding: 0 28px;
+  background: var(--dp-bg-bottom);
 }
 
-.dp-sample-numerals__ghost {
+.dp-sample-numerals__exnum {
   position: absolute;
-  left: 6px;
-  top: -30px;
-  color: var(--light);
-  opacity: 0.05;
-  font: 600 170px / 1 "Urbanist", system-ui, sans-serif;
-  pointer-events: none;
+  top: 18px;
+  right: 22px;
+  color: color-mix(in srgb, var(--glow) 32%, transparent);
+  font: 500 clamp(28px, 2.4vw, 38px) / 1 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.01em;
 }
 
 .dp-sample-numerals__eyebrow {
-  color: color-mix(in srgb, var(--glow) 76%, transparent);
-  font: 500 10px / 1.4 "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.24em;
+  color: color-mix(in srgb, var(--glow) 65%, transparent);
+  font: 500 11px / 1.4 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.36em;
   text-transform: uppercase;
 }
 
 .dp-sample-numerals__title {
-  color: var(--light-80);
-  font: 500 24px / 1.15 "Urbanist", system-ui, sans-serif;
+  color: var(--light);
+  font: 500 24px / 1.1 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
 }
 
+.dp-sample-numerals__rule {
+  width: 56%;
+  height: 1px;
+  margin-top: 6px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--glow) 38%, transparent), transparent);
+}
+
 /* --------------------------------------------------------------------------
-   AUDIENCE — animated Founders / Companies / Investors tabs
+   AUDIENCE — animated Founders / Companies / Investors switcher
+   (tabs = nav-cta pills, stage = original .preview card recipe)
    -------------------------------------------------------------------------- */
 
 .dp-aud__tabs {
   display: flex;
   justify-content: center;
-  gap: clamp(10px, 1.6vw, 18px);
+  gap: clamp(10px, 1.6vw, 16px);
   max-width: 1080px;
-  margin: 0 auto clamp(36px, 5vh, 56px);
+  margin: 0 auto clamp(32px, 5vh, 52px);
 }
 
 .dp-aud__tab {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 26px;
+  gap: 10px;
+  min-height: 42px;
+  padding: 10px 24px;
   border: 1px solid var(--light-10);
   border-radius: 40px;
-  background: color-mix(in srgb, var(--navy) 60%, transparent);
+  background: transparent;
   color: var(--light-60);
   cursor: pointer;
-  font: 500 13px / 1.2 "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.14em;
+  font: 500 12px / 1.2 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   overflow: hidden;
   transition: color 260ms ease, border-color 260ms ease, background 260ms ease, transform 260ms ease;
@@ -973,15 +1281,15 @@
 }
 
 .dp-aud__tab-num {
-  font: 600 12px / 1 "Urbanist", system-ui, sans-serif;
-  letter-spacing: 0.04em;
-  opacity: 0.65;
+  font: 500 11px / 1 "Urbanist", system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
 }
 
 .dp-aud__tab.is-active {
   color: var(--light);
   border-color: color-mix(in srgb, var(--aud-tab-accent, var(--glow)) 60%, transparent);
-  background: color-mix(in srgb, var(--aud-tab-accent, var(--glow)) 12%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--light) 7%, transparent), color-mix(in srgb, var(--light) 2%, transparent));
 }
 
 .dp-aud__tab[data-aud-tab="founders"] { --aud-tab-accent: var(--accent-founders); }
@@ -1001,7 +1309,7 @@
 }
 
 .dp-aud__tab.is-active .dp-aud__tab-progress {
-  opacity: 0.9;
+  opacity: 0.85;
   animation: dp-tab-progress var(--dp-aud-interval, 6000ms) linear forwards;
 }
 
@@ -1018,34 +1326,18 @@
 .dp-aud__stage {
   position: relative;
   max-width: 1180px;
-  min-height: 460px;
+  min-height: 440px;
   margin: 0 auto;
-  border: 1px solid var(--light-10);
-  border-radius: 26px;
-  background:
-    radial-gradient(640px 420px at 82% 110%, color-mix(in srgb, var(--aud-accent, var(--glow)) 14%, transparent), transparent 72%),
-    color-mix(in srgb, var(--navy) 72%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--light) 4%, transparent), color-mix(in srgb, var(--light) 1%, transparent));
+  border: 1px solid color-mix(in srgb, var(--aud-accent, var(--light)) 26%, transparent);
+  border-radius: 16px;
   overflow: hidden;
-  transition: background 600ms ease;
+  transition: border-color 600ms ease;
 }
 
 .dp-aud__stage[data-active="founders"] { --aud-accent: var(--accent-founders); }
 .dp-aud__stage[data-active="companies"] { --aud-accent: var(--accent-companies); }
 .dp-aud__stage[data-active="investors"] { --aud-accent: var(--accent-investors); }
-
-.dp-aud__ghost {
-  position: absolute;
-  right: -14px;
-  bottom: -54px;
-  z-index: 0;
-  color: var(--aud-accent, var(--light));
-  opacity: 0.07;
-  font: 600 clamp(120px, 16vw, 230px) / 1 "Urbanist", system-ui, sans-serif;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-  pointer-events: none;
-  transition: color 600ms ease;
-}
 
 .dp-aud__panel {
   position: relative;
@@ -1054,7 +1346,7 @@
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   gap: clamp(28px, 4vw, 64px);
   align-items: center;
-  padding: clamp(36px, 4.5vw, 64px);
+  padding: clamp(32px, 4vw, 56px);
   opacity: 0;
   translate: 0 18px;
   transition: opacity 520ms var(--ease-out), translate 520ms var(--ease-out);
@@ -1072,63 +1364,74 @@
 }
 
 .dp-aud__hint {
-  margin: 0 0 10px;
-  color: color-mix(in srgb, var(--aud-accent, var(--glow)) 88%, white);
-  font: 500 11px / 1.4 "Montserrat", system-ui, sans-serif;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  margin: 0 0 8px;
+  color: var(--light-60);
+  font: italic 400 13.5px / 1.4 "Outfit", system-ui, sans-serif;
 }
 
 .dp-aud__name {
-  margin: 0 0 18px;
+  margin: 0 0 16px;
   color: var(--light);
-  font: 500 clamp(30px, 3vw, 46px) / 1.05 "Urbanist", system-ui, sans-serif;
+  font: 500 clamp(28px, 2.8vw, 42px) / 1.05 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
 }
 
 .dp-aud__text {
-  margin: 0 0 22px;
-  color: var(--light-60);
-  font: 400 15.5px / 1.65 "Outfit", system-ui, sans-serif;
+  margin: 0 0 18px;
+  color: color-mix(in srgb, var(--light) 78%, transparent);
+  font: 400 14.5px / 1.6 "Outfit", system-ui, sans-serif;
+  text-wrap: pretty;
 }
 
 .dp-aud__list {
   margin: 0;
-  padding: 0;
+  padding: 14px 0 0;
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid color-mix(in srgb, var(--aud-accent, var(--glow)) 25%, transparent);
+  transition: border-color 600ms ease;
 }
 
 .dp-aud__list li {
   position: relative;
-  padding-left: 22px;
-  color: var(--light-80);
-  font: 400 14.5px / 1.55 "Outfit", system-ui, sans-serif;
+  padding-left: 18px;
+  color: color-mix(in srgb, var(--light) 75%, transparent);
+  font: 400 13.5px / 1.5 "Outfit", system-ui, sans-serif;
 }
 
 .dp-aud__list li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0.62em;
-  width: 10px;
-  height: 1.5px;
+  top: 9px;
+  width: 8px;
+  height: 1px;
   background: var(--aud-accent, var(--glow));
+  opacity: 0.75;
   transition: background 600ms ease;
 }
 
 .dp-aud__chart {
+  position: relative;
+  padding-bottom: clamp(10px, 1.3vh, 16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--aud-accent, var(--glow)) 18%, transparent);
   color: var(--aud-accent, var(--glow));
-  transition: color 600ms ease;
+  transition: color 600ms ease, border-color 600ms ease;
+}
+
+.dp-aud__chart::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--aud-accent, var(--glow)) 38%, transparent), transparent);
 }
 
 .dp-aud__chart svg {
   display: block;
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--aud-accent, var(--glow)) 26%, transparent));
 }
 
 .dp-aud__chart .dp-draw {
@@ -1143,10 +1446,6 @@
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
 }
 
-.site-footer--preview .site-footer__lede-text a {
-  pointer-events: none;
-}
-
 /* --------------------------------------------------------------------------
    TOAST
    -------------------------------------------------------------------------- */
@@ -1156,7 +1455,7 @@
   left: 50%;
   bottom: 34px;
   z-index: 200;
-  padding: 13px 26px;
+  padding: 12px 26px;
   border-radius: 40px;
   border: 1px solid color-mix(in srgb, var(--glow) 34%, transparent);
   background: color-mix(in srgb, var(--navy) 92%, black);
@@ -1193,18 +1492,26 @@
     padding: 10px;
   }
   .dp-swatches,
-  .dp-type__grid,
-  .dp-decisions__grid {
+  .dp-decisions__grid,
+  .dp-overlays {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dp-type__grid {
+    grid-template-columns: 1fr;
   }
   .dp-transfer {
     grid-template-columns: 1fr;
+  }
+  .dp-steps {
+    grid-template-columns: 1fr;
+    max-width: 620px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .dp-sun,
   .dp-sample-sun__glow,
+  .dp-overlay__sun,
   .dp-sample-trail__path,
   .dp-nav-badge::before {
     animation: none;
