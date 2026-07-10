@@ -281,6 +281,16 @@
   display: none;
 }
 
+/* Both this and the footer ridge are decorative (pointer-events: none in
+   the base stylesheet) but they visibly carry the Navy-recolored mountain
+   silhouette, so make them hoverable/clickable for the edit dock — same
+   "hero"/"footer" tokens as the rest of those scenes, just not reachable
+   without this override. */
+.is-design-preview .ridge-edge,
+.is-design-preview .footer-ridge {
+  pointer-events: auto;
+}
+
 /* --------------------------------------------------------------------------
    AUDIENCE TRIPTYCH (original expandable cards) — wired to the tokens
    -------------------------------------------------------------------------- */
@@ -1410,7 +1420,7 @@
   width: 56%;
   height: 1px;
   margin-top: 6px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--glow) 38%, transparent), transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--text-accent) 38%, transparent), transparent);
 }
 
 /* --------------------------------------------------------------------------

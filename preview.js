@@ -471,16 +471,25 @@
     const color = (cssVar) => ({ type: "color", cssVar });
     const alpha = (cssVar) => ({ type: "alpha", cssVar });
 
+    /* Every entry's `controls` list was audited against the actual CSS/JS
+       that paints its DOM region (including shared card chrome — the
+       faint orange/light/glow card wash every .dp-swatch/.dp-type-card/
+       .dp-decision shares — pseudo-elements, hover states, and the JS-driven
+       Navy recolor of the mountain/climbers/footer SVG silhouettes) so the
+       dock never hides a token that's actually rendered on screen. */
     const EDITABLES = {
       hero: {
         label: "Scena hero",
-        desc: "Niebo, słońce, wash, linia trasy i oddychanie światła. Te same tokeny działają w całym systemie.",
-        controls: [color("--navy-deep"), color("--orange"), color("--orange-soft"), alpha("--ov-sun"), alpha("--ov-wash"), alpha("--ov-trail"), alpha("--anim-speed"), alpha("--anim-depth")],
+        desc: "Niebo, granat gór, słońce, wash, linia trasy i oddychanie światła. Te same tokeny działają w całym systemie.",
+        controls: [
+          color("--navy-deep"), color("--navy"), color("--orange"), color("--orange-soft"), color("--glow"),
+          alpha("--ov-sun"), alpha("--ov-wash"), alpha("--ov-trail"), alpha("--anim-speed"), alpha("--anim-depth"),
+        ],
       },
       "hero-typo": {
         label: "Typografia sceny",
-        desc: "Światło tekstu i akcent eyebrow — wspólne dla całej strony.",
-        controls: [color("--light"), color("--text-accent")],
+        desc: "Światło tekstu, akcent eyebrow i kolor tekstu na przycisku po najechaniu.",
+        controls: [color("--light"), color("--text-accent"), color("--navy")],
       },
       stats: {
         label: "Statystyki hero",
@@ -489,63 +498,73 @@
       },
       triptych: {
         label: "Trasy klientów — karty",
-        desc: "Rozwijane karty segmentów: akcenty tras i światło szlaku łączników.",
-        controls: [color("--accent-founders"), color("--accent-companies"), color("--accent-investors"), color("--glow")],
+        desc: "Rozwijane karty segmentów, tło sceny i światło szlaku łączników.",
+        controls: [
+          color("--accent-founders"), color("--accent-companies"), color("--accent-investors"),
+          color("--glow"), color("--orange"), color("--orange-soft"), color("--navy-deep"), color("--navy"),
+          alpha("--ov-wash"), alpha("--ov-trail"),
+        ],
       },
       sections: {
         label: "Sekcje podglądu",
-        desc: "Nocne tła sekcji i światło szlaku budują głębię strony.",
-        controls: [color("--navy-deep"), color("--navy"), color("--glow")],
+        desc: "Nocne tła, tekst nagłówków i ambientowe słońce w tle intro.",
+        controls: [
+          color("--navy-deep"), color("--navy"), color("--light"), color("--text-accent"),
+          color("--orange"), color("--orange-soft"), alpha("--ov-sun"), alpha("--anim-speed"), alpha("--anim-depth"),
+        ],
       },
       "type-urbanist": {
         label: "Urbanist — nagłówki",
-        desc: "Głos nagłówków i liczb. Kolor światła wspólny dla całej strony.",
-        controls: [color("--light")],
+        desc: "Głos nagłówków i liczb, tło karty i litery-widmo w tle.",
+        controls: [color("--light"), color("--text-accent"), color("--orange"), color("--glow")],
       },
       "type-outfit": {
         label: "Outfit — treść i etykiety",
-        desc: "Głos treści oraz etykiet z wersalikami — tokeny tekstu.",
-        controls: [color("--light"), color("--text-accent"), color("--text-caps")],
+        desc: "Głos treści oraz etykiet z wersalikami — tokeny tekstu i tło karty.",
+        controls: [color("--light"), color("--text-accent"), color("--text-caps"), color("--orange"), color("--glow")],
       },
       "d-trail": {
         label: "Linia trasy",
-        desc: "Świetlisty szlak, punkty kontrolne i przerywane pomocnicze.",
-        controls: [color("--glow"), alpha("--ov-trail")],
+        desc: "Świetlisty szlak, punkty kontrolne, przerywane pomocnicze i tło karty.",
+        controls: [color("--glow"), color("--orange"), color("--light"), alpha("--ov-trail")],
       },
       "d-sun": {
         label: "Słońce i poświata",
-        desc: "Animowany blask za granią — kolory, intensywność i rytm oddychania.",
-        controls: [color("--orange-soft"), color("--orange"), alpha("--ov-sun"), alpha("--anim-speed"), alpha("--anim-depth")],
+        desc: "Animowany blask za granią, granat sylwetki gór, intensywność i rytm oddychania.",
+        controls: [
+          color("--orange-soft"), color("--orange"), color("--navy"), color("--light"), color("--glow"),
+          alpha("--ov-sun"), alpha("--anim-speed"), alpha("--anim-depth"),
+        ],
       },
       "d-duotone": {
         label: "Góra jako scena",
-        desc: "Duotonowy wash na fotografii: ciepły pomarańcz na granacie.",
-        controls: [color("--orange"), color("--navy-deep"), alpha("--ov-wash")],
+        desc: "Duotonowy wash na fotografii: ciepły pomarańcz na granacie, plus tło karty.",
+        controls: [color("--orange"), color("--navy-deep"), color("--light"), color("--glow"), alpha("--ov-wash")],
       },
       "d-surfaces": {
         label: "Plany głębi",
         desc: "Nocne tło, panele treści i światło typografii.",
-        controls: [color("--navy-deep"), color("--navy"), color("--light")],
+        controls: [color("--navy-deep"), color("--navy"), color("--light"), color("--orange"), color("--glow")],
       },
       "d-buttons": {
         label: "Przyciski pill",
-        desc: "Obrys w świetle, wypełnienie światłem po najechaniu.",
-        controls: [color("--light"), color("--navy"), color("--orange")],
+        desc: "Obrys w świetle, tekst po najechaniu, wypełnienie i tło karty.",
+        controls: [color("--light"), color("--navy"), color("--orange"), color("--glow")],
       },
       "d-numerals": {
         label: "Numeracja i eyebrow",
-        desc: "Wyciszone numery i sygnały w kolorze tekstu akcentowego.",
-        controls: [color("--text-accent"), color("--light")],
+        desc: "Wyciszone numery i sygnały w kolorze tekstu akcentowego, plus tło karty.",
+        controls: [color("--text-accent"), color("--light"), color("--orange"), color("--glow")],
       },
       segments: {
         label: "Segmenty klientów",
-        desc: "Akcenty tras Founders / Companies / Investors — z palety.",
-        controls: [color("--accent-founders"), color("--accent-companies"), color("--accent-investors")],
+        desc: "Akcenty tras Founders / Companies / Investors i tło paneli.",
+        controls: [color("--accent-founders"), color("--accent-companies"), color("--accent-investors"), color("--light")],
       },
       footer: {
         label: "Stopka",
-        desc: "Powierzchnia navy, tytuły w tekście akcentowym, treść w świetle.",
-        controls: [color("--navy"), color("--text-accent"), color("--light")],
+        desc: "Powierzchnia navy, granat sylwetki gór nad stopką, tytuły i treść.",
+        controls: [color("--navy"), color("--navy-deep"), color("--text-accent"), color("--light"), color("--glow")],
       },
     };
 
