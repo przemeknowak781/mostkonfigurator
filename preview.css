@@ -49,8 +49,8 @@
   --dp-gutter-x: clamp(20px, 3.2vw, 56px);
   --dp-gutter-top: clamp(16px, 2.2vw, 32px);
   --dp-frame-radius: clamp(14px, 1.4vw, 22px);
-  --dp-frame-line: rgba(20, 16, 24, 0.14);
-  --dp-canvas: #e7e2dc;
+  --dp-frame-line: #4a443d;
+  --dp-canvas: #2a2622;
 }
 
 /* --------------------------------------------------------------------------
@@ -774,6 +774,11 @@
 
 .dp-swatches--segments {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dp-swatches--frame {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 780px;
 }
 
 .dp-swatch {
