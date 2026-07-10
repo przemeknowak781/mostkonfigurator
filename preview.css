@@ -306,7 +306,7 @@
   min-height: 0;
   padding: 4px 0;
   border: 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--glow) 55%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--light) 30%, transparent);
   border-radius: 0;
   color: var(--light-60);
   font: 500 11px / 1.2 "Outfit", system-ui, sans-serif;
@@ -315,9 +315,9 @@
 
 .dp-btn--text:hover,
 .dp-btn--text:focus-visible {
-  color: color-mix(in srgb, var(--glow) 90%, white);
+  color: var(--light);
   background: transparent;
-  border-bottom-color: var(--glow);
+  border-bottom-color: color-mix(in srgb, var(--light) 60%, transparent);
   transform: none;
 }
 
@@ -379,7 +379,7 @@
   gap: 18px;
   max-width: 1320px;
   margin: clamp(40px, 6vh, 72px) auto 24px;
-  color: color-mix(in srgb, var(--glow) 55%, transparent);
+  color: var(--light-60);
   font: 500 11px / 1 "Outfit", system-ui, sans-serif;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -391,7 +391,7 @@
   height: 1px;
   background: repeating-linear-gradient(
     90deg,
-    color-mix(in srgb, var(--glow) 42%, transparent) 0 2px,
+    color-mix(in srgb, var(--light) 22%, transparent) 0 2px,
     transparent 2px 6px
   );
 }
@@ -521,9 +521,9 @@
 .dp-type-card:hover,
 .dp-decision:hover,
 .dp-overlay:hover {
-  border-color: color-mix(in srgb, var(--glow) 36%, transparent);
+  border-color: color-mix(in srgb, var(--light) 20%, transparent);
   background:
-    radial-gradient(520px 360px at 100% 0%, color-mix(in srgb, var(--orange) 12%, transparent), transparent 70%),
+    radial-gradient(520px 360px at 100% 0%, color-mix(in srgb, var(--orange) 8%, transparent), transparent 70%),
     color-mix(in srgb, var(--light) 4%, transparent);
   transform: translateY(-4px);
 }
@@ -594,6 +594,14 @@
 .dp-swatch__chip:focus-within .dp-swatch__edit {
   opacity: 1;
   transform: translateY(0);
+}
+
+.dp-swatch__route path {
+  stroke: color-mix(in srgb, var(--navy-deep) 62%, transparent);
+}
+
+.dp-swatch__route rect {
+  fill: color-mix(in srgb, var(--navy-deep) 62%, transparent);
 }
 
 .dp-swatch__route {
@@ -758,7 +766,7 @@
   gap: 14px;
   margin: 0 4px;
   padding-top: 14px;
-  border-top: 1px solid color-mix(in srgb, var(--glow) 18%, transparent);
+  border-top: 1px solid var(--light-10);
 }
 
 .dp-overlay__chip {
@@ -880,7 +888,7 @@
   position: absolute;
   inset: 0 0 auto;
   height: 1px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--glow) 38%, transparent), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--light) 25%, transparent), transparent);
 }
 
 .dp-transfer__copy .dp-eyebrow {
@@ -975,7 +983,7 @@
 .dp-type-card__name {
   margin: 22px 0 4px;
   padding-top: 18px;
-  border-top: 1px solid color-mix(in srgb, var(--glow) 18%, transparent);
+  border-top: 1px solid var(--light-10);
   color: var(--light);
   font: 500 clamp(20px, 1.6vw, 24px) / 1.15 "Urbanist", system-ui, sans-serif;
 }
@@ -1454,7 +1462,7 @@
 
 /* hover / pinned highlight: the dashed connector vocabulary as an outline */
 .dp-edit-hover {
-  outline: 1px dashed color-mix(in srgb, var(--glow) 45%, transparent);
+  outline: 1px dashed color-mix(in srgb, var(--light) 24%, transparent);
   outline-offset: 6px;
 }
 
@@ -1465,7 +1473,7 @@ section.dp-edit-hover,
 }
 
 .dp-edit-pinned {
-  outline: 1px dashed color-mix(in srgb, var(--glow) 80%, transparent) !important;
+  outline: 1px dashed color-mix(in srgb, var(--light) 48%, transparent) !important;
   outline-offset: 6px;
 }
 
@@ -1502,7 +1510,7 @@ section.dp-edit-pinned,
   gap: 12px;
   min-height: 42px;
   padding: 10px 22px;
-  border: 1px solid color-mix(in srgb, var(--glow) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--light) 25%, transparent);
   border-radius: 40px;
   background: color-mix(in srgb, var(--navy) 92%, black);
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
@@ -1516,7 +1524,7 @@ section.dp-edit-pinned,
 }
 
 .dp-dock__peek:hover {
-  border-color: color-mix(in srgb, var(--glow) 75%, transparent);
+  border-color: color-mix(in srgb, var(--light) 50%, transparent);
   transform: translateY(-2px);
 }
 
@@ -1546,7 +1554,7 @@ section.dp-edit-pinned,
   width: min(960px, calc(100vw - 48px));
   padding: 18px 22px 20px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--navy) 96%, black), color-mix(in srgb, var(--navy) 88%, black));
-  border: 1px solid color-mix(in srgb, var(--glow) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--light) 16%, transparent);
   border-radius: 16px;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
   pointer-events: auto;
@@ -1617,7 +1625,7 @@ section.dp-edit-pinned,
   gap: 12px 26px;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid color-mix(in srgb, var(--glow) 18%, transparent);
+  border-top: 1px solid var(--light-10);
 }
 
 .dp-dock__control {
@@ -1677,7 +1685,7 @@ body.dp-dock-pinned .dp-toast {
   z-index: 200;
   padding: 12px 26px;
   border-radius: 40px;
-  border: 1px solid color-mix(in srgb, var(--glow) 34%, transparent);
+  border: 1px solid color-mix(in srgb, var(--light) 20%, transparent);
   background: color-mix(in srgb, var(--navy) 92%, black);
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
   color: var(--light);

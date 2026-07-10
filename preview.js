@@ -143,6 +143,75 @@
     toastTimer = window.setTimeout(() => toastEl.classList.remove("is-visible"), 2600);
   }
 
+  /* ---------- SVG asset recoloring ----------
+     The mountain / climbers / footer silhouettes are <img src="*.svg"> with
+     a baked-in fill of #161822 — the Navy token. CSS can't reach into an
+     <img>, so on a Navy change we fetch the SVG once, swap the fill for the
+     current value and point the images at a recolored blob URL. */
+
+  const SVG_BASE_COLOR = "#161822";
+  const SVG_ASSET_URLS = ["gora-bez-tla-2000px.svg", "climbers.svg", "footer.svg"];
+  const svgAssets = new Map(); /* url -> { text, imgs, blobUrl } */
+  let svgAppliedColor = SVG_BASE_COLOR;
+  let svgRecolorRaf = 0;
+
+  function initSvgRecolor() {
+    if (typeof window.fetch !== "function") return;
+    const imgs = Array.from(document.querySelectorAll("img"));
+    SVG_ASSET_URLS.forEach((url) => {
+      const matched = imgs.filter((img) => (img.getAttribute("src") || "") === url);
+      if (!matched.length) return;
+      fetch(url)
+        .then((response) => (response.ok ? response.text() : Promise.reject()))
+        .then((text) => {
+          svgAssets.set(url, { text, imgs: matched, blobUrl: null });
+          svgAppliedColor = null; /* force a re-apply for the new asset */
+          scheduleSvgRecolor(); /* a saved set may already override Navy */
+        })
+        .catch(() => {
+          /* offline / file:// — silhouettes simply keep their baked color */
+        });
+    });
+  }
+
+  function applySvgRecolor() {
+    const navy = readTokenValue("--navy") || SVG_BASE_COLOR;
+    if (navy === svgAppliedColor) return;
+    svgAppliedColor = navy;
+
+    svgAssets.forEach((asset, url) => {
+      const oldBlobUrl = asset.blobUrl;
+      if (navy === SVG_BASE_COLOR && !oldBlobUrl) return; /* already original */
+
+      if (navy === SVG_BASE_COLOR) {
+        /* back to the original file (e.g. after reset) */
+        asset.imgs.forEach((img) => {
+          img.src = url;
+        });
+        asset.blobUrl = null;
+      } else {
+        const recolored = asset.text.replace(/#161822/gi, navy);
+        const blobUrl = URL.createObjectURL(new Blob([recolored], { type: "image/svg+xml" }));
+        asset.imgs.forEach((img) => {
+          img.src = blobUrl;
+        });
+        asset.blobUrl = blobUrl;
+      }
+
+      if (oldBlobUrl) window.setTimeout(() => URL.revokeObjectURL(oldBlobUrl), 2000);
+    });
+  }
+
+  function scheduleSvgRecolor() {
+    if (svgRecolorRaf) return;
+    svgRecolorRaf = window.requestAnimationFrame(() => {
+      svgRecolorRaf = 0;
+      applySvgRecolor();
+    });
+  }
+
+  initSvgRecolor();
+
   /* ---------- control binding (palette swatches, overlay cards, dock) ----------
      Any element with [data-token] + <input type=color> or [data-alpha] +
      <input type=range> becomes a live control for the shared tokens. */
@@ -170,6 +239,9 @@
       }
       if (pctLabel) pctLabel.textContent = pct + "%";
     });
+
+    /* silhouette SVGs follow the Navy token */
+    scheduleSvgRecolor();
   }
 
   function bindColorControl(card) {
