@@ -1447,6 +1447,226 @@
 }
 
 /* --------------------------------------------------------------------------
+   EDIT DOCK — hover an element, click to pin its editor at the bottom.
+   Peek = nav-cta pill; panel = original preview-card recipe; the glowing
+   dot mirrors the trail checkpoint.
+   -------------------------------------------------------------------------- */
+
+/* hover / pinned highlight: the dashed connector vocabulary as an outline */
+.dp-edit-hover {
+  outline: 1px dashed color-mix(in srgb, var(--glow) 45%, transparent);
+  outline-offset: 6px;
+}
+
+section.dp-edit-hover,
+.hero.dp-edit-hover,
+.site-footer.dp-edit-hover {
+  outline-offset: -10px;
+}
+
+.dp-edit-pinned {
+  outline: 1px dashed color-mix(in srgb, var(--glow) 80%, transparent) !important;
+  outline-offset: 6px;
+}
+
+section.dp-edit-pinned,
+.hero.dp-edit-pinned,
+.site-footer.dp-edit-pinned {
+  outline-offset: -10px !important;
+}
+
+[data-edit] {
+  cursor: default;
+}
+
+.dp-dock {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  z-index: 210;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: min(960px, calc(100vw - 48px));
+  pointer-events: none;
+}
+
+.dp-dock[hidden] {
+  display: none;
+}
+
+.dp-dock__peek {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  padding: 10px 22px;
+  border: 1px solid color-mix(in srgb, var(--glow) 40%, transparent);
+  border-radius: 40px;
+  background: color-mix(in srgb, var(--navy) 92%, black);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+  color: var(--light);
+  cursor: pointer;
+  font: 500 12px / 1.2 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  pointer-events: auto;
+  transition: border-color 240ms ease, transform 240ms ease;
+}
+
+.dp-dock__peek:hover {
+  border-color: color-mix(in srgb, var(--glow) 75%, transparent);
+  transform: translateY(-2px);
+}
+
+.dp-dock__peek[hidden] {
+  display: none;
+}
+
+.dp-dock__peek-hint {
+  color: var(--light-60);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.dp-dock__dot {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--glow) 98%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--glow) 18%, transparent),
+    0 0 12px color-mix(in srgb, var(--glow) 60%, transparent);
+  animation: dp-trail-point-pulse 3.4s ease-in-out infinite;
+}
+
+.dp-dock__panel {
+  width: min(960px, calc(100vw - 48px));
+  padding: 18px 22px 20px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--navy) 96%, black), color-mix(in srgb, var(--navy) 88%, black));
+  border: 1px solid color-mix(in srgb, var(--glow) 30%, transparent);
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
+}
+
+.dp-dock__panel[hidden] {
+  display: none;
+}
+
+.dp-dock__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dp-dock__titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.dp-dock__title {
+  margin: 0;
+  color: var(--light);
+  font: 500 19px / 1.15 "Urbanist", system-ui, sans-serif;
+}
+
+.dp-dock__desc {
+  margin: 2px 0 0;
+  color: var(--light-60);
+  font: 400 12.5px / 1.4 "Outfit", system-ui, sans-serif;
+}
+
+.dp-dock__close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--light);
+  background: color-mix(in srgb, var(--light) 8%, transparent);
+  border: 1px solid var(--light-10);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 240ms ease, color 240ms ease;
+}
+
+.dp-dock__close:hover {
+  color: var(--navy);
+  background: var(--light);
+}
+
+.dp-dock__close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dp-dock__close path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.dp-dock__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--glow) 18%, transparent);
+}
+
+.dp-dock__control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dp-dock__control--alpha {
+  flex: 1 1 240px;
+  min-width: 220px;
+}
+
+.dp-dock__control-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.dp-dock__control-name {
+  color: var(--light-80);
+  font: 400 12.5px / 1.2 "Outfit", system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+.dp-dock__control-hex,
+.dp-dock__control-pct {
+  color: color-mix(in srgb, var(--glow) 62%, transparent);
+  font: 500 10px / 1 "Outfit", system-ui, sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.dp-dock__control--alpha .dp-dock__control-meta {
+  flex-shrink: 0;
+  min-width: 118px;
+}
+
+.dp-dock__control--alpha .dp-overlay__range {
+  flex: 1;
+}
+
+/* Toast moves above the pinned dock */
+body.dp-dock-pinned .dp-toast {
+  bottom: 210px;
+}
+
+/* --------------------------------------------------------------------------
    TOAST
    -------------------------------------------------------------------------- */
 

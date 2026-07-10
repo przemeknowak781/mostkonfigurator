@@ -77,7 +77,7 @@
     <input type="file" accept=".json,application/json" hidden data-dp-file />
 
     <main>
-      <section class="hero" aria-labelledby="hero-title">
+      <section class="hero" aria-labelledby="hero-title" data-edit="hero">
         <div class="hero-media" aria-hidden="true">
           <img class="hero-bg" src="background.webp" alt="" fetchpriority="high" decoding="async" />
           <div class="hero-wash"></div>
@@ -100,7 +100,7 @@
           </div>
         </div>
 
-        <div class="hero-content">
+        <div class="hero-content" data-edit="hero-typo">
           <p class="eyebrow reveal">let's make the most at every stage</p>
           <h1 class="hero-title reveal" id="hero-title">
             Your Legal Partner
@@ -118,7 +118,7 @@
           </a>
         </div>
 
-        <div class="hero-stats" aria-label="Highlights">
+        <div class="hero-stats" aria-label="Highlights" data-edit="stats">
           <div class="hero-stat">
             <strong>200+</strong>
             <span>Funding rounds closed</span>
@@ -146,7 +146,7 @@
       <div class="ridge-edge">
         <svg class="ridge-edge__leaders" viewBox="0 0 2000 100" preserveAspectRatio="none" aria-hidden="true"></svg>
         <img class="ridge-edge__img" src="gora-bez-tla-2000px.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-        <p class="ridge-quote">
+        <p class="ridge-quote" data-edit="quote">
           At MOST, we accompany founders, tech companies, and investors as long-term partners in law and business&nbsp;–
           helping them <strong>protect what matters most, move forward with confidence, and unlock opportunity.</strong>
         </p>
@@ -163,7 +163,7 @@
 
       <!-- ===================== DESIGN 2.0 PREVIEW ===================== -->
 
-      <section class="dp-section dp-intro" id="design" aria-labelledby="dp-intro-title">
+      <section class="dp-section dp-intro" id="design" aria-labelledby="dp-intro-title" data-edit="sections">
         <div class="dp-sun" aria-hidden="true"></div>
         <header class="dp-head" data-reveal>
           <p class="dp-eyebrow">— design 2.0 · podgląd interaktywny —</p>
@@ -171,7 +171,7 @@
           <p class="dp-lede">
             To, co widzicie powyżej, oraz próbki poniżej to jeden żywy organizm. Kliknijcie dowolny kolor,
             a hero, linie tras, poświata słońca i wszystkie elementy przemalują się natychmiast.
-            Gdy zestaw będzie gotowy&nbsp;— pobierzcie plik i odeślijcie go do&nbsp;nas.
+            Możecie też po prostu najechać na dowolny element strony i kliknąć&nbsp;— u dołu pojawi się edytor tego miejsca. Gdy zestaw będzie gotowy&nbsp;— pobierzcie plik i odeślijcie go do&nbsp;nas.
           </p>
         </header>
         <ol class="dp-steps" data-reveal>
@@ -420,14 +420,14 @@
           <h2 class="dp-title" id="dp-type-title">Dwa głosy, jedna&nbsp;narracja.</h2>
         </header>
         <div class="dp-type__grid" data-reveal>
-          <article class="dp-type-card dp-type-card--urbanist">
+          <article class="dp-type-card dp-type-card--urbanist" data-edit="type-urbanist">
             <span class="dp-type-card__glyph" aria-hidden="true">Aa</span>
             <p class="dp-type-card__specimen">Your Legal Partner for Growth, Funding, and Global Expansion.</p>
             <h3 class="dp-type-card__name">Urbanist</h3>
             <p class="dp-type-card__role">Nagłówki i liczby</p>
             <p class="dp-type-card__meta">500–600 · H1–H3, statystyki, numeracja · ciasny tracking&nbsp;−0.005em</p>
           </article>
-          <article class="dp-type-card dp-type-card--outfit">
+          <article class="dp-type-card dp-type-card--outfit" data-edit="type-outfit">
             <span class="dp-type-card__glyph" aria-hidden="true">Aa</span>
             <p class="dp-type-card__specimen">We accompany founders, tech companies, and investors as long-term partners in law and business — helping them protect what matters most.</p>
             <p class="dp-type-card__specimen-label">— let's make the most at every stage —</p>
@@ -446,7 +446,7 @@
         </header>
 
         <div class="dp-decisions__grid">
-          <article class="dp-decision" data-reveal>
+          <article class="dp-decision" data-reveal data-edit="d-trail">
             <div class="dp-decision__sample dp-sample-trail" aria-hidden="true">
               <svg viewBox="0 0 400 150" preserveAspectRatio="none">
                 <line class="dp-sample-trail__leader" x1="88" y1="94" x2="88" y2="150" />
@@ -461,7 +461,7 @@
             <p class="dp-decision__copy">Cienka, świetlista linia prowadzi przez całą stronę jak szlak na grani. Punkty kontrolne pulsują jak światła obozów, a przerywane pionowe pomocnicze wiążą dane z trasą.</p>
           </article>
 
-          <article class="dp-decision" data-reveal>
+          <article class="dp-decision" data-reveal data-edit="d-sun">
             <div class="dp-decision__sample dp-sample-sun" aria-hidden="true">
               <span class="dp-sample-sun__glow"></span>
               <img src="gora-bez-tla-2000px.svg" alt="" loading="lazy" decoding="async" />
@@ -471,7 +471,7 @@
             <p class="dp-decision__copy">Animowane overlaye światła: słońce „oddycha” za granią w powolnym, 9-sekundowym rytmie. Ciepło ogrzewa scenę, nigdy nie odciąga uwagi od treści.</p>
           </article>
 
-          <article class="dp-decision" data-reveal>
+          <article class="dp-decision" data-reveal data-edit="d-duotone">
             <div class="dp-decision__sample dp-sample-duotone" aria-hidden="true">
               <span class="dp-sample-duotone__wash"></span>
             </div>
@@ -480,7 +480,7 @@
             <p class="dp-decision__copy">Realistyczna fotografia gór spięta duotonowym washem: chłodny granat od góry, ciepły pomarańcz od słońca. Zdjęcie zawsze pracuje pod treścią, nie obok niej.</p>
           </article>
 
-          <article class="dp-decision" data-reveal>
+          <article class="dp-decision" data-reveal data-edit="d-surfaces">
             <div class="dp-decision__sample dp-sample-surfaces" aria-hidden="true">
               <span class="dp-sample-surfaces__panel dp-sample-surfaces__panel--deep"><i>Deep Navy · niebo</i></span>
               <span class="dp-sample-surfaces__panel dp-sample-surfaces__panel--navy"><i>Navy · powierzchnie</i></span>
@@ -491,7 +491,7 @@
             <p class="dp-decision__copy">Nocne tło, panele treści i światło typografii. Kontrast między planami — nie ozdobniki — prowadzi wzrok i porządkuje hierarchię.</p>
           </article>
 
-          <article class="dp-decision" data-reveal>
+          <article class="dp-decision" data-reveal data-edit="d-buttons">
             <div class="dp-decision__sample dp-sample-buttons" aria-hidden="true">
               <span class="nav-cta">contact us</span>
               <span class="primary-cta dp-sample-buttons__primary">
@@ -504,7 +504,7 @@
             <p class="dp-decision__copy">Zaokrąglone obrysy i wersaliki z szerokim światłem liter. Spokojne w spoczynku, jednoznaczne po najechaniu — wypełniają się światłem.</p>
           </article>
 
-          <article class="dp-decision" data-reveal>
+          <article class="dp-decision" data-reveal data-edit="d-numerals">
             <div class="dp-decision__sample dp-sample-numerals" aria-hidden="true">
               <span class="dp-sample-numerals__exnum">01</span>
               <span class="dp-sample-numerals__eyebrow">— for every stage —</span>
@@ -518,7 +518,7 @@
         </div>
       </section>
 
-      <section class="dp-section dp-aud" id="segments" aria-labelledby="dp-aud-title" data-dp-aud>
+      <section class="dp-section dp-aud" id="segments" aria-labelledby="dp-aud-title" data-dp-aud data-edit="segments">
         <header class="dp-head" data-reveal>
           <p class="dp-eyebrow">— for every stage —</p>
           <h2 class="dp-title" id="dp-aud-title">Trzy trasy. Jeden&nbsp;partner.</h2>
@@ -639,7 +639,7 @@
       <img class="footer-ridge__overlay" src="footer.svg" alt="" loading="lazy" decoding="async" />
     </div>
 
-    <footer class="site-footer site-footer--preview">
+    <footer class="site-footer site-footer--preview" data-edit="footer">
       <div class="site-footer__inner">
         <div class="site-footer__lede">
           <p class="site-footer__lede-eyebrow">— let's make the most —</p>
@@ -661,7 +661,7 @@
           <div class="site-footer__col">
             <p class="site-footer__col-title">Contact</p>
             <ul>
-              <li><a href="mailto:bemost@mostpartners.com">bemost@mostpartners.com</a></li>
+              <li><a href="mailto:bemost@mostpartners.com" data-edit-ignore>bemost@mostpartners.com</a></li>
               <li>Bracka 20, 00-028 Warsaw, Poland</li>
             </ul>
           </div>
@@ -682,6 +682,27 @@
         </div>
       </div>
     </footer>
+
+    <div class="dp-dock" data-dp-dock hidden>
+      <button class="dp-dock__peek" type="button" data-dock-peek>
+        <span class="dp-dock__dot" aria-hidden="true"></span>
+        <span class="dp-dock__peek-label" data-dock-peek-label></span>
+        <span class="dp-dock__peek-hint">kliknij, aby edytować</span>
+      </button>
+      <section class="dp-dock__panel" data-dock-panel aria-label="Edytor elementu" hidden>
+        <header class="dp-dock__head">
+          <span class="dp-dock__dot" aria-hidden="true"></span>
+          <div class="dp-dock__titles">
+            <h3 class="dp-dock__title" data-dock-title></h3>
+            <p class="dp-dock__desc" data-dock-desc></p>
+          </div>
+          <button class="dp-dock__close" type="button" aria-label="Zamknij edytor" data-dock-close>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+          </button>
+        </header>
+        <div class="dp-dock__controls" data-dock-controls></div>
+      </section>
+    </div>
 
     <div class="dp-toast" role="status" aria-live="polite" data-dp-toast></div>
 

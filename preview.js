@@ -1,7 +1,10 @@
 /* =========================================================================
    DESIGN — INTERACTIVE PREVIEW
    Color pickers + overlay opacity sliders wired to CSS custom properties,
-   JSON export/import of the full set, and the animated audience switcher.
+   JSON export/import of the full set, the animated audience switcher, and
+   the bottom edit dock (hover an element, click to edit it in place).
+   Every control edits the same global tokens, so changes stay consistent
+   across the whole system.
    ========================================================================= */
 
 (function () {
@@ -30,6 +33,14 @@
     { cssVar: "--ov-wash", name: "Wash fotografii — intensywność" },
     { cssVar: "--ov-trail", name: "Linia trasy — intensywność" },
   ];
+
+  const TOKEN_NAMES = {};
+  TOKENS.forEach((t) => (TOKEN_NAMES[t.cssVar] = t.name));
+  const OVERLAY_NAMES = {
+    "--ov-sun": "Słońce — intensywność",
+    "--ov-wash": "Wash — intensywność",
+    "--ov-trail": "Trasa — intensywność",
+  };
 
   /* ---------- value helpers ---------- */
 
@@ -132,13 +143,14 @@
     toastTimer = window.setTimeout(() => toastEl.classList.remove("is-visible"), 2600);
   }
 
-  /* ---------- color + alpha UI (palette swatches AND overlay cards) ---------- */
+  /* ---------- control binding (palette swatches, overlay cards, dock) ----------
+     Any element with [data-token] + <input type=color> or [data-alpha] +
+     <input type=range> becomes a live control for the shared tokens. */
 
-  const colorCards = Array.from(document.querySelectorAll("[data-token]"));
-  const alphaCards = Array.from(document.querySelectorAll("[data-alpha]"));
+  const boundControls = new WeakSet();
 
   function syncControls() {
-    colorCards.forEach((card) => {
+    document.querySelectorAll("[data-token]").forEach((card) => {
       const hex = readTokenValue(card.dataset.token);
       if (!hex) return;
       const input = card.querySelector('input[type="color"]');
@@ -147,7 +159,7 @@
       if (hexLabel) hexLabel.textContent = hex.toUpperCase();
     });
 
-    alphaCards.forEach((card) => {
+    document.querySelectorAll("[data-alpha]").forEach((card) => {
       const alpha = readAlphaValue(card.dataset.alpha);
       const range = card.querySelector('input[type="range"]');
       const pctLabel = card.querySelector("[data-alpha-value]");
@@ -160,40 +172,50 @@
     });
   }
 
-  colorCards.forEach((card) => {
-    const cssVar = card.dataset.token;
+  function bindColorControl(card) {
     const input = card.querySelector('input[type="color"]');
-    if (!input) return;
+    if (!input || boundControls.has(input)) return;
+    boundControls.add(input);
+    const cssVar = card.dataset.token;
 
     input.addEventListener("input", () => {
       rootEl.style.setProperty(cssVar, input.value);
-      syncControls(); /* the same token can live on a palette swatch AND an overlay card */
+      syncControls(); /* the same token can live on several controls at once */
     });
 
     input.addEventListener("change", () => {
       persist();
       showToast("Kolor zapisany w podglądzie");
     });
-  });
+  }
 
-  alphaCards.forEach((card) => {
-    const cssVar = card.dataset.alpha;
+  function bindAlphaControl(card) {
     const range = card.querySelector('input[type="range"]');
+    if (!range || boundControls.has(range)) return;
+    boundControls.add(range);
+    const cssVar = card.dataset.alpha;
     const pctLabel = card.querySelector("[data-alpha-value]");
-    if (!range) return;
 
     range.addEventListener("input", () => {
       const pct = Math.max(0, Math.min(100, parseInt(range.value, 10) || 0));
       rootEl.style.setProperty(cssVar, pct + "%");
       range.style.setProperty("--fill", pct + "%");
       if (pctLabel) pctLabel.textContent = pct + "%";
+      syncControls();
     });
 
     range.addEventListener("change", () => {
       persist();
       showToast("Przezroczystość zapisana w podglądzie");
     });
-  });
+  }
+
+  function bindAllControls(scope) {
+    (scope || document).querySelectorAll("[data-token]").forEach(bindColorControl);
+    (scope || document).querySelectorAll("[data-alpha]").forEach(bindAlphaControl);
+  }
+
+  bindAllControls(document);
 
   /* ---------- download / upload / reset ---------- */
 
@@ -308,7 +330,7 @@
           const parsed = JSON.parse(String(reader.result));
           const applied = applySet(parsed);
           if (applied) {
-            showToast("Wczytano zestaw: zaktualizowano " + applied + " " + (applied === 1 ? "wartość" : applied < 5 ? "wartości" : "wartości"));
+            showToast("Wczytano zestaw: zaktualizowano " + applied + " " + (applied === 1 ? "wartość" : "wartości"));
           } else {
             showToast("Ten plik nie zawiera rozpoznawalnych wartości");
           }
@@ -329,6 +351,248 @@
   const saved = readPersisted();
   if (saved) applySet(saved, { save: false });
   syncControls();
+
+  /* ---------- edit dock: hover an element, click to edit it ---------- */
+
+  function setupEditDock() {
+    const dock = document.querySelector("[data-dp-dock]");
+    if (!dock) return;
+
+    const peek = dock.querySelector("[data-dock-peek]");
+    const peekLabel = dock.querySelector("[data-dock-peek-label]");
+    const panel = dock.querySelector("[data-dock-panel]");
+    const titleEl = dock.querySelector("[data-dock-title]");
+    const descEl = dock.querySelector("[data-dock-desc]");
+    const controlsEl = dock.querySelector("[data-dock-controls]");
+    const closeBtn = dock.querySelector("[data-dock-close]");
+    if (!peek || !panel || !titleEl || !descEl || !controlsEl || !closeBtn) return;
+
+    const color = (cssVar) => ({ type: "color", cssVar });
+    const alpha = (cssVar) => ({ type: "alpha", cssVar });
+
+    const EDITABLES = {
+      hero: {
+        label: "Scena hero",
+        desc: "Niebo, słońce, wash i linia trasy. Te same tokeny działają w całym systemie.",
+        controls: [color("--navy-deep"), color("--orange"), color("--orange-soft"), alpha("--ov-sun"), alpha("--ov-wash"), alpha("--ov-trail")],
+      },
+      "hero-typo": {
+        label: "Typografia sceny",
+        desc: "Światło tekstu i sygnał eyebrow — wspólne dla całej strony.",
+        controls: [color("--light"), color("--glow"), color("--orange")],
+      },
+      stats: {
+        label: "Statystyki hero",
+        desc: "Liczby w Urbanist i etykiety w Outfit — kolor światła z palety.",
+        controls: [color("--light"), color("--glow")],
+      },
+      quote: {
+        label: "Cytat na grani",
+        desc: "Tekst w świetle i linia akcentu w kolorach szlaku.",
+        controls: [color("--light"), color("--glow"), color("--orange")],
+      },
+      sections: {
+        label: "Sekcje podglądu",
+        desc: "Nocne tła sekcji i światło szlaku budują głębię strony.",
+        controls: [color("--navy-deep"), color("--navy"), color("--glow")],
+      },
+      "type-urbanist": {
+        label: "Urbanist — nagłówki",
+        desc: "Głos nagłówków i liczb. Kolor światła wspólny dla całej strony.",
+        controls: [color("--light")],
+      },
+      "type-outfit": {
+        label: "Outfit — treść i etykiety",
+        desc: "Głos treści oraz etykiet z wersalikami. Sygnał w kolorze szlaku.",
+        controls: [color("--light"), color("--glow")],
+      },
+      "d-trail": {
+        label: "Linia trasy",
+        desc: "Świetlisty szlak, punkty kontrolne i przerywane pomocnicze.",
+        controls: [color("--glow"), alpha("--ov-trail")],
+      },
+      "d-sun": {
+        label: "Słońce i poświata",
+        desc: "Animowany blask za granią — kolory i intensywność.",
+        controls: [color("--orange-soft"), color("--orange"), alpha("--ov-sun")],
+      },
+      "d-duotone": {
+        label: "Góra jako scena",
+        desc: "Duotonowy wash na fotografii: ciepły pomarańcz na granacie.",
+        controls: [color("--orange"), color("--navy-deep"), alpha("--ov-wash")],
+      },
+      "d-surfaces": {
+        label: "Plany głębi",
+        desc: "Nocne tło, panele treści i światło typografii.",
+        controls: [color("--navy-deep"), color("--navy"), color("--light")],
+      },
+      "d-buttons": {
+        label: "Przyciski pill",
+        desc: "Obrys w świetle, wypełnienie światłem po najechaniu.",
+        controls: [color("--light"), color("--navy"), color("--orange")],
+      },
+      "d-numerals": {
+        label: "Numeracja i eyebrow",
+        desc: "Wyciszone numery i sygnały w kolorze szlaku.",
+        controls: [color("--glow"), color("--light")],
+      },
+      segments: {
+        label: "Segmenty klientów",
+        desc: "Akcenty tras Founders / Companies / Investors — z palety.",
+        controls: [color("--accent-founders"), color("--accent-companies"), color("--accent-investors")],
+      },
+      footer: {
+        label: "Stopka",
+        desc: "Powierzchnia navy, tytuły w kolorze szlaku, treść w świetle.",
+        controls: [color("--navy"), color("--glow"), color("--light")],
+      },
+    };
+
+    let hoverKey = null;
+    let hoverEl = null;
+    let pinnedEl = null;
+    let pinned = false;
+
+    function clearHover() {
+      if (hoverEl && hoverEl !== pinnedEl) hoverEl.classList.remove("dp-edit-hover");
+      hoverEl = null;
+      hoverKey = null;
+    }
+
+    function showPeek(key) {
+      const entry = EDITABLES[key];
+      if (!entry) return;
+      peekLabel.textContent = entry.label;
+      dock.hidden = false;
+      peek.hidden = false;
+      panel.hidden = true;
+    }
+
+    function hideDock() {
+      dock.hidden = true;
+      peek.hidden = true;
+      panel.hidden = true;
+    }
+
+    function buildControls(entry) {
+      controlsEl.replaceChildren();
+
+      entry.controls.forEach((control) => {
+        const wrap = document.createElement("div");
+
+        if (control.type === "color") {
+          wrap.className = "dp-dock__control";
+          wrap.setAttribute("data-token", control.cssVar);
+          const name = TOKEN_NAMES[control.cssVar] || control.cssVar;
+          wrap.innerHTML =
+            '<label class="dp-overlay__chip" style="--chip: var(' + control.cssVar + ')">' +
+            '<input type="color" aria-label="Zmień kolor: ' + name + '" />' +
+            "</label>" +
+            '<div class="dp-dock__control-meta">' +
+            '<span class="dp-dock__control-name">' + name + "</span>" +
+            '<span class="dp-dock__control-hex" data-hex></span>' +
+            "</div>";
+        } else {
+          wrap.className = "dp-dock__control dp-dock__control--alpha";
+          wrap.setAttribute("data-alpha", control.cssVar);
+          const name = OVERLAY_NAMES[control.cssVar] || control.cssVar;
+          wrap.innerHTML =
+            '<div class="dp-dock__control-meta">' +
+            '<span class="dp-dock__control-name">' + name + "</span>" +
+            '<span class="dp-dock__control-pct" data-alpha-value></span>' +
+            "</div>" +
+            '<input class="dp-overlay__range" type="range" min="0" max="100" step="1" aria-label="Przezroczystość: ' + name + '" />';
+        }
+
+        controlsEl.appendChild(wrap);
+      });
+
+      bindAllControls(controlsEl);
+      syncControls();
+    }
+
+    function pin(key, el) {
+      const entry = EDITABLES[key];
+      if (!entry) return;
+
+      if (pinnedEl) pinnedEl.classList.remove("dp-edit-pinned");
+      pinned = true;
+      pinnedEl = el;
+      pinnedEl.classList.add("dp-edit-pinned");
+      document.body.classList.add("dp-dock-pinned");
+
+      titleEl.textContent = entry.label;
+      descEl.textContent = entry.desc;
+      buildControls(entry);
+
+      dock.hidden = false;
+      peek.hidden = true;
+      panel.hidden = false;
+    }
+
+    function unpin() {
+      pinned = false;
+      if (pinnedEl) {
+        pinnedEl.classList.remove("dp-edit-pinned");
+        pinnedEl = null;
+      }
+      document.body.classList.remove("dp-dock-pinned");
+      hideDock();
+      clearHover();
+    }
+
+    document.addEventListener("mouseover", (event) => {
+      if (event.target.closest("[data-dp-dock]")) return; /* keep state over the dock */
+
+      const el = event.target.closest("[data-edit]");
+      if (!el) {
+        if (!pinned) hideDock();
+        clearHover();
+        return;
+      }
+
+      const key = el.dataset.edit;
+      if (el === hoverEl) return;
+
+      clearHover();
+      hoverKey = key;
+      hoverEl = el;
+      if (el !== pinnedEl) el.classList.add("dp-edit-hover");
+      if (!pinned) showPeek(key);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (event.target.closest("[data-dp-dock]")) return;
+
+      if (event.target.closest("[data-edit-ignore]")) return;
+
+      const el = event.target.closest("[data-edit]");
+      if (!el) {
+        /* clicks on the toolbar or other editors shouldn't close the dock */
+        if (pinned && !event.target.closest(".top-nav, .dp-swatch, .dp-overlay, .dp-transfer")) unpin();
+        return;
+      }
+
+      /* sample links inside editable regions shouldn't navigate away */
+      const link = event.target.closest("a");
+      if (link) event.preventDefault();
+
+      el.classList.remove("dp-edit-hover");
+      pin(el.dataset.edit, el);
+    });
+
+    peek.addEventListener("click", () => {
+      if (hoverKey && hoverEl) pin(hoverKey, hoverEl);
+    });
+
+    closeBtn.addEventListener("click", unpin);
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && pinned) unpin();
+    });
+  }
+
+  setupEditDock();
 
   /* ---------- animated audience tabs ---------- */
 
