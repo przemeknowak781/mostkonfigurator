@@ -454,15 +454,27 @@
     radial-gradient(900px 580px at 50% 12%, color-mix(in srgb, color-mix(in srgb, var(--orange) 18%, transparent) var(--ov-wash, 100%), transparent), transparent 70%),
     linear-gradient(180deg, color-mix(in srgb, var(--navy-deep) 92%, black) 0%, var(--navy) 100%);
   /* Top-cut mask uses the same corrected path as ::after below, so the
-     silhouette edge and the trail line stay aligned. */
+     silhouette edge and the trail line stay aligned.
+
+     Bottom-cut mask (3rd layer, positioned "bottom"): the original curve's
+     last segment dives back up to (1200,0) right at the corner. Flattening
+     the last stretch — holding at y=51 from x=1186 to x=1200 instead of
+     diving — keeps full depth all the way to the frame border instead of
+     tapering off. */
   -webkit-mask:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 94 L52 95 L137 94 L221 98 L318 97 L398 101 L432 96 L506 86 L552 89 L589 72 L652 64 L701 69 L746 51 L817 42 L858 46 L917 28 L971 32 L1004 21 L1058 24 L1096 7 L1130 4 L1164 2 L1186 1 L1200 0 L1200 160 L0 160 Z' fill='%23fff'/%3E%3C/svg%3E") top / 100% var(--audience-cut-depth) no-repeat,
     linear-gradient(#fff, #fff) 0 var(--audience-cut-depth) / 100% calc(100% - var(--audience-cut-depth) * 2) no-repeat,
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0 L1200 0 L1186 51 L1164 46 L1130 67 L1096 59 L1058 76 L1004 73 L971 84 L917 80 L858 98 L817 94 L746 103 L701 121 L652 116 L589 124 L552 141 L506 138 L432 148 L398 153 L318 149 L221 150 L137 146 L52 147 L0 146 Z' fill='%23fff'/%3E%3C/svg%3E") bottom / 100% var(--audience-cut-depth) no-repeat;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0 L1200 0 L1200 51 L1186 51 L1164 46 L1130 67 L1096 59 L1058 76 L1004 73 L971 84 L917 80 L858 98 L817 94 L746 103 L701 121 L652 116 L589 124 L552 141 L506 138 L432 148 L398 153 L318 149 L221 150 L137 146 L52 147 L0 146 Z' fill='%23fff'/%3E%3C/svg%3E") bottom / 100% var(--audience-cut-depth) no-repeat;
   mask:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 94 L52 95 L137 94 L221 98 L318 97 L398 101 L432 96 L506 86 L552 89 L589 72 L652 64 L701 69 L746 51 L817 42 L858 46 L917 28 L971 32 L1004 21 L1058 24 L1096 7 L1130 4 L1164 2 L1186 1 L1200 0 L1200 160 L0 160 Z' fill='%23fff'/%3E%3C/svg%3E") top / 100% var(--audience-cut-depth) no-repeat,
     linear-gradient(#fff, #fff) 0 var(--audience-cut-depth) / 100% calc(100% - var(--audience-cut-depth) * 2) no-repeat,
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0 L1200 0 L1186 51 L1164 46 L1130 67 L1096 59 L1058 76 L1004 73 L971 84 L917 80 L858 98 L817 94 L746 103 L701 121 L652 116 L589 124 L552 141 L506 138 L432 148 L398 153 L318 149 L221 150 L137 146 L52 147 L0 146 Z' fill='%23fff'/%3E%3C/svg%3E") bottom / 100% var(--audience-cut-depth) no-repeat;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0 L1200 0 L1200 51 L1186 51 L1164 46 L1130 67 L1096 59 L1058 76 L1004 73 L971 84 L917 80 L858 98 L817 94 L746 103 L701 121 L652 116 L589 124 L552 141 L506 138 L432 148 L398 153 L318 149 L221 150 L137 146 L52 147 L0 146 Z' fill='%23fff'/%3E%3C/svg%3E") bottom / 100% var(--audience-cut-depth) no-repeat;
+}
+
+/* The visible bottom trail line mirrors the mask above: flat from x=1186
+   to x=1200 instead of diving to 0 right at the corner. */
+.is-design-preview .audience-intro__trail-edge--bottom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 146 L52 147 L137 146 L221 150 L318 149 L398 153 L432 148 L506 138 L552 141 L589 124 L652 116 L701 121 L746 103 L817 94 L858 98 L917 80 L971 84 L1004 73 L1058 76 L1096 59 L1130 67 L1164 46 L1186 51 L1200 51' stroke='%23FFA86E' stroke-opacity='.78' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 .is-design-preview .audience-col__connector::before {
