@@ -241,8 +241,16 @@
   const boundControls = new WeakSet();
 
   function syncControls() {
+    /* The same token/overlay often backs several controls at once (palette
+       swatch + dock copy). Read each unique CSS var once per sync instead of
+       once per card — cheap on its own, but this runs on every drag tick of
+       a color/range input (see scheduleSyncControls below), so redundant
+       getComputedStyle + parsing per duplicate card adds up fast. */
+    const tokenCache = new Map();
     document.querySelectorAll("[data-token]").forEach((card) => {
-      const hex = readTokenValue(card.dataset.token);
+      const cssVar = card.dataset.token;
+      if (!tokenCache.has(cssVar)) tokenCache.set(cssVar, readTokenValue(cssVar));
+      const hex = tokenCache.get(cssVar);
       if (!hex) return;
       const input = card.querySelector('input[type="color"]');
       const hexLabel = card.querySelector("[data-hex]");
@@ -250,10 +258,12 @@
       if (hexLabel) hexLabel.textContent = hex.toUpperCase();
     });
 
+    const alphaCache = new Map();
     document.querySelectorAll("[data-alpha]").forEach((card) => {
       const cssVar = card.dataset.alpha;
       const entry = OVERLAY_BY_VAR[cssVar] || { min: 0, max: 100 };
-      const alpha = readAlphaValue(cssVar);
+      if (!alphaCache.has(cssVar)) alphaCache.set(cssVar, readAlphaValue(cssVar));
+      const alpha = alphaCache.get(cssVar);
       const range = card.querySelector('input[type="range"]');
       const pctLabel = card.querySelector("[data-alpha-value]");
       const pct = Math.round(alpha * 100);
@@ -271,6 +281,21 @@
     scheduleSvgRecolor();
   }
 
+  /* Dragging a color wheel or range slider fires "input" many times per
+     frame in some browsers. The token write below is immediate (so the
+     scene repaints with zero latency), but resyncing every OTHER control
+     showing the same token is just housekeeping — batching it to once per
+     animation frame keeps a fast drag smooth instead of re-querying and
+     re-reading every control on the page dozens of times a second. */
+  let syncControlsRaf = 0;
+  function scheduleSyncControls() {
+    if (syncControlsRaf) return;
+    syncControlsRaf = window.requestAnimationFrame(() => {
+      syncControlsRaf = 0;
+      syncControls();
+    });
+  }
+
   function bindColorControl(card) {
     const input = card.querySelector('input[type="color"]');
     if (!input || boundControls.has(input)) return;
@@ -279,7 +304,7 @@
 
     input.addEventListener("input", () => {
       rootEl.style.setProperty(cssVar, input.value);
-      syncControls(); /* the same token can live on several controls at once */
+      scheduleSyncControls(); /* the same token can live on several controls at once */
     });
 
     input.addEventListener("change", () => {
@@ -302,7 +327,7 @@
       const fill = ((pct - entry.min) / Math.max(1, entry.max - entry.min)) * 100;
       range.style.setProperty("--fill", fill.toFixed(1) + "%");
       if (pctLabel) pctLabel.textContent = pct + "%";
-      syncControls();
+      scheduleSyncControls();
     });
 
     range.addEventListener("change", () => {
