@@ -34,6 +34,7 @@
     { cssVar: "--ov-sun", name: "Poświata słońca — intensywność", min: 0, max: 100, unit: "%" },
     { cssVar: "--ov-wash", name: "Wash fotografii — intensywność", min: 0, max: 100, unit: "%" },
     { cssVar: "--ov-trail", name: "Linia trasy — intensywność", min: 0, max: 100, unit: "%" },
+    { cssVar: "--ov-photo", name: "Przezroczystość grafiki", min: 0, max: 100, unit: "%" },
     { cssVar: "--anim-speed", name: "Oddychanie — prędkość", min: 25, max: 400, unit: "" },
     { cssVar: "--anim-depth", name: "Oddychanie — głębokość pulsu", min: 0, max: 150, unit: "" },
   ];
@@ -47,6 +48,7 @@
     "--ov-sun": "Słońce — intensywność",
     "--ov-wash": "Wash — intensywność",
     "--ov-trail": "Trasa — intensywność",
+    "--ov-photo": "Przezroczystość grafiki",
     "--anim-speed": "Oddychanie — prędkość",
     "--anim-depth": "Oddychanie — głębokość",
   };
@@ -483,7 +485,7 @@
         desc: "Niebo, granat gór, słońce, wash, linia trasy i oddychanie światła. Te same tokeny działają w całym systemie.",
         controls: [
           color("--navy-deep"), color("--navy"), color("--orange"), color("--orange-soft"), color("--glow"),
-          alpha("--ov-sun"), alpha("--ov-wash"), alpha("--ov-trail"), alpha("--anim-speed"), alpha("--anim-depth"),
+          alpha("--ov-sun"), alpha("--ov-wash"), alpha("--ov-trail"), alpha("--ov-photo"), alpha("--anim-speed"), alpha("--anim-depth"),
         ],
       },
       "hero-typo": {
@@ -539,7 +541,7 @@
       "d-duotone": {
         label: "Góra jako scena",
         desc: "Duotonowy wash na fotografii: ciepły pomarańcz na granacie, plus tło karty.",
-        controls: [color("--orange"), color("--navy-deep"), color("--light"), color("--glow"), alpha("--ov-wash")],
+        controls: [color("--orange"), color("--navy-deep"), color("--light"), color("--glow"), alpha("--ov-wash"), alpha("--ov-photo")],
       },
       "d-surfaces": {
         label: "Plany głębi",

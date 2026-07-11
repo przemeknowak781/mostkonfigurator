@@ -314,6 +314,7 @@ function updateScroll() {
   }
 
   if (topNav) topNav.classList.toggle("is-scrolled", scrollY > 12);
+  document.body.classList.toggle("is-nav-scrolled", scrollY > 12);
   if (window.updateParallax) window.updateParallax();
 }
 

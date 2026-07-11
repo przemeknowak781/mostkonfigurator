@@ -13,17 +13,25 @@
 
 :root {
   /* Editable tokens extracted from hardcoded values in styles.css */
-  --glow: #ffa86e;
+  --navy-deep: #0e1016;
+  --navy: #0d0d0d;
+  --light: #f0ebe9;
+  --orange: #ff4000;
+  --orange-soft: #ff3300;
+  --glow: #ff6600;
+  --purple-dark: #6a6e86;
+  --purple-light: #8087ad;
   --text-accent: #ffa86e;
   --text-caps: #f0ebe9;
   --accent-founders: #d17e5f;
   --accent-companies: #9b8b95;
-  --accent-investors: #5b7ab0;
+  --accent-investors: #3575e3;
 
   /* Overlay intensities (percentages; 100% = original design) */
   --ov-sun: 100%;
   --ov-wash: 100%;
   --ov-trail: 100%;
+  --ov-photo: 100%;
 
   /* Breathing animation: speed multiplier and pulse depth (1 = original) */
   --anim-speed: 1;
@@ -122,6 +130,18 @@
   right: var(--dp-gutter-x);
   width: auto;
   border-radius: 999px;
+}
+
+/* Once the nav snaps flush to the true top of the window (.is-nav-scrolled,
+   toggled in script.js at the same scrollY threshold as .top-nav's own
+   .is-scrolled), the progress sliver must follow it there — otherwise it
+   stays pinned to the gutter offset and cuts across the middle of the
+   now-flush navbar instead of tracing its top edge. */
+.is-design-preview.is-nav-scrolled .scroll-progress {
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -390,6 +410,7 @@
   background-position: center, center, 50% 38%;
   transform: translate3d(0, calc((var(--ridge-progress, 0.5) - 0.5) * 12vh), 0);
   filter: saturate(0.82) contrast(1.06) brightness(0.6);
+  opacity: var(--ov-photo, 100%);
 }
 
 /* Both this and the footer ridge are decorative (pointer-events: none in
