@@ -28,6 +28,11 @@
     { cssVar: "--accent-founders", name: "Akcent — Founders" },
     { cssVar: "--accent-companies", name: "Akcent — Companies" },
     { cssVar: "--accent-investors", name: "Akcent — Investors" },
+    { cssVar: "--hero-sky", name: "Hero — niebo" },
+    { cssVar: "--hero-ridge", name: "Hero — granat gór" },
+    { cssVar: "--hero-sun", name: "Hero — słońce" },
+    { cssVar: "--hero-halo", name: "Hero — łuna" },
+    { cssVar: "--hero-trail", name: "Hero — linia trasy" },
   ];
 
   const OVERLAYS = [
@@ -35,6 +40,11 @@
     { cssVar: "--ov-wash", name: "Wash fotografii — intensywność", min: 0, max: 100, unit: "%" },
     { cssVar: "--ov-trail", name: "Linia trasy — intensywność", min: 0, max: 100, unit: "%" },
     { cssVar: "--ov-photo", name: "Przezroczystość grafiki", min: 0, max: 100, unit: "%" },
+    { cssVar: "--hero-ov-sun", name: "Hero — słońce intensywność", min: 0, max: 100, unit: "%" },
+    { cssVar: "--hero-ov-wash", name: "Hero — wash intensywność", min: 0, max: 100, unit: "%" },
+    { cssVar: "--hero-ov-trail", name: "Hero — trasa intensywność", min: 0, max: 100, unit: "%" },
+    { cssVar: "--img-hue", name: "Grafiki — obrót barwy", min: 0, max: 360, unit: "deg" },
+    { cssVar: "--img-sat", name: "Grafiki — nasycenie", min: 0, max: 200, unit: "%" },
     { cssVar: "--anim-speed", name: "Oddychanie — prędkość", min: 25, max: 400, unit: "" },
     { cssVar: "--anim-depth", name: "Oddychanie — głębokość pulsu", min: 0, max: 150, unit: "" },
   ];
@@ -49,6 +59,11 @@
     "--ov-wash": "Wash — intensywność",
     "--ov-trail": "Trasa — intensywność",
     "--ov-photo": "Przezroczystość grafiki",
+    "--hero-ov-sun": "Hero: słońce — intensywność",
+    "--hero-ov-wash": "Hero: wash — intensywność",
+    "--hero-ov-trail": "Hero: trasa — intensywność",
+    "--img-hue": "Grafiki — obrót barwy",
+    "--img-sat": "Grafiki — nasycenie",
     "--anim-speed": "Oddychanie — prędkość",
     "--anim-depth": "Oddychanie — głębokość",
   };
@@ -77,15 +92,28 @@
     return null;
   }
 
-  /* Accepts ratio numbers, percent numbers, and "63%" strings → ratio or null.
-     maxRatio widens the accepted range for settings like animation speed. */
+  /* Accepts ratio numbers, percent numbers, and "63%" / "120deg" strings →
+     ratio or null. maxRatio widens the accepted range for settings like
+     animation speed; degree values map 100deg → ratio 1. */
   function normalizeAlpha(value, maxRatio = 1) {
     if (value === null || value === undefined || value === "") return null;
     const str = String(value).trim();
     const num = parseFloat(str);
     if (!Number.isFinite(num)) return null;
-    const scaled = str.includes("%") || num > maxRatio ? num / 100 : num;
+    const scaled = str.includes("%") || str.includes("deg") || num > maxRatio ? num / 100 : num;
     return Math.max(0, Math.min(maxRatio, scaled));
+  }
+
+  /* One place decides how a slider's integer value is written to the CSS
+     var ("62%", "140deg", or "1.4") and which suffix its label shows. */
+  function overlayCssValue(entry, pct) {
+    if (entry.unit === "%") return pct + "%";
+    if (entry.unit === "deg") return pct + "deg";
+    return String(pct / 100);
+  }
+
+  function overlaySuffix(entry) {
+    return entry.unit === "deg" ? "°" : "%";
   }
 
   function readTokenValue(cssVar) {
@@ -106,7 +134,7 @@
     if (!entry) return;
     const clamped = Math.max(entry.min / 100, Math.min(entry.max / 100, ratio));
     const pct = Math.round(clamped * 100);
-    rootEl.style.setProperty(cssVar, entry.unit === "%" ? pct + "%" : String(pct / 100));
+    rootEl.style.setProperty(cssVar, overlayCssValue(entry, pct));
   }
 
   /* ---------- state ---------- */
@@ -136,10 +164,11 @@
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ colors: currentColors(), overlays: currentOverlays() })
+        JSON.stringify({ colors: currentColors(), overlays: currentOverlays(), images: currentImages() })
       );
     } catch (err) {
-      /* private mode etc. — live preview still works */
+      /* private mode / quota (large uploaded images) — live preview and
+         the JSON export still work, only the auto-restore is skipped */
     }
   }
 
@@ -172,23 +201,28 @@
      current value and point the images at a recolored blob URL. */
 
   const SVG_BASE_COLOR = "#161822";
-  const SVG_ASSET_URLS = ["gora-bez-tla-2000px.svg", "climbers.svg", "footer.svg"];
-  const svgAssets = new Map(); /* url -> { text, imgs, blobUrl } */
-  let svgAppliedColor = SVG_BASE_COLOR;
+  /* Which token drives each silhouette: the hero scene's mountains and
+     climbers follow the independent hero ridge token; the footer silhouette
+     stays on the global Navy. */
+  const SVG_ASSET_TOKENS = {
+    "gora-bez-tla-2000px.svg": "--hero-ridge",
+    "climbers.svg": "--hero-ridge",
+    "footer.svg": "--navy",
+  };
+  const svgAssets = new Map(); /* url -> { text, imgs, blobUrl, appliedColor } */
   let svgRecolorRaf = 0;
 
   function initSvgRecolor() {
     if (typeof window.fetch !== "function") return;
     const imgs = Array.from(document.querySelectorAll("img"));
-    SVG_ASSET_URLS.forEach((url) => {
+    Object.keys(SVG_ASSET_TOKENS).forEach((url) => {
       const matched = imgs.filter((img) => (img.getAttribute("src") || "") === url);
       if (!matched.length) return;
       fetch(url)
         .then((response) => (response.ok ? response.text() : Promise.reject()))
         .then((text) => {
-          svgAssets.set(url, { text, imgs: matched, blobUrl: null });
-          svgAppliedColor = null; /* force a re-apply for the new asset */
-          scheduleSvgRecolor(); /* a saved set may already override Navy */
+          svgAssets.set(url, { text, imgs: matched, blobUrl: null, appliedColor: SVG_BASE_COLOR });
+          scheduleSvgRecolor(); /* a saved set may already override the token */
         })
         .catch(() => {
           /* offline / file:// — silhouettes simply keep their baked color */
@@ -197,22 +231,20 @@
   }
 
   function applySvgRecolor() {
-    const navy = readTokenValue("--navy") || SVG_BASE_COLOR;
-    if (navy === svgAppliedColor) return;
-    svgAppliedColor = navy;
-
     svgAssets.forEach((asset, url) => {
-      const oldBlobUrl = asset.blobUrl;
-      if (navy === SVG_BASE_COLOR && !oldBlobUrl) return; /* already original */
+      const color = readTokenValue(SVG_ASSET_TOKENS[url]) || SVG_BASE_COLOR;
+      if (color === asset.appliedColor) return;
+      asset.appliedColor = color;
 
-      if (navy === SVG_BASE_COLOR) {
+      const oldBlobUrl = asset.blobUrl;
+      if (color === SVG_BASE_COLOR) {
         /* back to the original file (e.g. after reset) */
         asset.imgs.forEach((img) => {
           img.src = url;
         });
         asset.blobUrl = null;
       } else {
-        const recolored = asset.text.replace(/#161822/gi, navy);
+        const recolored = asset.text.replace(/#161822/gi, color);
         const blobUrl = URL.createObjectURL(new Blob([recolored], { type: "image/svg+xml" }));
         asset.imgs.forEach((img) => {
           img.src = blobUrl;
@@ -233,6 +265,49 @@
   }
 
   initSvgRecolor();
+
+  /* ---------- custom image replacement ----------
+     Uploaded images live as data URLs: applied live, persisted with the
+     rest of the set (quota permitting) and included in the JSON export so
+     the choice travels with the file. */
+
+  const IMAGE_TARGETS = {
+    "hero-bg": { label: "Tło hero — zdjęcie" },
+    "ridge-photo": { label: "Zdjęcie pod hero" },
+  };
+  const heroBgImg = document.querySelector(".hero-bg");
+  const HERO_BG_ORIGINAL = heroBgImg ? heroBgImg.getAttribute("src") : null;
+  const customImages = {};
+
+  function applyCustomImages() {
+    if (heroBgImg) {
+      const want = customImages["hero-bg"] || HERO_BG_ORIGINAL;
+      if (heroBgImg.getAttribute("src") !== want) heroBgImg.src = want;
+    }
+    if (customImages["ridge-photo"]) {
+      rootEl.style.setProperty("--ridge-photo", 'url("' + customImages["ridge-photo"] + '")');
+    } else {
+      rootEl.style.removeProperty("--ridge-photo");
+    }
+  }
+
+  function setCustomImage(key, dataUrl) {
+    if (!(key in IMAGE_TARGETS)) return;
+    if (dataUrl) {
+      customImages[key] = dataUrl;
+    } else {
+      delete customImages[key];
+    }
+    applyCustomImages();
+  }
+
+  function currentImages() {
+    const out = {};
+    Object.keys(customImages).forEach((key) => {
+      out[key] = customImages[key];
+    });
+    return out;
+  }
 
   /* ---------- control binding (palette swatches, overlay cards, dock) ----------
      Any element with [data-token] + <input type=color> or [data-alpha] +
@@ -274,7 +349,7 @@
         const fill = ((pct - entry.min) / Math.max(1, entry.max - entry.min)) * 100;
         range.style.setProperty("--fill", fill.toFixed(1) + "%");
       }
-      if (pctLabel) pctLabel.textContent = pct + "%";
+      if (pctLabel) pctLabel.textContent = pct + overlaySuffix(entry);
     });
 
     /* silhouette SVGs follow the Navy token */
@@ -323,10 +398,10 @@
 
     range.addEventListener("input", () => {
       const pct = Math.max(entry.min, Math.min(entry.max, parseInt(range.value, 10) || 0));
-      rootEl.style.setProperty(cssVar, entry.unit === "%" ? pct + "%" : String(pct / 100));
+      rootEl.style.setProperty(cssVar, overlayCssValue(entry, pct));
       const fill = ((pct - entry.min) / Math.max(1, entry.max - entry.min)) * 100;
       range.style.setProperty("--fill", fill.toFixed(1) + "%");
-      if (pctLabel) pctLabel.textContent = pct + "%";
+      if (pctLabel) pctLabel.textContent = pct + overlaySuffix(entry);
       scheduleSyncControls();
     });
 
@@ -360,6 +435,7 @@
       exportedAt: new Date().toISOString(),
       colors: currentColors(),
       overlays: currentOverlays(),
+      images: currentImages(),
       names,
     };
 
@@ -421,6 +497,17 @@
       }
     });
 
+    const imageMap = parsed && typeof parsed === "object" && parsed.images && typeof parsed.images === "object" ? parsed.images : null;
+    if (imageMap) {
+      Object.keys(IMAGE_TARGETS).forEach((key) => {
+        const value = imageMap[key];
+        if (typeof value === "string" && value.startsWith("data:image/")) {
+          setCustomImage(key, value);
+          applied += 1;
+        }
+      });
+    }
+
     if (applied) {
       syncControls();
       if (save) persist();
@@ -431,13 +518,14 @@
   function resetAll() {
     TOKENS.forEach((token) => rootEl.style.removeProperty(token.cssVar));
     OVERLAYS.forEach((overlay) => rootEl.style.removeProperty(overlay.cssVar));
+    Object.keys(IMAGE_TARGETS).forEach((key) => setCustomImage(key, null));
     try {
       window.localStorage.removeItem(STORAGE_KEY);
     } catch (err) {
       /* noop */
     }
     syncControls();
-    showToast("Przywrócono oryginalne kolory i overlaye");
+    showToast("Przywrócono oryginalne kolory, overlaye i grafiki");
   }
 
   const fileInput = document.querySelector("[data-dp-file]");
@@ -497,6 +585,7 @@
 
     const color = (cssVar) => ({ type: "color", cssVar });
     const alpha = (cssVar) => ({ type: "alpha", cssVar });
+    const image = (key) => ({ type: "image", key });
 
     /* Every entry's `controls` list was audited against the actual CSS/JS
        that paints its DOM region (including shared card chrome — the
@@ -507,10 +596,12 @@
     const EDITABLES = {
       hero: {
         label: "Scena hero",
-        desc: "Niebo, granat gór, słońce, wash, linia trasy i oddychanie światła. Te same tokeny działają w całym systemie.",
+        desc: "Niezależne tokeny hero — niebo, granat gór, słońce, łuna i linia trasy osobno od globalnej palety. Plus tint grafik i podmiana zdjęć.",
         controls: [
-          color("--navy-deep"), color("--navy"), color("--orange"), color("--orange-soft"), color("--glow"),
-          alpha("--ov-sun"), alpha("--ov-wash"), alpha("--ov-trail"), alpha("--ov-photo"), alpha("--anim-speed"), alpha("--anim-depth"),
+          color("--hero-sky"), color("--hero-ridge"), color("--hero-sun"), color("--hero-halo"), color("--hero-trail"),
+          alpha("--hero-ov-sun"), alpha("--hero-ov-wash"), alpha("--hero-ov-trail"), alpha("--ov-photo"),
+          alpha("--img-hue"), alpha("--img-sat"), alpha("--anim-speed"), alpha("--anim-depth"),
+          image("hero-bg"), image("ridge-photo"),
         ],
       },
       "hero-typo": {
@@ -559,14 +650,18 @@
         label: "Słońce i poświata",
         desc: "Animowany blask za granią, granat sylwetki gór, intensywność i rytm oddychania.",
         controls: [
-          color("--orange-soft"), color("--orange"), color("--navy"), color("--light"), color("--glow"),
+          color("--orange-soft"), color("--orange"), color("--navy"), color("--hero-ridge"), color("--light"), color("--glow"),
           alpha("--ov-sun"), alpha("--anim-speed"), alpha("--anim-depth"),
         ],
       },
       "d-duotone": {
         label: "Góra jako scena",
-        desc: "Duotonowy wash na fotografii: ciepły pomarańcz na granacie, plus tło karty.",
-        controls: [color("--orange"), color("--navy-deep"), color("--light"), color("--glow"), alpha("--ov-wash"), alpha("--ov-photo")],
+        desc: "Duotonowy wash na fotografii: ciepły pomarańcz na granacie, tint barwy i nasycenia, plus podmiana zdjęcia.",
+        controls: [
+          color("--orange"), color("--navy-deep"), color("--light"), color("--glow"),
+          alpha("--ov-wash"), alpha("--ov-photo"), alpha("--img-hue"), alpha("--img-sat"),
+          image("ridge-photo"),
+        ],
       },
       "d-surfaces": {
         label: "Plany głębi",
@@ -639,6 +734,30 @@
             '<span class="dp-dock__control-name">' + name + "</span>" +
             '<span class="dp-dock__control-hex" data-hex></span>' +
             "</div>";
+        } else if (control.type === "image") {
+          const target = IMAGE_TARGETS[control.key] || { label: control.key };
+          wrap.className = "dp-dock__control dp-dock__control--image";
+          wrap.innerHTML =
+            '<div class="dp-dock__control-meta">' +
+            '<span class="dp-dock__control-name">' + target.label + "</span>" +
+            "</div>" +
+            '<button type="button" class="dp-dock__upload">Wgraj własny obrazek</button>' +
+            '<input type="file" accept="image/*" hidden />';
+          const btn = wrap.querySelector(".dp-dock__upload");
+          const fileEl = wrap.querySelector('input[type="file"]');
+          btn.addEventListener("click", () => fileEl.click());
+          fileEl.addEventListener("change", () => {
+            const file = fileEl.files && fileEl.files[0];
+            fileEl.value = "";
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+              setCustomImage(control.key, String(reader.result));
+              persist();
+              showToast("Podmieniono grafikę: " + target.label);
+            };
+            reader.readAsDataURL(file);
+          });
         } else {
           wrap.className = "dp-dock__control dp-dock__control--alpha";
           wrap.setAttribute("data-alpha", control.cssVar);
