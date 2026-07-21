@@ -107,6 +107,18 @@
   background: var(--dp-canvas);
 }
 
+/* The base stylesheet puts `scroll-snap-type: y proximity` on <html> with a
+   snap point on .hero-stats. On the normal marketing pages that's a nice
+   settle, but this preview is a long, scroll-through design DOCUMENT: the
+   snap keeps catching on the hero and stalls the scroll before the reader
+   reaches the triptych, so the scroll-driven card reveal (founders →
+   companies → investors) never plays. Disable snapping on the preview only
+   — preview.css is loaded solely on index.html, and the :has() keeps it
+   from ever touching the real subpages. */
+html:has(.is-design-preview) {
+  scroll-snap-type: none;
+}
+
 .is-design-preview .dp-frame {
   position: relative;
   margin: var(--dp-gutter-top) var(--dp-gutter-x);
@@ -281,18 +293,59 @@
   }
 }
 
+/* GENTLE HERO BREATHING — the sun/haze/climbers fields are now one large,
+   heavily-blurred continuous łuna spanning most of the hero, so the wide
+   swings of the sample keyframes above turned into a whole-scene throb.
+   These hero-only variants keep the SAME --anim-depth hook (dock slider
+   still works) but with a high opacity floor and small scale swing, so the
+   łuna gently pulses instead of flickering, and never drops dark in the
+   trough — preserving the continuous-glow read. The small samples in the
+   decision cards keep the louder keyframes above. */
+@keyframes dp-breathe-hero-sun {
+  0%, 100% {
+    opacity: calc(1 - 0.20 * var(--anim-depth, 1));
+    transform: translate(calc(2% - 2% * var(--anim-depth, 1)), calc(-1.5% + 1.5% * var(--anim-depth, 1))) scale(calc(1.08 - 0.08 * var(--anim-depth, 1)));
+  }
+  50% {
+    opacity: 1;
+    transform: translate(2%, -1.5%) scale(1.08);
+  }
+}
+
+@keyframes dp-breathe-hero-climbers {
+  0%, 100% {
+    opacity: calc(1 - 0.22 * var(--anim-depth, 1));
+    transform: scale(calc(1.1 - 0.09 * var(--anim-depth, 1))) translate(calc(0.8% - 1.2% * var(--anim-depth, 1)), calc(-0.9% + 1.3% * var(--anim-depth, 1)));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translate(0.8%, -0.9%);
+  }
+}
+
+@keyframes dp-breathe-hero-haze {
+  0%, 100% {
+    opacity: calc(1 - 0.34 * var(--anim-depth, 1));
+    transform: scale(calc(1.04 - 0.03 * var(--anim-depth, 1)));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
 .is-design-preview .hero-glow__sun {
-  animation-name: dp-breathe-sun;
+  animation-name: dp-breathe-hero-sun;
   animation-duration: calc(9s / clamp(0.25, var(--anim-speed, 1), 4));
 }
 
 .is-design-preview .hero-glow__haze {
-  animation-name: dp-breathe-haze;
+  animation-name: dp-breathe-hero-haze;
   animation-duration: calc(12s / clamp(0.25, var(--anim-speed, 1), 4));
 }
 
 .is-design-preview .hero-climbers-sun {
-  animation-name: dp-breathe-climbers;
+  animation-name: dp-breathe-hero-climbers;
   animation-duration: calc(6.5s / clamp(0.25, var(--anim-speed, 1), 4));
 }
 
@@ -356,8 +409,8 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(56% 44% at 24% 34%, color-mix(in srgb, color-mix(in srgb, var(--hero-halo) 30%, transparent) var(--hero-ov-sun, 100%), transparent), transparent 74%),
-    radial-gradient(85% 58% at 58% 46%, color-mix(in srgb, color-mix(in srgb, var(--hero-halo) 14%, transparent) var(--hero-ov-sun, 100%), transparent), transparent 80%);
+    radial-gradient(56% 44% at 24% 34%, color-mix(in srgb, color-mix(in srgb, var(--hero-halo) 40%, transparent) var(--hero-ov-sun, 100%), transparent), transparent 74%),
+    radial-gradient(90% 60% at 56% 46%, color-mix(in srgb, color-mix(in srgb, var(--hero-halo) 20%, transparent) var(--hero-ov-sun, 100%), transparent), transparent 82%);
   filter: blur(34px);
   mix-blend-mode: screen;
 }
