@@ -32,6 +32,7 @@
     { cssVar: "--hero-ridge", name: "Hero — granat gór" },
     { cssVar: "--hero-sun", name: "Hero — słońce" },
     { cssVar: "--hero-halo", name: "Hero — łuna" },
+    { cssVar: "--hero-wash", name: "Hero — wash" },
     { cssVar: "--hero-trail", name: "Hero — linia trasy" },
   ];
 
@@ -598,7 +599,7 @@
         label: "Scena hero",
         desc: "Niezależne tokeny hero — niebo, granat gór, słońce, łuna i linia trasy osobno od globalnej palety. Plus tint grafik i podmiana zdjęć.",
         controls: [
-          color("--hero-sky"), color("--hero-ridge"), color("--hero-sun"), color("--hero-halo"), color("--hero-trail"),
+          color("--hero-sky"), color("--hero-ridge"), color("--hero-sun"), color("--hero-halo"), color("--hero-wash"), color("--hero-trail"),
           alpha("--hero-ov-sun"), alpha("--hero-ov-wash"), alpha("--hero-ov-trail"), alpha("--ov-photo"),
           alpha("--img-hue"), alpha("--img-sat"), alpha("--anim-speed"), alpha("--anim-depth"),
           image("hero-bg"), image("ridge-photo"),

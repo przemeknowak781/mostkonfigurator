@@ -35,6 +35,7 @@
   --hero-ridge: #0d0d0d;
   --hero-sun: #ff3300;
   --hero-halo: #ff4000;
+  --hero-wash: #ff4000;
   --hero-trail: #ff6600;
   --hero-ov-sun: 100%;
   --hero-ov-wash: 100%;
@@ -227,10 +228,15 @@ html:has(.is-design-preview) {
   filter: hue-rotate(var(--img-hue, 0deg)) saturate(calc(var(--img-sat, 100%) * 0.94)) contrast(1.06) brightness(0.78);
 }
 
+/* WASH — its own editable colour (--hero-wash) and a much wider reach than
+   before: the two warm radials grew ~2x (now viewport-scaled so the glow
+   keeps spreading on large screens) and their falloffs run further out
+   (85% / 90%), so the light bleeds across most of the hero instead of
+   staying a tight pool bottom-left. Intensity still rides --hero-ov-wash. */
 .is-design-preview .hero-wash {
   background:
-    radial-gradient(800px 520px at 14% 64%, color-mix(in srgb, color-mix(in srgb, var(--hero-halo) 26%, transparent) var(--hero-ov-wash, 100%), transparent), transparent 66%),
-    radial-gradient(700px 460px at 60% 56%, color-mix(in srgb, color-mix(in srgb, var(--hero-sun) 12%, transparent) var(--hero-ov-wash, 100%), transparent), transparent 72%),
+    radial-gradient(min(1600px, 108vw) min(1080px, 82vh) at 16% 62%, color-mix(in srgb, color-mix(in srgb, var(--hero-wash) 30%, transparent) var(--hero-ov-wash, 100%), transparent), transparent 85%),
+    radial-gradient(min(1400px, 94vw) min(960px, 74vh) at 58% 54%, color-mix(in srgb, color-mix(in srgb, var(--hero-wash) 15%, transparent) var(--hero-ov-wash, 100%), transparent), transparent 90%),
     linear-gradient(90deg, rgba(4, 6, 12, 0.88) 0%, rgba(11, 14, 25, 0.6) 38%, rgba(18, 20, 31, 0.22) 72%, rgba(8, 10, 17, 0.32) 100%),
     linear-gradient(180deg, rgba(5, 8, 15, 0.42) 0%, rgba(17, 20, 31, 0.05) 44%, transparent 100%);
 }
