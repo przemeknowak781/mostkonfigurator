@@ -679,6 +679,11 @@
         desc: "Wyciszone numery i sygnały w kolorze tekstu akcentowego, plus tło karty.",
         controls: [color("--text-accent"), color("--light"), color("--orange"), color("--glow")],
       },
+      accent: {
+        label: "Akcent pomarańczowy",
+        desc: "DNA marki: trzy natężenia ciepła — Orange (sygnał/CTA), Orange Soft (półton) i Trail Glow (światło szlaku) — plus światło tekstu.",
+        controls: [color("--orange"), color("--orange-soft"), color("--glow"), color("--light"), color("--text-accent")],
+      },
       segments: {
         label: "Segmenty klientów",
         desc: "Akcenty tras Founders / Companies / Investors i tło paneli.",
