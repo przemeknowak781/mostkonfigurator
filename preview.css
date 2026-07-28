@@ -1749,20 +1749,37 @@ html:has(.is-design-preview) {
   padding-bottom: clamp(60px, 8vh, 96px);
 }
 
-.dp-accent .dp-head {
-  margin-bottom: clamp(26px, 4vh, 40px);
+/* Two columns: the principle on the left, the live example on the right.
+   The orange accent appears ONLY in the example ("One") — the heading stays
+   neutral, so the section obeys its own "one accent per view" rule. */
+.dp-accent__intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(28px, 4vw, 64px);
+  max-width: 1320px;
+  margin: 0 auto clamp(28px, 4.5vh, 48px);
 }
 
-.dp-accent__hot {
-  color: var(--orange);
+.dp-accent__lead {
+  text-align: left;
 }
 
-/* Showcase — the "one word carries the weight" principle, centred. */
+.dp-accent__title {
+  text-align: left;
+}
+
+.dp-accent__lede {
+  max-width: 46ch;
+  margin: 18px 0 0;
+  text-align: left;
+}
+
+/* Showcase — the "one word carries the weight" principle, fills its column. */
 .dp-accent__showcase {
   position: relative;
-  max-width: 940px;
-  margin: 0 auto clamp(24px, 3.5vh, 38px);
-  padding: clamp(24px, 3.4vw, 44px) clamp(24px, 4vw, 56px);
+  margin: 0;
+  padding: clamp(26px, 3.4vw, 48px) clamp(24px, 3vw, 44px);
   text-align: center;
   border-radius: 14px;
   border: 1px solid color-mix(in srgb, var(--light) 8%, transparent);
@@ -2421,6 +2438,19 @@ body.dp-dock-pinned .dp-toast {
   }
   .dp-accent__grid {
     grid-template-columns: 1fr;
+  }
+  .dp-accent__intro {
+    grid-template-columns: 1fr;
+    gap: clamp(22px, 4vh, 34px);
+  }
+  .dp-accent__lead,
+  .dp-accent__title,
+  .dp-accent__lede {
+    text-align: center;
+  }
+  .dp-accent__lede {
+    max-width: 52ch;
+    margin-inline: auto;
   }
   .dp-type__grid {
     grid-template-columns: 1fr;
