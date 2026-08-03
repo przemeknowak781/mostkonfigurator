@@ -1738,6 +1738,108 @@ html:has(.is-design-preview) {
   background: linear-gradient(90deg, color-mix(in srgb, var(--text-accent) 38%, transparent), transparent);
 }
 
+/* 07 — architecture as TEXTURE (full-width tile). Four stock shots cross-fade
+   once a second so the wall reads as a living pattern, not a gallery: heavily
+   desaturated and duotone-tinted with the palette, overlaid with a faint
+   structural grid — we borrow the rhythm of concrete/glass/steel, never the
+   building itself. */
+.dp-decision--wide {
+  grid-column: 1 / -1;
+}
+
+.dp-arch {
+  flex-direction: row;
+  align-items: stretch;
+  gap: clamp(20px, 2.4vw, 40px);
+  padding: 14px;
+}
+
+.dp-arch__stage {
+  flex: 1 1 56%;
+  height: auto;
+  min-height: clamp(210px, 22vw, 300px);
+  margin: 0;
+}
+
+.dp-arch__frames {
+  position: absolute;
+  inset: 0;
+}
+
+.dp-arch__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  /* Read as texture, not a photographed object: near-monochrome and dimmed
+     so the palette duotone above does the tinting. */
+  filter: grayscale(0.82) contrast(1.08) brightness(0.6);
+  animation: dp-arch-cross 4s linear infinite;
+}
+
+/* First frame stays lit when animations are off (reduced motion). */
+.dp-arch__frame:first-child {
+  opacity: 1;
+}
+
+@keyframes dp-arch-cross {
+  0% { opacity: 0; }
+  6% { opacity: 1; }
+  25% { opacity: 1; }
+  31% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Duotone spun from the palette — cool navy across the body, warm accent
+   welling from the lower-left, so the texture belongs to the scene. */
+.dp-arch__duotone {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  /* Normal blend, semi-opaque: a warm accent pool wells from the lower-left
+     over a cool navy field — a palette duotone laid on the dark grayscale
+     texture, without a blend mode washing it back out. */
+  background:
+    radial-gradient(120% 135% at 10% 112%, color-mix(in srgb, color-mix(in srgb, var(--orange) 62%, transparent) var(--ov-wash, 100%), transparent), transparent 56%),
+    linear-gradient(125deg, color-mix(in srgb, var(--navy-deep) 34%, transparent) 0%, color-mix(in srgb, var(--navy-deep) 72%, transparent) 100%);
+}
+
+/* Faint structural grid — the "faktura" made explicit. */
+.dp-arch__grid-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  background:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--light) 8%, transparent) 0 1px, transparent 1px clamp(48px, 6vw, 72px)),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--light) 6%, transparent) 0 1px, transparent 1px clamp(48px, 6vw, 72px));
+}
+
+.dp-arch__body {
+  flex: 1 1 44%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(6px, 1vw, 20px) clamp(4px, 0.8vw, 14px);
+}
+
+@media (max-width: 1080px) {
+  .dp-arch {
+    flex-direction: column;
+  }
+  .dp-arch__stage {
+    min-height: clamp(200px, 44vw, 260px);
+  }
+  .dp-arch__body {
+    padding: 4px 8px 12px;
+  }
+}
+
 /* --------------------------------------------------------------------------
    ORANGE ACCENT — brand-DNA guidelines. Everything reads the live orange /
    orange-soft / glow tokens, so the whole section repaints with the palette.
