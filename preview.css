@@ -1743,22 +1743,29 @@ html:has(.is-design-preview) {
    desaturated and duotone-tinted with the palette, overlaid with a faint
    structural grid — we borrow the rhythm of concrete/glass/steel, never the
    building itself. */
+/* Full-width "feature" tile shared by the architecture and accent cards:
+   spans the grid and lays out as visual-left / copy-right. */
 .dp-decision--wide {
   grid-column: 1 / -1;
-}
-
-.dp-arch {
   flex-direction: row;
   align-items: stretch;
-  gap: clamp(20px, 2.4vw, 40px);
+  gap: clamp(20px, 2.4vw, 44px);
   padding: 14px;
 }
 
-.dp-arch__stage {
+.dp-decision--wide > .dp-decision__sample {
   flex: 1 1 56%;
   height: auto;
   min-height: clamp(210px, 22vw, 300px);
   margin: 0;
+}
+
+.dp-feature__body {
+  flex: 1 1 44%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(6px, 1vw, 20px) clamp(4px, 0.8vw, 16px);
 }
 
 .dp-arch__frames {
@@ -1802,22 +1809,33 @@ html:has(.is-design-preview) {
   background: radial-gradient(135% 130% at 50% 42%, transparent 58%, color-mix(in srgb, var(--navy-deep) 60%, transparent) 100%);
 }
 
-.dp-arch__body {
-  flex: 1 1 44%;
+/* Accent tile — the example stage: centred "One partner." on a dark panel
+   with a faint warm wash. A touch taller than the architecture tile. */
+.dp-accent-tile__stage {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(6px, 1vw, 20px) clamp(4px, 0.8vw, 14px);
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding: clamp(28px, 4vw, 56px);
+  background:
+    radial-gradient(130% 150% at 50% 0%, color-mix(in srgb, var(--orange) 11%, transparent), transparent 62%),
+    var(--dp-bg-bottom);
+}
+
+.dp-decision--wide.dp-accent-tile > .dp-decision__sample {
+  min-height: clamp(230px, 25vw, 340px);
 }
 
 @media (max-width: 1080px) {
-  .dp-arch {
+  .dp-decision--wide {
     flex-direction: column;
   }
-  .dp-arch__stage {
+  .dp-decision--wide > .dp-decision__sample {
     min-height: clamp(200px, 44vw, 260px);
   }
-  .dp-arch__body {
+  .dp-feature__body {
     padding: 4px 8px 12px;
   }
 }
@@ -1831,46 +1849,6 @@ html:has(.is-design-preview) {
 .dp-accent {
   padding-top: clamp(60px, 8vh, 96px);
   padding-bottom: clamp(60px, 8vh, 96px);
-}
-
-/* Two columns: the principle on the left, the live example on the right.
-   The orange accent appears ONLY in the example ("One") — the heading stays
-   neutral, so the section obeys its own "one accent per view" rule. */
-.dp-accent__intro {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: clamp(28px, 4vw, 64px);
-  max-width: 1320px;
-  margin: 0 auto clamp(28px, 4.5vh, 48px);
-}
-
-.dp-accent__lead {
-  text-align: left;
-}
-
-.dp-accent__title {
-  text-align: left;
-}
-
-.dp-accent__lede {
-  max-width: 46ch;
-  margin: 18px 0 0;
-  text-align: left;
-}
-
-/* Showcase — the "one word carries the weight" principle, fills its column. */
-.dp-accent__showcase {
-  position: relative;
-  margin: 0;
-  padding: clamp(26px, 3.4vw, 48px) clamp(24px, 3vw, 44px);
-  text-align: center;
-  border-radius: 14px;
-  border: 1px solid color-mix(in srgb, var(--light) 8%, transparent);
-  background:
-    radial-gradient(120% 150% at 50% 0%, color-mix(in srgb, var(--orange) 12%, transparent), transparent 62%),
-    var(--dp-bg-bottom);
-  overflow: hidden;
 }
 
 .dp-accent__kicker {
@@ -1892,132 +1870,6 @@ html:has(.is-design-preview) {
   color: var(--orange-soft);
   font-style: italic;
   text-shadow: 0 0 24px color-mix(in srgb, var(--glow) 36%, transparent);
-}
-
-.dp-accent__caption {
-  max-width: 540px;
-  margin: clamp(14px, 2vh, 20px) auto 0;
-  color: var(--light-80);
-  font: 400 clamp(13px, 0.95vw, 15px) / 1.5 "Outfit", system-ui, sans-serif;
-  text-wrap: pretty;
-}
-
-/* Guideline cards */
-.dp-accent__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(14px, 1.5vw, 20px);
-  max-width: 1320px;
-  margin: 0 auto;
-}
-
-.dp-accent-card {
-  display: flex;
-  flex-direction: column;
-  padding: clamp(16px, 1.5vw, 22px);
-  border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--light) 8%, transparent);
-  background: var(--dp-bg-bottom);
-}
-
-.dp-accent-card__num {
-  margin: 0 0 10px;
-  color: color-mix(in srgb, var(--text-accent) 55%, transparent);
-  font: 500 10.5px / 1 "Outfit", system-ui, sans-serif;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
-
-.dp-accent-card__name {
-  margin: 0 0 12px;
-  color: var(--light);
-  font: 500 clamp(16px, 1.3vw, 19px) / 1.2 "Urbanist", system-ui, sans-serif;
-}
-
-.dp-accent-card__copy {
-  margin: 0;
-  color: var(--light-80);
-  font: 400 13px / 1.55 "Outfit", system-ui, sans-serif;
-}
-
-.dp-accent__uses,
-.dp-accent__scale,
-.dp-accent__rules {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-/* Placement list — glow bullet, echoing the trail checkpoints */
-.dp-accent__uses li {
-  position: relative;
-  padding-left: 18px;
-  color: var(--light-80);
-  font: 400 13px / 1.45 "Outfit", system-ui, sans-serif;
-}
-
-.dp-accent__uses li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--glow);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--glow) 60%, transparent);
-}
-
-/* Intensity scale — a live swatch dot per token */
-.dp-accent__scale li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  color: var(--light-80);
-  font: 400 12.5px / 1.45 "Outfit", system-ui, sans-serif;
-}
-
-.dp-accent__scale b {
-  color: var(--light);
-  font-weight: 600;
-}
-
-.dp-accent__dot {
-  flex: none;
-  margin-top: 3px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--c);
-  box-shadow: 0 0 10px color-mix(in srgb, var(--c) 55%, transparent);
-}
-
-/* Do / don't rhythm rules */
-.dp-accent__rules li {
-  position: relative;
-  padding-left: 22px;
-  color: var(--light-80);
-  font: 400 13px / 1.45 "Outfit", system-ui, sans-serif;
-}
-
-.dp-accent__rules li::before {
-  position: absolute;
-  left: 0;
-  top: -1px;
-  font: 700 15px / 1.5 "Outfit", system-ui, sans-serif;
-}
-
-.dp-accent__rules .is-do::before {
-  content: "+";
-  color: var(--glow);
-}
-
-.dp-accent__rules .is-dont::before {
-  content: "×";
-  color: color-mix(in srgb, var(--purple-light) 82%, white);
 }
 
 /* --------------------------------------------------------------------------
@@ -2502,9 +2354,6 @@ body.dp-dock-pinned .dp-toast {
   .dp-swatches {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .dp-accent__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 1080px) {
@@ -2519,22 +2368,6 @@ body.dp-dock-pinned .dp-toast {
   .dp-decisions__grid,
   .dp-overlays {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .dp-accent__grid {
-    grid-template-columns: 1fr;
-  }
-  .dp-accent__intro {
-    grid-template-columns: 1fr;
-    gap: clamp(22px, 4vh, 34px);
-  }
-  .dp-accent__lead,
-  .dp-accent__title,
-  .dp-accent__lede {
-    text-align: center;
-  }
-  .dp-accent__lede {
-    max-width: 52ch;
-    margin-inline: auto;
   }
   .dp-type__grid {
     grid-template-columns: 1fr;
