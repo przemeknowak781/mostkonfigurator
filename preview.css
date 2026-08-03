@@ -1773,10 +1773,10 @@ html:has(.is-design-preview) {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  /* Read as texture, not a photographed object: near-monochrome and dimmed
-     so the palette duotone above does the tinting. */
-  filter: grayscale(0.82) contrast(1.08) brightness(0.6);
-  animation: dp-arch-cross 4s linear infinite;
+  /* We don't tint the photos — they're chosen to already sit in the palette
+     (warm light, cool shadows). Only a light, neutral grade for cohesion. */
+  filter: contrast(1.04) brightness(0.9) saturate(0.96);
+  animation: dp-arch-cross 12s linear infinite;
 }
 
 /* First frame stays lit when animations are off (reduced motion). */
@@ -1792,32 +1792,14 @@ html:has(.is-design-preview) {
   100% { opacity: 0; }
 }
 
-/* Duotone spun from the palette — cool navy across the body, warm accent
-   welling from the lower-left, so the texture belongs to the scene. */
-.dp-arch__duotone {
+/* No palette duotone — just a soft neutral vignette so the tile grounds
+   into the card and its edges don't cut hard. */
+.dp-arch__vignette {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  /* Normal blend, semi-opaque: a warm accent pool wells from the lower-left
-     over a cool navy field — a palette duotone laid on the dark grayscale
-     texture, without a blend mode washing it back out. */
-  background:
-    radial-gradient(120% 135% at 10% 112%, color-mix(in srgb, color-mix(in srgb, var(--orange) 62%, transparent) var(--ov-wash, 100%), transparent), transparent 56%),
-    linear-gradient(125deg, color-mix(in srgb, var(--navy-deep) 34%, transparent) 0%, color-mix(in srgb, var(--navy-deep) 72%, transparent) 100%);
-}
-
-/* Faint structural grid — the "faktura" made explicit. */
-.dp-arch__grid-lines {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  opacity: 0.5;
-  mix-blend-mode: soft-light;
-  background:
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--light) 8%, transparent) 0 1px, transparent 1px clamp(48px, 6vw, 72px)),
-    repeating-linear-gradient(0deg, color-mix(in srgb, var(--light) 6%, transparent) 0 1px, transparent 1px clamp(48px, 6vw, 72px));
+  background: radial-gradient(135% 130% at 50% 42%, transparent 58%, color-mix(in srgb, var(--navy-deep) 60%, transparent) 100%);
 }
 
 .dp-arch__body {
