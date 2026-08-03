@@ -1845,12 +1845,6 @@ html:has(.is-design-preview) {
    orange-soft / glow tokens, so the whole section repaints with the palette.
    -------------------------------------------------------------------------- */
 
-/* Compact section: tighter top/bottom than the default dp-section rhythm. */
-.dp-accent {
-  padding-top: clamp(60px, 8vh, 96px);
-  padding-bottom: clamp(60px, 8vh, 96px);
-}
-
 .dp-accent__kicker {
   margin: 0 0 12px;
   color: color-mix(in srgb, var(--text-accent) 62%, transparent);
