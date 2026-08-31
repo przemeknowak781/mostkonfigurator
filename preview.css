@@ -404,12 +404,6 @@ html:has(.is-design-preview) {
     radial-gradient(130% 85% at 52% 116%, color-mix(in srgb, var(--hero-halo) 14%, transparent), transparent 82%);
 }
 
-/* Base warm aurora drifting low on the left: recolour it through the halo
-   token so custom palettes stay coherent. */
-.is-design-preview .hero-glow::before {
-  background: color-mix(in srgb, var(--hero-halo) 20%, transparent);
-}
-
 /* The climbers' sun animates its own opacity, so intensity is folded into
    the gradient stops instead (nested color-mix scaled by --hero-ov-sun). */
 .is-design-preview .hero-climbers-sun {

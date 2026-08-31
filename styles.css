@@ -371,7 +371,7 @@ body.menu-open {
 .hero-wash {
   z-index: 1;
   background:
-    linear-gradient(180deg, rgba(5, 13, 25, 0.88) 0%, rgba(8, 17, 31, 0.64) 26%, rgba(64, 56, 60, 0.5) 48%, rgba(126, 94, 74, 0.44) 74%, rgba(90, 58, 44, 0.42) 100%),
+    linear-gradient(180deg, rgba(5, 13, 25, 0.88) 0%, rgba(8, 17, 31, 0.64) 26%, rgba(44, 38, 44, 0.46) 48%, rgba(126, 94, 74, 0.4) 74%, rgba(90, 58, 44, 0.4) 100%),
     radial-gradient(980px 620px at 30% 62%, rgba(178, 118, 88, 0.24), rgba(120, 74, 54, 0.12) 48%, transparent 74%),
     radial-gradient(820px 460px at 90% 18%, rgba(9, 18, 33, 0.4), rgba(8, 11, 19, 0.1) 58%, transparent 82%),
     linear-gradient(90deg, rgba(8, 11, 19, 0.6), rgba(8, 11, 19, 0.24) 44%, rgba(8, 11, 19, 0.06) 74%, transparent 100%);
@@ -450,22 +450,6 @@ body.menu-open {
   opacity: 0.3;
   translate: 0 calc(var(--scroll-y, 0px) * 0.08);
   animation: hero-haze-drift 14s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate;
-}
-
-/* Creamy latte haze bridging the sun core and the climbers' halo. */
-.hero-glow::before {
-  content: "";
-  position: absolute;
-  top: 34vh;
-  left: 26%;
-  width: 52vw;
-  height: 36vh;
-  border-radius: 999px;
-  background: rgba(226, 178, 148, 0.18);
-  filter: blur(34px);
-  mix-blend-mode: screen;
-  opacity: 0.32;
-  animation: hero-haze-drift 18s cubic-bezier(0.4, 0, 0.6, 1) -6s infinite alternate;
 }
 
 @keyframes hero-sun-breathe {
