@@ -6577,39 +6577,49 @@ body.menu-open {
   z-index: 0;
 }
 
+/* Mirrored and graded like the homepage hero: bright photo, additive
+   light, navy-to-latte scrim instead of a dark multiply-era veil. */
 .aud-hero__photo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.95) brightness(0.7);
+  transform: scaleX(-1);
+  filter: saturate(1) contrast(1.08) brightness(0.94);
 }
 
 .aud-hero__wash {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(900px 540px at 18% 28%, rgba(255, 97, 44, 0.5), transparent 70%),
-    linear-gradient(180deg, rgba(8, 11, 19, 0.45) 0%, rgba(8, 11, 19, 0.65) 70%, rgba(8, 11, 19, 0.96) 100%);
+    linear-gradient(180deg, rgba(5, 13, 25, 0.86) 0%, rgba(8, 17, 31, 0.6) 30%, rgba(44, 38, 44, 0.42) 52%, rgba(126, 94, 74, 0.34) 78%, rgba(90, 58, 44, 0.34) 100%),
+    linear-gradient(90deg, rgba(8, 11, 19, 0.66), rgba(8, 11, 19, 0.3) 44%, rgba(8, 11, 19, 0.08) 72%, transparent 100%),
+    linear-gradient(180deg, transparent 55%, rgba(8, 11, 19, 0.52) 86%, rgba(8, 11, 19, 0.9) 100%);
 }
 
 .aud-hero--founders .aud-hero__wash {
   background:
-    radial-gradient(900px 540px at 18% 28%, rgba(255, 97, 44, 0.6), transparent 70%),
-    linear-gradient(180deg, rgba(48, 16, 8, 0.4) 0%, rgba(8, 11, 19, 0.7) 70%, rgba(8, 11, 19, 0.95) 100%);
+    radial-gradient(760px 480px at 82% 18%, rgba(209, 126, 95, 0.28), transparent 72%),
+    linear-gradient(180deg, rgba(5, 13, 25, 0.86) 0%, rgba(8, 17, 31, 0.6) 30%, rgba(44, 38, 44, 0.42) 52%, rgba(126, 94, 74, 0.34) 78%, rgba(90, 58, 44, 0.34) 100%),
+    linear-gradient(90deg, rgba(8, 11, 19, 0.66), rgba(8, 11, 19, 0.3) 44%, rgba(8, 11, 19, 0.08) 72%, transparent 100%),
+    linear-gradient(180deg, transparent 55%, rgba(8, 11, 19, 0.52) 86%, rgba(8, 11, 19, 0.9) 100%);
 }
 
 .aud-hero--companies .aud-hero__wash {
   background:
-    radial-gradient(900px 540px at 78% 30%, rgba(155, 139, 149, 0.5), transparent 70%),
-    linear-gradient(180deg, rgba(40, 30, 38, 0.5) 0%, rgba(8, 11, 19, 0.7) 70%, rgba(8, 11, 19, 0.95) 100%);
+    radial-gradient(760px 480px at 82% 18%, rgba(155, 139, 149, 0.3), transparent 72%),
+    linear-gradient(180deg, rgba(5, 13, 25, 0.86) 0%, rgba(8, 17, 31, 0.6) 30%, rgba(44, 38, 44, 0.42) 52%, rgba(126, 94, 74, 0.34) 78%, rgba(90, 58, 44, 0.34) 100%),
+    linear-gradient(90deg, rgba(8, 11, 19, 0.66), rgba(8, 11, 19, 0.3) 44%, rgba(8, 11, 19, 0.08) 72%, transparent 100%),
+    linear-gradient(180deg, transparent 55%, rgba(8, 11, 19, 0.52) 86%, rgba(8, 11, 19, 0.9) 100%);
 }
 
 .aud-hero--investors .aud-hero__wash {
   background:
-    radial-gradient(900px 540px at 78% 30%, rgba(91, 122, 176, 0.5), transparent 70%),
-    linear-gradient(180deg, rgba(20, 30, 56, 0.55) 0%, rgba(8, 11, 19, 0.7) 70%, rgba(8, 11, 19, 0.95) 100%);
+    radial-gradient(760px 480px at 82% 18%, rgba(91, 122, 176, 0.3), transparent 72%),
+    linear-gradient(180deg, rgba(5, 13, 25, 0.86) 0%, rgba(8, 17, 31, 0.6) 30%, rgba(44, 38, 44, 0.42) 52%, rgba(126, 94, 74, 0.34) 78%, rgba(90, 58, 44, 0.34) 100%),
+    linear-gradient(90deg, rgba(8, 11, 19, 0.66), rgba(8, 11, 19, 0.3) 44%, rgba(8, 11, 19, 0.08) 72%, transparent 100%),
+    linear-gradient(180deg, transparent 55%, rgba(8, 11, 19, 0.52) 86%, rgba(8, 11, 19, 0.9) 100%);
 }
 
 .aud-hero__noise {
@@ -6655,15 +6665,20 @@ body.menu-open {
   height: auto;
 }
 
+/* Low warm sun in the latte pipeline: plus-lighter adds light near the
+   ridge line instead of painting a matte orange disc over the photo. */
 .aud-hero__sun {
   position: absolute;
-  top: 16%;
-  left: 14%;
-  width: clamp(220px, 26vw, 380px);
-  height: clamp(220px, 26vw, 380px);
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 176, 119, 0.5), rgba(255, 97, 44, 0.18) 45%, transparent 70%);
-  filter: blur(10px);
+  bottom: 6%;
+  left: -10%;
+  width: min(72vw, 1120px);
+  height: min(48vh, 520px);
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at 45% 55%, rgba(250, 160, 100, 0.9), rgba(204, 96, 52, 0.66) 32%, rgba(139, 66, 39, 0.34) 54%, transparent 80%);
+  filter: blur(26px) saturate(0.72);
+  mix-blend-mode: plus-lighter;
+  opacity: 0.55;
   z-index: 1;
 }
 
@@ -6849,7 +6864,7 @@ body.menu-open {
   transform: translate(-50%, -50%);
   will-change: transform;
   /* Desaturate + darken â€” the colour overlay does the tinting */
-  filter: saturate(0.08) brightness(0.48);
+  filter: saturate(0.7) brightness(0.68);
 }
 
 /* Duotone colour overlay â€” mirrors each page's accent palette */
@@ -6864,9 +6879,10 @@ body.menu-open {
 }
 
 .page--companies .aud-bleed::after {
-  /* Companies: muted dusty mauve/purple */
+  /* Companies: muted dusty mauve/purple, translucent so the local
+     architecture photo shows through */
   background:
-    linear-gradient(155deg, rgba(148, 122, 138, 0.88) 0%, rgba(110, 88, 108, 0.74) 55%, rgba(30, 20, 32, 0.88) 100%);
+    linear-gradient(155deg, rgba(148, 122, 138, 0.46) 0%, rgba(110, 88, 108, 0.34) 55%, rgba(30, 20, 32, 0.72) 100%);
 }
 
 .page--investors .aud-bleed::after {
@@ -6997,6 +7013,30 @@ body.menu-open {
   max-width: 420px;
 }
 
+.aud-expertise__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  color: rgba(28, 20, 25, 0.66);
+  font: 500 12px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 200ms ease, gap 200ms ease;
+}
+
+.aud-expertise__more svg {
+  width: 18px;
+  height: 18px;
+}
+
+.aud-expertise__more:hover,
+.aud-expertise__more:focus-visible {
+  color: #1c1419;
+  gap: 14px;
+}
+
 .aud-expertise__list-wrap {
   position: relative;
   display: grid;
@@ -7067,15 +7107,32 @@ body.menu-open {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.92) brightness(0.65);
+  transform: scaleX(-1);
+  filter: saturate(1) contrast(1.06) brightness(0.9);
 }
 
 .aud-grow__wash {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(720px 480px at 24% 60%, rgba(255, 97, 44, 0.4), transparent 70%),
-    linear-gradient(180deg, rgba(8, 11, 19, 0.45) 0%, rgba(8, 11, 19, 0.78) 100%);
+    radial-gradient(900px 520px at 30% 62%, rgba(178, 118, 88, 0.2), transparent 74%),
+    linear-gradient(180deg, rgba(5, 13, 25, 0.8) 0%, rgba(8, 17, 31, 0.52) 34%, rgba(44, 38, 44, 0.34) 58%, rgba(8, 11, 19, 0.64) 100%);
+}
+
+/* Additive warm glow above the ridge line, matching the hero pipeline. */
+.aud-grow__bg::after {
+  content: "";
+  position: absolute;
+  left: 4%;
+  bottom: 12%;
+  width: min(64vw, 980px);
+  height: min(46vh, 440px);
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at 45% 55%, rgba(250, 160, 100, 0.85), rgba(204, 96, 52, 0.6) 34%, rgba(139, 66, 39, 0.3) 56%, transparent 80%);
+  filter: blur(28px) saturate(0.72);
+  mix-blend-mode: plus-lighter;
+  opacity: 0.56;
 }
 
 .aud-grow__ridge {
