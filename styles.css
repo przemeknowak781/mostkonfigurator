@@ -371,12 +371,12 @@ body.menu-open {
 .hero-wash {
   z-index: 1;
   background:
-    linear-gradient(180deg, rgba(5, 13, 25, 0.9) 0%, rgba(8, 17, 31, 0.78) 30%, rgba(41, 36, 42, 0.56) 52%, rgba(121, 64, 43, 0.5) 74%, rgba(55, 24, 17, 0.55) 100%),
-    radial-gradient(980px 620px at 12% 62%, rgba(164, 84, 52, 0.34), rgba(104, 48, 32, 0.18) 48%, transparent 74%),
-    radial-gradient(900px 520px at 82% 32%, rgba(9, 18, 33, 0.5), rgba(8, 11, 19, 0.14) 58%, transparent 82%),
-    linear-gradient(90deg, rgba(8, 11, 19, 0.74), rgba(8, 11, 19, 0.34) 46%, rgba(8, 11, 19, 0.1) 76%, transparent 100%);
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 50%, rgba(0, 0, 0, 0.4) 64%, transparent 82%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 50%, rgba(0, 0, 0, 0.4) 64%, transparent 82%);
+    linear-gradient(180deg, rgba(5, 13, 25, 0.88) 0%, rgba(8, 17, 31, 0.68) 28%, rgba(41, 36, 42, 0.42) 50%, rgba(121, 64, 43, 0.38) 74%, rgba(55, 24, 17, 0.42) 100%),
+    radial-gradient(980px 620px at 30% 62%, rgba(164, 84, 52, 0.28), rgba(104, 48, 32, 0.14) 48%, transparent 74%),
+    radial-gradient(820px 460px at 90% 18%, rgba(9, 18, 33, 0.4), rgba(8, 11, 19, 0.1) 58%, transparent 82%),
+    linear-gradient(90deg, rgba(8, 11, 19, 0.64), rgba(8, 11, 19, 0.28) 44%, rgba(8, 11, 19, 0.08) 74%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 40%, rgba(0, 0, 0, 0.38) 58%, transparent 78%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 40%, rgba(0, 0, 0, 0.38) 58%, transparent 78%);
 }
 
 /* Framing shade, masked away from the sunlit valley so the glow zone and
@@ -384,15 +384,15 @@ body.menu-open {
 .hero-vignette {
   z-index: 2;
   background:
-    linear-gradient(180deg, rgba(6, 12, 23, 0.46) 0%, rgba(6, 12, 23, 0.18) 24%, transparent 46%, rgba(8, 11, 19, 0.4) 100%),
-    radial-gradient(1120px 680px at 48% -8%, rgba(5, 13, 25, 0.6), transparent 70%),
-    linear-gradient(90deg, rgba(8, 11, 19, 0.22), transparent 52%);
+    linear-gradient(180deg, rgba(6, 12, 23, 0.34) 0%, rgba(6, 12, 23, 0.14) 22%, transparent 44%, rgba(8, 11, 19, 0.32) 100%),
+    radial-gradient(1120px 680px at 48% -8%, rgba(5, 13, 25, 0.48), transparent 70%),
+    linear-gradient(90deg, rgba(8, 11, 19, 0.16), transparent 50%);
   -webkit-mask-image:
-    radial-gradient(ellipse 58% 48% at 16% 66%, transparent 0%, transparent 34%, rgba(0, 0, 0, 0.42) 52%, #000 74%),
-    linear-gradient(180deg, #000 0%, #000 52%, rgba(0, 0, 0, 0.3) 66%, transparent 84%);
+    radial-gradient(ellipse 72% 54% at 36% 60%, transparent 0%, transparent 36%, rgba(0, 0, 0, 0.42) 56%, #000 78%),
+    linear-gradient(180deg, #000 0%, #000 44%, rgba(0, 0, 0, 0.28) 60%, transparent 80%);
   mask-image:
-    radial-gradient(ellipse 58% 48% at 16% 66%, transparent 0%, transparent 34%, rgba(0, 0, 0, 0.42) 52%, #000 74%),
-    linear-gradient(180deg, #000 0%, #000 52%, rgba(0, 0, 0, 0.3) 66%, transparent 84%);
+    radial-gradient(ellipse 72% 54% at 36% 60%, transparent 0%, transparent 36%, rgba(0, 0, 0, 0.42) 56%, #000 78%),
+    linear-gradient(180deg, #000 0%, #000 44%, rgba(0, 0, 0, 0.28) 60%, transparent 80%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
@@ -420,17 +420,17 @@ body.menu-open {
    over it, so the valley haze brightens without muddying the ridges. */
 .hero-glow__sun {
   position: absolute;
-  left: -26%;
-  bottom: 4%;
-  width: min(82vw, 1240px);
-  height: min(72vh, 820px);
+  left: -2%;
+  bottom: 8%;
+  width: min(104vw, 1680px);
+  height: min(64vh, 760px);
   border-radius: 999px;
   background:
-    radial-gradient(ellipse at 43% 42%, rgba(246, 146, 88, 0.94), rgba(204, 96, 52, 0.78) 26%, rgba(139, 66, 39, 0.42) 48%, rgba(86, 38, 26, 0.18) 66%, transparent 84%);
+    radial-gradient(ellipse at 48% 44%, rgba(246, 146, 88, 0.94), rgba(204, 96, 52, 0.78) 26%, rgba(139, 66, 39, 0.42) 48%, rgba(86, 38, 26, 0.18) 66%, transparent 84%);
   filter: blur(26px) saturate(0.78);
   mix-blend-mode: plus-lighter;
   opacity: 0.68;
-  transform-origin: 42% 50%;
+  transform-origin: 46% 50%;
   translate: 0 calc(var(--scroll-y, 0px) * 0.14);
   will-change: transform, opacity;
   animation: hero-sun-breathe 9s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
@@ -452,12 +452,12 @@ body.menu-open {
   animation: hero-haze-drift 14s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate;
 }
 
-/* Faint warm aurora drifting low on the left, echoing the sun. */
+/* Faint warm aurora bridging the sun core and the climbers' halo. */
 .hero-glow::before {
   content: "";
   position: absolute;
-  top: 44vh;
-  left: -16%;
+  top: 34vh;
+  left: 26%;
   width: 52vw;
   height: 36vh;
   border-radius: 999px;
@@ -774,6 +774,7 @@ body.menu-open {
   font: 500 clamp(30px, 2.9vw, 54px) / 1.06 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
   text-wrap: balance;
+  text-shadow: 0 2px 18px rgba(5, 8, 15, 0.5), 0 1px 4px rgba(5, 8, 15, 0.35);
 }
 
 .hero-title span {
@@ -786,6 +787,7 @@ body.menu-open {
   color: var(--light-80);
   font: 400 clamp(15px, 1.1vw, 18px) / 1.5 "Outfit", system-ui, sans-serif;
   letter-spacing: 0;
+  text-shadow: 0 2px 12px rgba(5, 8, 15, 0.55), 0 1px 3px rgba(5, 8, 15, 0.45);
 }
 
 .primary-cta {
