@@ -6765,8 +6765,14 @@ body.menu-open {
 
 .aud-hero__intro p {
   margin: 0;
-  color: rgba(255, 246, 240, 0.95);
+  color: rgba(255, 246, 240, 0.88);
   font: 400 clamp(15px, 1.05vw, 16.5px) / 1.65 "Outfit", system-ui, sans-serif;
+}
+
+.aud-hero__intro p.aud-hero__intro-lead {
+  margin: 0 0 10px;
+  color: #fff8f2;
+  font: 500 clamp(16.5px, 1.2vw, 19px) / 1.5 "Urbanist", system-ui, sans-serif;
 }
 
 /* AUD HELP â€” white grid */
