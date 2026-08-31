@@ -63,35 +63,49 @@
 
     <main class="audience-page">
 
-      <!-- AUDIENCE HERO: dark warm orange wash, mountain silhouette + climber -->
-      <section class="aud-hero aud-hero--founders" aria-labelledby="aud-hero-title">
-        <div class="aud-hero__bg" aria-hidden="true">
-          <img class="aud-hero__photo" src="background.webp" alt="" fetchpriority="high" decoding="async" />
-          <div class="aud-hero__wash"></div>
-          <div class="aud-hero__noise"></div>
+      <!-- AUDIENCE HERO: the homepage hero scene, founders edition (orange
+           overlay, orange ridge silhouette) -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-media" aria-hidden="true">
+          <img class="hero-bg" src="background.webp" alt="" fetchpriority="high" decoding="async" />
+          <div class="hero-wash"></div>
+          <div class="hero-vignette"></div>
+          <div class="hero-noise"></div>
         </div>
-        <div class="aud-hero__ridge" aria-hidden="true">
-          <img src="gora-bez-tla-2000px.svg" alt="" decoding="async" />
-        </div>
-        <div class="aud-hero__climber" aria-hidden="true">
-          <img src="climbers.svg" alt="" decoding="async" />
-        </div>
-        <div class="aud-hero__sun" aria-hidden="true"></div>
 
-        <div class="aud-hero__content">
-          <p class="aud-hero__eyebrow reveal">— for founders</p>
-          <h1 class="aud-hero__title reveal" id="aud-hero-title">
+        <div class="hero-glow" aria-hidden="true">
+          <span class="hero-glow__sun"></span>
+          <span class="hero-glow__haze"></span>
+        </div>
+
+        <div class="hero-ridges" aria-hidden="true">
+          <div class="hero-climbers-sun" aria-hidden="true"></div>
+
+          <img class="hero-ridges__img" src="gora-pomarancz-2000px.svg" alt="" decoding="async" />
+
+          <div class="hero-climbers" aria-hidden="true">
+            <img class="hero-climbers__img" src="climbers.svg" alt="" decoding="async" />
+          </div>
+        </div>
+
+        <div class="hero-content">
+          <p class="eyebrow reveal">— for founders</p>
+          <h1 class="hero-title reveal" id="hero-title">
             Legal support that grows<br>with your&nbsp;business.
           </h1>
-          <p class="aud-hero__copy reveal">
+          <p class="hero-tagline reveal">
             We make sure the legal side keeps pace&nbsp;— giving you clarity, confidence, and space to focus on what you are&nbsp;building.
           </p>
-          <a class="aud-hero__btn reveal" href="#what-we-help">
+          <a class="primary-cta reveal" href="#what-we-help">
             <span>Learn more</span>
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M6 12l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M10 4v12M6 12l4 4 4-4" />
+            </svg>
           </a>
         </div>
+      </section>
 
+      <div class="aud-intro-float">
         <div class="aud-hero__intro">
           <span class="aud-hero__intro-dot" aria-hidden="true"></span>
           <p class="aud-hero__intro-lead">
@@ -101,7 +115,20 @@
             From day one, we help you set the right foundations, attract talent, close clients, raise capital, and scale&nbsp;globally. Whether you are just getting started or preparing for your next round, we are with you at every&nbsp;stage.
           </p>
         </div>
-      </section>
+      </div>
+
+      <svg class="hero-trail" viewBox="0 0 2000 850" preserveAspectRatio="none" aria-hidden="true">
+        <path class="hero-trail__path" d="" />
+        <g class="hero-trail__leaders"></g>
+      </svg>
+
+      <!-- invisible stub: the trail builder requires the homepage's
+           ridge-edge leaders group to exist before it draws anything -->
+      <svg class="ridge-edge__leaders" viewBox="0 0 2000 100" preserveAspectRatio="none" aria-hidden="true" style="display:none"></svg>
+
+      <div class="hero-trail-points" aria-hidden="true"></div>
+
+      <div class="hero-trail-labels" aria-hidden="true"></div>
 
       <!-- WHAT WE HELP YOU ACHIEVE — white grid -->
       <section class="aud-help" id="what-we-help" aria-labelledby="aud-help-title">
