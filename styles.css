@@ -353,7 +353,7 @@ body.menu-open {
   height: 130%;
   object-fit: cover;
   object-position: 56% 78%;
-  filter: saturate(1.08) contrast(1.1) brightness(0.96);
+  filter: saturate(1) contrast(1.08) brightness(0.96);
   transform: scaleX(-1)
     translate3d(
       0,
@@ -371,8 +371,8 @@ body.menu-open {
 .hero-wash {
   z-index: 1;
   background:
-    linear-gradient(180deg, rgba(5, 13, 25, 0.88) 0%, rgba(8, 17, 31, 0.64) 26%, rgba(41, 36, 42, 0.36) 48%, rgba(121, 64, 43, 0.3) 74%, rgba(55, 24, 17, 0.34) 100%),
-    radial-gradient(980px 620px at 30% 62%, rgba(164, 84, 52, 0.2), rgba(104, 48, 32, 0.1) 48%, transparent 74%),
+    linear-gradient(180deg, rgba(5, 13, 25, 0.88) 0%, rgba(8, 17, 31, 0.64) 26%, rgba(64, 56, 60, 0.5) 48%, rgba(126, 94, 74, 0.44) 74%, rgba(90, 58, 44, 0.42) 100%),
+    radial-gradient(980px 620px at 30% 62%, rgba(178, 118, 88, 0.24), rgba(120, 74, 54, 0.12) 48%, transparent 74%),
     radial-gradient(820px 460px at 90% 18%, rgba(9, 18, 33, 0.4), rgba(8, 11, 19, 0.1) 58%, transparent 82%),
     linear-gradient(90deg, rgba(8, 11, 19, 0.6), rgba(8, 11, 19, 0.24) 44%, rgba(8, 11, 19, 0.06) 74%, transparent 100%);
   -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 34%, rgba(0, 0, 0, 0.35) 54%, transparent 76%);
@@ -426,10 +426,10 @@ body.menu-open {
   height: min(58vh, 700px);
   border-radius: 999px;
   background:
-    radial-gradient(ellipse at 48% 44%, rgba(246, 146, 88, 0.78), rgba(204, 96, 52, 0.58) 26%, rgba(139, 66, 39, 0.3) 48%, rgba(86, 38, 26, 0.12) 66%, transparent 84%);
-  filter: blur(26px) saturate(0.78);
+    radial-gradient(ellipse at 48% 44%, rgba(255, 208, 168, 0.9), rgba(246, 146, 88, 0.82) 18%, rgba(204, 96, 52, 0.68) 34%, rgba(139, 66, 39, 0.38) 52%, rgba(86, 38, 26, 0.16) 68%, transparent 84%);
+  filter: blur(26px) saturate(0.72);
   mix-blend-mode: plus-lighter;
-  opacity: 0.5;
+  opacity: 0.6;
   transform-origin: 46% 50%;
   translate: 0 calc(var(--scroll-y, 0px) * 0.14);
   will-change: transform, opacity;
@@ -452,7 +452,7 @@ body.menu-open {
   animation: hero-haze-drift 14s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate;
 }
 
-/* Faint warm aurora bridging the sun core and the climbers' halo. */
+/* Creamy latte haze bridging the sun core and the climbers' halo. */
 .hero-glow::before {
   content: "";
   position: absolute;
@@ -461,25 +461,25 @@ body.menu-open {
   width: 52vw;
   height: 36vh;
   border-radius: 999px;
-  background: rgba(172, 92, 58, 0.16);
+  background: rgba(226, 178, 148, 0.18);
   filter: blur(34px);
   mix-blend-mode: screen;
-  opacity: 0.26;
+  opacity: 0.32;
   animation: hero-haze-drift 18s cubic-bezier(0.4, 0, 0.6, 1) -6s infinite alternate;
 }
 
 @keyframes hero-sun-breathe {
   from {
-    opacity: 0.38;
+    opacity: 0.5;
     transform: translate(-1.2%, 1.4%) scale(0.96);
   }
 
   48% {
-    opacity: 0.62;
+    opacity: 0.78;
   }
 
   to {
-    opacity: 0.48;
+    opacity: 0.6;
     transform: translate(1.8%, -1%) scale(1.14);
   }
 }
