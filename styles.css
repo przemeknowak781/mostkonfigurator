@@ -6899,9 +6899,10 @@ body.menu-open {
 }
 
 .page--investors .aud-bleed::after {
-  /* Investors: steel blue */
+  /* Investors: steel blue, translucent so the local architecture photo
+     shows through */
   background:
-    linear-gradient(155deg, rgba(75, 108, 158, 0.88) 0%, rgba(48, 78, 130, 0.76) 55%, rgba(10, 16, 38, 0.88) 100%);
+    linear-gradient(155deg, rgba(75, 108, 158, 0.48) 0%, rgba(48, 78, 130, 0.36) 55%, rgba(10, 16, 38, 0.72) 100%);
 }
 
 
