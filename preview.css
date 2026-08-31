@@ -29,14 +29,16 @@
 
   /* HERO — independent scene tokens. The hero (plus its ridge-edge tail)
      reads ONLY these, so recoloring the global palette never repaints the
-     hero and vice versa. Defaults mirror the global palette's values at the
-     moment of the split, so out of the box both look identical. */
+     hero and vice versa. Defaults are tuned for the additive light pipeline
+     (screen/plus-lighter, no multiply): softer peach/amber cores that match
+     the Coming Soon grade — hot saturated reds are still reachable via the
+     pickers, they just no longer come baked in. */
   --hero-sky: #0e1016;
   --hero-ridge: #0d0d0d;
-  --hero-sun: #ff3300;
-  --hero-halo: #ff4000;
-  --hero-wash: #ff4000;
-  --hero-trail: #ff6600;
+  --hero-sun: #f69258;
+  --hero-halo: #cc6034;
+  --hero-wash: #a45434;
+  --hero-trail: #ffa86e;
   --hero-ov-sun: 100%;
   --hero-ov-wash: 100%;
   --hero-ov-trail: 100%;
@@ -225,14 +227,17 @@ html:has(.is-design-preview) {
 
 .is-design-preview .hero-bg {
   opacity: var(--ov-photo, 100%);
-  filter: hue-rotate(var(--img-hue, 0deg)) saturate(calc(var(--img-sat, 100%) * 0.94)) contrast(1.06) brightness(0.78);
+  filter: hue-rotate(var(--img-hue, 0deg)) saturate(calc(var(--img-sat, 100%) * 1.04)) contrast(1.08) brightness(0.94);
 }
 
 /* WASH — its own editable colour (--hero-wash) and a much wider reach than
    before: the two warm radials grew ~2x (now viewport-scaled so the glow
    keeps spreading on large screens) and their falloffs run further out
    (85% / 90%), so the light bleeds across most of the hero instead of
-   staying a tight pool bottom-left. Intensity still rides --hero-ov-wash. */
+   staying a tight pool bottom-left. Intensity still rides --hero-ov-wash.
+   The layer is no longer multiplied into the photo: the base styles mask it
+   out over the ridges and blend it normally, so cranking the wash colour
+   tints the sky instead of burying the mountains in a dark sandstorm. */
 .is-design-preview .hero-wash {
   background:
     radial-gradient(min(1600px, 108vw) min(1080px, 82vh) at 16% 62%, color-mix(in srgb, color-mix(in srgb, var(--hero-wash) 30%, transparent) var(--hero-ov-wash, 100%), transparent), transparent 85%),
@@ -385,10 +390,24 @@ html:has(.is-design-preview) {
       transparent 88%);
 }
 
+/* The łuna haze was authored for the old full-bleed box, so pin that
+   geometry back explicitly (the base styles now use a compact top-right
+   aurora pill here). */
 .is-design-preview .hero-glow__haze {
+  inset: 16% -10% -10%;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  opacity: 0.7;
   background:
     radial-gradient(80% 72% at 24% 100%, color-mix(in srgb, var(--hero-halo) 26%, transparent), transparent 78%),
     radial-gradient(130% 85% at 52% 116%, color-mix(in srgb, var(--hero-halo) 14%, transparent), transparent 82%);
+}
+
+/* Base warm aurora drifting low on the left: recolour it through the halo
+   token so custom palettes stay coherent. */
+.is-design-preview .hero-glow::before {
+  background: color-mix(in srgb, var(--hero-halo) 20%, transparent);
 }
 
 /* The climbers' sun animates its own opacity, so intensity is folded into
@@ -1171,13 +1190,16 @@ html:has(.is-design-preview) {
   background-position: 56% 62%;
 }
 
+/* Sample tile mirrors the live wash: normal blending plus the vertical
+   fade-out mask, instead of the old multiply that darkened the photo. */
 .dp-overlay__wash {
   position: absolute;
   inset: 0;
   background:
     radial-gradient(70% 90% at 18% 78%, color-mix(in srgb, color-mix(in srgb, var(--orange) 34%, transparent) var(--ov-wash, 100%), transparent), transparent 70%),
     linear-gradient(180deg, color-mix(in srgb, var(--navy-deep) 72%, transparent) 0%, color-mix(in srgb, var(--navy-deep) 24%, transparent) 55%, color-mix(in srgb, var(--navy-deep) 58%, transparent) 100%);
-  mix-blend-mode: multiply;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 50%, rgba(0, 0, 0, 0.4) 64%, transparent 82%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 50%, rgba(0, 0, 0, 0.4) 64%, transparent 82%);
 }
 
 .dp-overlay__preview--trail svg {
