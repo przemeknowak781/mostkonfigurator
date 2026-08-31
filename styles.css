@@ -9104,32 +9104,31 @@ body.menu-open {
    its negative-z scene layers visible inside the section. */
 .page--founders .hero {
   isolation: isolate;
-  background: #c75b33;
+  background: #f2ab80;
 }
 
-/* Clean corporate sky: a saturated peach falling into light salmon.
+/* Washed corporate sky: pale peach falling into near-white salmon.
    The photo rides on top as pure greyscale multiplied into the
    gradient, so every pixel stays inside the salmon family - no browns
    from hue mixing. The mask keeps the top of the sky pure gradient. */
 .page--founders .hero-media {
-  background: linear-gradient(180deg, #c75b33 0%, #e8845a 36%, #f9a97e 62%, #ffc5a3 100%);
+  background: linear-gradient(180deg, #f2ab80 0%, #f9c6a4 38%, #ffdfc9 68%, #fff0e6 100%);
 }
 
 .page--founders .hero-bg {
   object-position: 50% 78%;
   filter: grayscale(1) brightness(1.3) contrast(1.03);
   mix-blend-mode: multiply;
-  opacity: 0.85;
+  opacity: 0.72;
   -webkit-mask-image: linear-gradient(180deg, transparent 26%, rgba(0, 0, 0, 0.4) 44%, #000 62%);
   mask-image: linear-gradient(180deg, transparent 26%, rgba(0, 0, 0, 0.4) 44%, #000 62%);
 }
 
-/* Only gentle deepening for nav and headline legibility - saturated
-   coral, never brown or black. */
+/* Soft white veils lift the nav and copy zones on the washed ground. */
 .page--founders .hero-wash {
   background:
-    linear-gradient(180deg, rgba(146, 56, 24, 0.3), rgba(146, 56, 24, 0.06) 18%, transparent 30%),
-    linear-gradient(90deg, rgba(150, 58, 26, 0.24), rgba(150, 58, 26, 0.09) 40%, transparent 68%);
+    linear-gradient(180deg, rgba(255, 243, 236, 0.5), transparent 24%),
+    linear-gradient(90deg, rgba(255, 246, 240, 0.55), rgba(255, 246, 240, 0.2) 42%, transparent 66%);
   -webkit-mask-image: none;
   mask-image: none;
 }
@@ -9141,7 +9140,7 @@ body.menu-open {
 }
 
 .page--founders .hero-glow__sun {
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 .page--founders .hero-glow__haze {
@@ -9149,49 +9148,79 @@ body.menu-open {
 }
 
 .page--founders .hero-ridges__img {
-  filter: drop-shadow(0 -24px 50px rgba(146, 56, 24, 0.28));
+  filter: drop-shadow(0 -22px 46px rgba(196, 124, 86, 0.35));
 }
 
-/* Palette-coherent trail: deep coral line and points on the light scene. */
+/* Palette-coherent trail: soft coral line and points on the washed scene. */
 .page--founders .hero-trail__path {
-  stroke: rgba(178, 70, 30, 0.85);
-  filter: drop-shadow(0 0 4px rgba(255, 197, 163, 0.5));
+  stroke: rgba(186, 84, 44, 0.66);
+  filter: drop-shadow(0 0 4px rgba(255, 214, 188, 0.6));
 }
 
 .page--founders .hero-trail__leader {
-  stroke: rgba(178, 70, 30, 0.38);
+  stroke: rgba(186, 84, 44, 0.32);
 }
 
 .page--founders .hero-trail-point {
-  background: #c25a2c;
+  background: #c97a4e;
   box-shadow:
-    0 0 0 3px rgba(194, 90, 44, 0.2),
-    0 0 12px rgba(194, 90, 44, 0.5),
-    0 0 26px rgba(255, 176, 122, 0.32);
+    0 0 0 3px rgba(201, 122, 78, 0.18),
+    0 0 12px rgba(201, 122, 78, 0.4),
+    0 0 26px rgba(255, 205, 173, 0.35);
 }
 
-/* Type and CTA on the light peach ground. */
+/* Black hero type on the washed ground; dark nav to match. */
 .page--founders .hero-content .eyebrow {
-  color: rgba(122, 44, 16, 0.85);
+  color: rgba(125, 48, 18, 0.85);
 }
 
 .page--founders .hero-title {
-  color: #fff;
-  text-shadow: 0 2px 16px rgba(146, 56, 24, 0.35);
+  color: #1d1310;
+  text-shadow: none;
 }
 
 .page--founders .hero-tagline {
-  color: rgba(255, 248, 243, 0.96);
-  text-shadow: 0 1px 10px rgba(146, 56, 24, 0.32);
+  color: rgba(29, 19, 16, 0.78);
+  text-shadow: none;
 }
 
 .page--founders .primary-cta {
-  background: rgba(122, 44, 16, 0.2);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 16px 44px -18px rgba(122, 44, 16, 0.5);
+  color: #1d1310;
+  background: rgba(255, 255, 255, 0.35);
+  border-color: rgba(29, 19, 16, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(29, 19, 16, 0.08), 0 16px 44px -20px rgba(150, 74, 34, 0.45);
+}
+
+.page--founders .top-nav .wordmark {
+  color: #241511;
+}
+
+.page--founders .top-nav__menu a {
+  color: rgba(36, 21, 17, 0.78);
+}
+
+.page--founders .top-nav__menu a:hover,
+.page--founders .top-nav__menu a:focus-visible,
+.page--founders .top-nav__menu a[aria-current="page"] {
+  color: #241511;
+}
+
+.page--founders .top-nav .nav-cta {
+  color: #241511;
+  border-color: rgba(36, 21, 17, 0.45);
 }
 
 .page--founders .aud-hero__intro {
-  background: linear-gradient(135deg, #c56a3e 0%, #a5512c 100%);
+  background: linear-gradient(135deg, #f3b78e 0%, #e79d72 100%);
+  box-shadow: 0 26px 60px -34px rgba(150, 74, 34, 0.5);
+}
+
+.page--founders .aud-hero__intro p {
+  color: rgba(62, 30, 14, 0.85);
+}
+
+.page--founders .aud-hero__intro p.aud-hero__intro-lead {
+  color: #3a1c0c;
 }
 
 /* The intro panel floats over the hero's lower edge, above the drawn
