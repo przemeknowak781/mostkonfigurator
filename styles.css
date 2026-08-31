@@ -6649,12 +6649,14 @@ body.menu-open {
   filter: drop-shadow(0 -6px 20px rgba(0, 0, 0, 0.45));
 }
 
+/* Anchored to the ridge crest (the silhouette's slope at ~64% across
+   scales with viewport width, so a vw offset keeps the feet planted). */
 .aud-hero__climber {
   position: absolute;
-  left: 36%;
-  bottom: 14%;
+  left: 58%;
+  bottom: 30.6vw;
   z-index: 2;
-  width: clamp(80px, 8vw, 120px);
+  width: clamp(100px, 10vw, 170px);
   height: auto;
   pointer-events: none;
   opacity: 0.92;
@@ -8177,7 +8179,7 @@ body.menu-open {
 }
 
 .page--audience .aud-help__item {
-  min-height: 214px;
+  min-height: 0;
   border: 0;
   border-radius: 0;
   background:
@@ -8186,10 +8188,9 @@ body.menu-open {
   color: #1c1419;
 }
 
+/* Figma cards hug their text - no ruled/dashed underline decor. */
 .page--audience .aud-help__item::after {
-  border-top-color: rgba(var(--aud-accent-rgb), 0.3);
-  border-bottom-color: rgba(var(--aud-accent-rgb), 0.12);
-  mix-blend-mode: multiply;
+  content: none;
 }
 
 .page--audience .aud-help__item:hover {
@@ -8216,29 +8217,23 @@ body.menu-open {
   border: 0;
 }
 
+/* Figma rows: plain text beside the trail, no card chrome, no numbers. */
 .page--audience .aud-expertise__list li {
-  min-height: 128px;
-  padding: 22px 22px 22px 58px;
-  border: 1px solid rgba(28, 20, 25, 0.12);
-  border-radius: 8px;
-  background:
-    linear-gradient(145deg, rgba(var(--aud-accent-rgb), 0.11), transparent 58%),
-    rgba(255, 255, 255, 0.5);
-  box-shadow: 0 16px 42px -34px rgba(28, 20, 25, 0.36);
+  min-height: 0;
+  padding: 14px 8px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   color: rgba(28, 20, 25, 0.84);
 }
 
 .page--audience .aud-expertise__list li:nth-last-child(-n + 2) {
-  border-bottom: 1px solid rgba(28, 20, 25, 0.12);
+  border-bottom: 0;
 }
 
 .page--audience .aud-expertise__list li::before {
-  top: 20px;
-  left: 20px;
-  width: 24px;
-  height: 24px;
-  border: 0;
-  background: rgba(var(--aud-accent-rgb), 0.14);
+  content: none;
 }
 
 @media (max-width: 920px) {
@@ -8330,14 +8325,10 @@ body.menu-open {
   gap: clamp(16px, 1.6vw, 24px);
 }
 
+/* Cards hug their text (per Figma); row stretch keeps each row even. */
 .page--audience .aud-help__item {
-  min-height: clamp(190px, 17vw, 244px);
-  padding: clamp(22px, 2.2vw, 34px);
-}
-
-.page--founders .aud-help__item:nth-last-child(-n + 3),
-.page--investors .aud-help__item:nth-last-child(-n + 3) {
-  min-height: clamp(170px, 14vw, 214px);
+  min-height: 0;
+  padding: clamp(22px, 2.2vw, 30px);
 }
 
 .page--founders .aud-help__item:nth-child(5),
@@ -8372,23 +8363,13 @@ body.menu-open {
 
 .page--audience .aud-bleed img {
   height: 128%;
-  filter: saturate(0.14) brightness(0.5) contrast(1.08);
+  filter: saturate(0.72) brightness(0.72) contrast(1.06);
 }
 
+/* The Figma frames show the architecture photo clean, edge to edge - no
+   grid overlay, no inset frame. */
 .page--audience .aud-bleed::before {
-  content: "";
-  position: absolute;
-  inset: clamp(18px, 2.4vw, 34px);
-  z-index: 2;
-  border: 1px solid rgba(240, 235, 233, 0.18);
-  border-radius: 22px;
-  background:
-    linear-gradient(90deg, rgba(240, 235, 233, 0.22) 0 1px, transparent 1px) 0 0 / 12.5% 100%,
-    linear-gradient(180deg, rgba(240, 235, 233, 0.16) 0 1px, transparent 1px) 0 0 / 100% 25%;
-  box-shadow: inset 0 0 0 1px rgba(var(--aud-accent-rgb), 0.18);
-  pointer-events: none;
-  mix-blend-mode: screen;
-  opacity: 0.76;
+  content: none;
 }
 
 .page--audience .aud-bleed::after {
@@ -8405,7 +8386,7 @@ body.menu-open {
 }
 
 .page--audience .aud-work__grid li {
-  min-height: clamp(244px, 20vw, 306px);
+  min-height: clamp(200px, 15vw, 250px);
   padding: clamp(24px, 2.4vw, 38px);
 }
 
@@ -8686,42 +8667,25 @@ body.menu-open {
 
 .page--audience .aud-expertise__list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(14px, 1.5vw, 20px);
+  grid-template-columns: 1fr;
+  gap: clamp(6px, 0.8vw, 12px);
   margin: 0;
   padding: 0;
   border: 0;
 }
 
 .page--audience .aud-expertise__list li {
-  min-height: clamp(132px, 10vw, 164px);
-  padding: 24px 24px 24px 62px;
-  border: 1px solid rgba(28, 20, 25, 0.12);
-  border-radius: 18px;
-  background:
-    linear-gradient(145deg, rgba(var(--aud-accent-rgb), 0.12), transparent 60%),
-    rgba(255, 255, 255, 0.55);
+  min-height: 0;
+  padding: 14px 8px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color: rgba(28, 20, 25, 0.84);
-  box-shadow: 0 18px 48px -42px rgba(28, 20, 25, 0.4);
+  box-shadow: none;
 }
 
 .page--audience .aud-expertise__list li::before {
-  top: 24px;
-  left: 24px;
-  width: 24px;
-  height: 24px;
-  border: 0;
-  border-radius: 10px;
-  background: rgba(var(--aud-accent-rgb), 0.14);
-  color: var(--aud-accent);
-}
-
-.page--companies .aud-expertise__list {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.page--companies .aud-expertise__list li {
-  min-height: clamp(126px, 9vw, 152px);
+  content: none;
 }
 
 @media (max-width: 1120px) {
@@ -8821,14 +8785,16 @@ body.menu-open {
   grid-column: 2;
 }
 
+/* Figma layout: the wavy accent trail runs beside a single column of
+   plain rows - restore the trail column instead of the card grid. */
 .page--audience .aud-expertise__list-wrap {
-  display: block;
-  grid-template-columns: none;
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
   min-width: 0;
 }
 
 .page--audience .aud-expertise__trail {
-  display: none;
+  display: block;
 }
 
 .page--audience .aud-expertise__copy {
@@ -8840,12 +8806,8 @@ body.menu-open {
 .page--audience .aud-expertise__list {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  grid-template-columns: 1fr;
   align-items: stretch;
-}
-
-.page--companies .aud-expertise__list {
-  grid-template-columns: repeat(3, minmax(190px, 1fr));
 }
 
 .page--audience .aud-expertise__list li {
@@ -8870,10 +8832,6 @@ body.menu-open {
 
   .page--audience .aud-expertise__copy {
     max-width: 640px;
-  }
-
-  .page--companies .aud-expertise__list {
-    grid-template-columns: repeat(2, minmax(240px, 1fr));
   }
 }
 
