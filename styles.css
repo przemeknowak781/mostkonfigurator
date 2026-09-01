@@ -9161,7 +9161,7 @@ body.menu-open {
   z-index: -1;
   inset: -14% -22% -16% -24%;
   background:
-    radial-gradient(56% 54% at 36% 44%, rgba(255, 247, 241, 0.9), rgba(255, 240, 231, 0.5) 55%, transparent 78%);
+    radial-gradient(54% 52% at 36% 44%, rgba(255, 247, 241, 0.55), rgba(255, 240, 231, 0.28) 55%, transparent 76%);
   filter: blur(12px);
   pointer-events: none;
 }
