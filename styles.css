@@ -9147,6 +9147,25 @@ body.menu-open {
   display: none;
 }
 
+/* Climbers parked for now (markup stays, easy to bring back). */
+.page--founders .hero-climbers,
+.page--founders .hero-climbers-sun {
+  display: none;
+}
+
+/* Soft drop glow behind the hero copy: lifts the black type off the
+   facade texture without boxing it in. */
+.page--founders .hero-content::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -14% -22% -16% -24%;
+  background:
+    radial-gradient(56% 54% at 36% 44%, rgba(255, 247, 241, 0.9), rgba(255, 240, 231, 0.5) 55%, transparent 78%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
 .page--founders .hero-ridges__img {
   filter: drop-shadow(0 -22px 46px rgba(196, 124, 86, 0.35));
 }
