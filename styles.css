@@ -6892,10 +6892,10 @@ body.menu-open {
 }
 
 .page--companies .aud-bleed::after {
-  /* Companies: muted dusty mauve/purple, translucent so the local
+  /* Companies: muted grey-brown taupe, translucent so the local
      architecture photo shows through */
   background:
-    linear-gradient(155deg, rgba(148, 122, 138, 0.42) 0%, rgba(110, 88, 108, 0.3) 55%, rgba(30, 20, 32, 0.58) 100%);
+    linear-gradient(155deg, rgba(138, 120, 106, 0.42) 0%, rgba(102, 88, 76, 0.3) 55%, rgba(26, 20, 16, 0.58) 100%);
 }
 
 .page--investors .aud-bleed::after {
@@ -9258,92 +9258,92 @@ body.menu-open {
   max-width: 760px;
 }
 
-/* --- Companies palette: washed dusty mauve (same construction, new hues) --- */
+/* --- Companies palette: washed grey-brown taupe (same construction, new hues) --- */
 .page--companies .hero {
-  background: #c2a0ac;
+  background: #b1a49c;
 }
 
 .page--companies .hero-media {
-  background: linear-gradient(180deg, #c2a0ac 0%, #d6bac2 38%, #ead8dc 68%, #f8eef0 100%);
+  background: linear-gradient(180deg, #b1a49c 0%, #c6bab3 38%, #dcd3cd 68%, #f2eeea 100%);
 }
 
 .page--companies .hero-wash {
   background:
-    linear-gradient(180deg, rgba(250, 240, 243, 0.5), transparent 24%),
-    linear-gradient(90deg, rgba(251, 243, 245, 0.55), rgba(251, 243, 245, 0.2) 42%, transparent 66%);
+    linear-gradient(180deg, rgba(247, 243, 240, 0.5), transparent 24%),
+    linear-gradient(90deg, rgba(249, 246, 243, 0.55), rgba(249, 246, 243, 0.2) 42%, transparent 66%);
 }
 
 .page--companies .hero-content::before {
   background: radial-gradient(
     54% 52% at 36% 44%,
-    rgba(252, 244, 246, 0.55),
-    rgba(248, 236, 240, 0.28) 55%,
+    rgba(250, 246, 243, 0.55),
+    rgba(244, 238, 233, 0.28) 55%,
     transparent 76%
   );
 }
 
 .page--companies .hero-ridges__img {
-  filter: drop-shadow(0 -22px 46px rgba(154, 116, 130, 0.35));
+  filter: drop-shadow(0 -22px 46px rgba(138, 120, 106, 0.35));
 }
 
 .page--companies .hero-content .eyebrow {
-  color: rgba(94, 50, 67, 0.9);
+  color: rgba(88, 68, 54, 0.9);
 }
 
 .page--companies .hero-title {
-  color: #1a1216;
+  color: #1a1512;
 }
 
 .page--companies .hero-tagline {
-  color: rgba(26, 18, 22, 0.78);
+  color: rgba(26, 21, 18, 0.78);
 }
 
 .page--companies .primary-cta {
-  color: #1a1216;
-  border-color: rgba(26, 18, 22, 0.4);
+  color: #1a1512;
+  border-color: rgba(26, 21, 18, 0.4);
   box-shadow:
-    inset 0 0 0 1px rgba(26, 18, 22, 0.08),
-    0 16px 44px -20px rgba(122, 74, 92, 0.45);
+    inset 0 0 0 1px rgba(26, 21, 18, 0.08),
+    0 16px 44px -20px rgba(108, 88, 72, 0.45);
 }
 
 .page--companies .top-nav .wordmark {
-  color: #221820;
+  color: #201a15;
 }
 
 .page--companies .top-nav__menu a {
-  color: rgba(34, 24, 32, 0.78);
+  color: rgba(32, 26, 21, 0.78);
 }
 
 .page--companies .top-nav__menu a:hover,
 .page--companies .top-nav__menu a[aria-current="page"] {
-  color: #221820;
+  color: #201a15;
 }
 
 .page--companies .top-nav .nav-cta {
-  color: #221820;
-  border-color: rgba(34, 24, 32, 0.45);
+  color: #201a15;
+  border-color: rgba(32, 26, 21, 0.45);
 }
 
 .page--companies .aud-hero__intro {
-  background: linear-gradient(135deg, #d9aebc 0%, #c08fa0 100%);
-  box-shadow: 0 26px 60px -34px rgba(122, 74, 92, 0.5);
+  background: linear-gradient(135deg, #c2b2a7 0%, #a8988b 100%);
+  box-shadow: 0 26px 60px -34px rgba(108, 88, 72, 0.5);
 }
 
 .page--companies .aud-hero__intro p {
-  color: rgba(56, 28, 38, 0.88);
+  color: rgba(48, 38, 30, 0.88);
 }
 
 .page--companies .aud-hero__intro p.aud-hero__intro-lead {
-  color: #2f1620;
+  color: #2a2018;
 }
 
 /* --- Investors palette: washed slate blue (same construction, new hues) --- */
 .page--investors .hero {
-  background: #9fb0ca;
+  background: #a3adbd;
 }
 
 .page--investors .hero-media {
-  background: linear-gradient(180deg, #9fb0ca 0%, #bcc8dc 38%, #dae1ec 68%, #f0f4f9 100%);
+  background: linear-gradient(180deg, #a3adbd 0%, #bec6d2 38%, #d9dee6 68%, #eef1f5 100%);
 }
 
 .page--investors .hero-wash {
@@ -9362,7 +9362,7 @@ body.menu-open {
 }
 
 .page--investors .hero-ridges__img {
-  filter: drop-shadow(0 -22px 46px rgba(112, 132, 164, 0.35));
+  filter: drop-shadow(0 -22px 46px rgba(108, 124, 146, 0.35));
 }
 
 .page--investors .hero-content .eyebrow {
@@ -9382,7 +9382,7 @@ body.menu-open {
   border-color: rgba(18, 22, 29, 0.4);
   box-shadow:
     inset 0 0 0 1px rgba(18, 22, 29, 0.08),
-    0 16px 44px -20px rgba(74, 96, 128, 0.45);
+    0 16px 44px -20px rgba(78, 94, 118, 0.45);
 }
 
 .page--investors .top-nav .wordmark {
@@ -9404,8 +9404,8 @@ body.menu-open {
 }
 
 .page--investors .aud-hero__intro {
-  background: linear-gradient(135deg, #b6c6da 0%, #93a9c4 100%);
-  box-shadow: 0 26px 60px -34px rgba(74, 96, 128, 0.5);
+  background: linear-gradient(135deg, #b2bcca 0%, #93a1b3 100%);
+  box-shadow: 0 26px 60px -34px rgba(78, 94, 118, 0.5);
 }
 
 .page--investors .aud-hero__intro p {
@@ -9421,10 +9421,10 @@ body.menu-open {
 .page--companies .hero-glow__sun {
   background: radial-gradient(
     ellipse at 48% 44%,
-    rgba(240, 170, 195, 0.92),
-    rgba(200, 110, 145, 0.7) 30%,
-    rgba(140, 70, 100, 0.38) 52%,
-    rgba(90, 42, 66, 0.16) 68%,
+    rgba(228, 206, 188, 0.92),
+    rgba(178, 152, 132, 0.7) 30%,
+    rgba(122, 102, 86, 0.38) 52%,
+    rgba(78, 64, 54, 0.16) 68%,
     transparent 84%
   );
 }
@@ -9432,10 +9432,10 @@ body.menu-open {
 .page--investors .hero-glow__sun {
   background: radial-gradient(
     ellipse at 48% 44%,
-    rgba(170, 195, 235, 0.92),
-    rgba(105, 135, 185, 0.7) 30%,
-    rgba(60, 85, 130, 0.38) 52%,
-    rgba(38, 56, 90, 0.16) 68%,
+    rgba(188, 200, 218, 0.92),
+    rgba(132, 146, 168, 0.7) 30%,
+    rgba(86, 98, 118, 0.38) 52%,
+    rgba(54, 62, 78, 0.16) 68%,
     transparent 84%
   );
 }
