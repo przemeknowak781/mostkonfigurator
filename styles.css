@@ -9124,21 +9124,13 @@ body.menu-open {
   mask-image: linear-gradient(180deg, transparent 26%, rgba(0, 0, 0, 0.4) 44%, #000 62%);
 }
 
-/* Soft white veils lift the nav and copy zones on the washed ground
-   (the copy column sits on the right). */
+/* Soft white veils lift the nav and copy zones on the washed ground. */
 .page--founders .hero-wash {
   background:
     linear-gradient(180deg, rgba(255, 243, 236, 0.5), transparent 24%),
-    linear-gradient(270deg, rgba(255, 246, 240, 0.62), rgba(255, 246, 240, 0.26) 48%, transparent 70%);
+    linear-gradient(90deg, rgba(255, 246, 240, 0.55), rgba(255, 246, 240, 0.2) 42%, transparent 66%);
   -webkit-mask-image: none;
   mask-image: none;
-}
-
-/* Copy column moved into the open right half of the scene. */
-.page--founders .hero-content {
-  justify-self: end;
-  width: min(680px, 100%);
-  margin-right: clamp(0px, 2.4vw, 48px);
 }
 
 .page--founders .hero-vignette {
@@ -9250,15 +9242,18 @@ body.menu-open {
   color: #3a1c0c;
 }
 
-/* The intro panel floats over the hero's lower edge, above the drawn
-   trail line (the trail svg is a sibling of the hero at z-index 18). */
+/* The intro panel floats over the hero's lower-right corner - the open
+   zone of the scene - above the drawn trail line (the trail svg is a
+   sibling of the hero at z-index 18). */
 .page--founders .aud-intro-float {
   position: relative;
   z-index: 20;
-  margin: clamp(-240px, -20vh, -120px) var(--container-x) 0;
+  display: flex;
+  justify-content: flex-end;
+  margin: clamp(-300px, -26vh, -160px) var(--container-x) 0;
 }
 
 .page--founders .aud-intro-float .aud-hero__intro {
   margin-top: 0;
-  max-width: 820px;
+  max-width: 760px;
 }
