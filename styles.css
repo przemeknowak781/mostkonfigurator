@@ -9450,3 +9450,31 @@ body.menu-open {
 .page--companies .aud-bleed img {
   filter: saturate(0.66) brightness(1.08) contrast(1.05);
 }
+
+/* Figma copy audit: the companies/investors "how we work" rows carry five
+   tiles, and the team page closes with a careers CTA. */
+.page--companies .aud-work__grid,
+.page--investors .aud-work__grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.aud-grow__sub {
+  margin: 14px auto 26px;
+  max-width: 520px;
+  color: rgba(240, 235, 233, 0.82);
+  font: 400 clamp(15px, 1.1vw, 17px) / 1.6 "Outfit", system-ui, sans-serif;
+}
+
+/* Team careers CTA: title + subline stacked left, button on the right
+   (the base inner grid is title | button only). */
+.page--team .aud-grow__sub {
+  grid-column: 1;
+  margin: 0;
+  max-width: 560px;
+}
+
+.page--team .aud-grow__btn {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  justify-self: end;
+}
