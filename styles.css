@@ -9657,3 +9657,102 @@ body.menu-open {
 .page--expertise .page-hero__title {
   font-size: clamp(30px, 4.2vw, 54px);
 }
+
+/* ============ scroll-in reveals (IntersectionObserver adds .is-in) ============ */
+.io-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s var(--ease-out, ease), transform 0.7s var(--ease-out, ease);
+}
+
+.io-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* teaser cards cascade in one after another */
+.expertise-cards__grid .ex-card.io-reveal:nth-child(2) { transition-delay: 0.1s; }
+.expertise-cards__grid .ex-card.io-reveal:nth-child(3) { transition-delay: 0.2s; }
+.expertise-cards__grid .ex-card.io-reveal:nth-child(4) { transition-delay: 0.1s; }
+.expertise-cards__grid .ex-card.io-reveal:nth-child(5) { transition-delay: 0.2s; }
+.expertise-cards__grid .ex-card.io-reveal:nth-child(6) { transition-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .io-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============ HOME - compact How We Work band ============ */
+.exwork--lite .exwork__steps {
+  margin-bottom: clamp(30px, 4vh, 44px);
+}
+
+.exwork--lite .exwork__step h3 {
+  margin: 0;
+}
+
+.exwork__more-wrap {
+  text-align: center;
+}
+
+.exwork__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 26px;
+  border: 1px solid rgba(255, 138, 92, 0.5);
+  border-radius: 999px;
+  color: #ffb98f;
+  background: rgba(255, 97, 44, 0.1);
+  font: 500 12.5px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.exwork__more svg {
+  width: 16px;
+  height: 16px;
+}
+
+.exwork__more:hover {
+  background: rgba(255, 97, 44, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ============ HOME - expertise teaser CTA ============ */
+.expertise-cards__cta-wrap {
+  margin-top: clamp(40px, 5.5vh, 64px);
+  text-align: center;
+}
+
+.expertise-cards__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 30px;
+  border: 1px solid rgba(240, 235, 233, 0.35);
+  border-radius: 999px;
+  color: var(--light);
+  background: rgba(240, 235, 233, 0.06);
+  font: 500 12.5px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.expertise-cards__cta svg {
+  width: 16px;
+  height: 16px;
+}
+
+.expertise-cards__cta:hover {
+  background: rgba(240, 235, 233, 0.14);
+  border-color: rgba(240, 235, 233, 0.6);
+  transform: translateY(-2px);
+}
