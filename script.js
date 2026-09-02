@@ -1403,30 +1403,59 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   });
 })();
 
-/* Scroll-in reveals for the sections below the audience triptych */
+/* Scroll-in reveals for the sections below the audience triptych.
+   Scroll snapping can jump a whole section in a single frame, and an element
+   that never intersects never fires the observer - so a scroll sweep backs it
+   up and reveals anything the viewport has already reached or passed. */
 (() => {
-  const targets = Array.from(document.querySelectorAll(".io-reveal"));
-  if (!targets.length) return;
-  if (!("IntersectionObserver" in window)) {
-    targets.forEach((el) => el.classList.add("is-in"));
-    return;
+  const pending = new Set(document.querySelectorAll(".io-reveal"));
+  if (!pending.size) return;
+
+  const reveal = (el) => {
+    el.classList.add("is-in");
+    pending.delete(el);
+    if (!pending.size) teardown();
+  };
+
+  let io = null;
+  const sweep = () => {
+    pending.forEach((el) => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.94) reveal(el);
+    });
+  };
+
+  let queued = false;
+  const onScroll = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      sweep();
+    });
+  };
+
+  function teardown() {
+    io?.disconnect();
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", onScroll);
   }
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-in");
-        io.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.16, rootMargin: "0px 0px -6% 0px" }
-  );
-  targets.forEach((el) => io.observe(el));
+
+  if ("IntersectionObserver" in window) {
+    io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && reveal(e.target)),
+      { threshold: 0.16, rootMargin: "0px 0px -6% 0px" }
+    );
+    pending.forEach((el) => io.observe(el));
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  sweep();
 })();
 
 /* Measure each teaser icon's stroke so it can draw itself in on scroll */
 (() => {
-  const paths = document.querySelectorAll(".ex-card__icon path");
+  const paths = document.querySelectorAll(".ex-icon path");
   if (!paths.length) return;
   paths.forEach((path) => {
     try {
