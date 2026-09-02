@@ -9972,3 +9972,20 @@ body.menu-open {
   height: 18px;
   background: #f0ebe9;
 }
+
+/* Expertise has no floating intro panel below the ridge - shorten the hero
+   and pull the areas section up over the empty cream so the void closes */
+.page--expertise .hero {
+  min-height: clamp(680px, 92svh, 920px);
+}
+
+.page--expertise .ex-areas {
+  position: relative;
+  z-index: 20;
+  margin-top: clamp(-300px, -24vh, -140px);
+}
+
+/* nothing anchors the dotted trail leaders here - drop them */
+.page--expertise .hero-trail__leader {
+  display: none;
+}
