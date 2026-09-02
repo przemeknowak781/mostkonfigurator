@@ -8183,21 +8183,30 @@ body.menu-open {
   min-height: 0;
   border: 0;
   border-radius: 0;
-  background:
-    linear-gradient(145deg, rgba(var(--aud-accent-rgb), 0.1), transparent 58%),
-    rgba(248, 244, 241, 0.94);
+  background: rgba(248, 244, 241, 0.94);
   color: #1c1419;
+  transition: border-color 0.35s ease;
 }
 
-/* Figma cards hug their text - no ruled/dashed underline decor. */
+/* Cards rest flat; the accent gradient only breathes in on hover. */
 .page--audience .aud-help__item::after {
-  content: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(145deg, rgba(var(--aud-accent-rgb), 0.12), transparent 58%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.page--audience .aud-help__item:hover::after {
+  opacity: 1;
 }
 
 .page--audience .aud-help__item:hover {
-  background:
-    linear-gradient(145deg, rgba(var(--aud-accent-rgb), 0.17), rgba(255, 255, 255, 0.2) 64%),
-    #fbf8f5;
+  background: rgba(248, 244, 241, 0.94);
+  border-color: rgba(var(--aud-accent-rgb), 0.4);
 }
 
 .page--audience .aud-help__item p {
@@ -8267,10 +8276,6 @@ body.menu-open {
   border: 1px solid rgba(28, 20, 25, 0.12);
   border-radius: 18px;
   box-shadow: 0 20px 56px -44px rgba(28, 20, 25, 0.42);
-}
-
-.page--audience .aud-help__item::after {
-  border-radius: 0 0 16px 16px;
 }
 
 .page--audience .aud-work__grid {
