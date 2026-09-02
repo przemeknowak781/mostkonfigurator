@@ -1423,3 +1423,16 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   );
   targets.forEach((el) => io.observe(el));
 })();
+
+/* Measure each teaser icon's stroke so it can draw itself in on scroll */
+(() => {
+  const paths = document.querySelectorAll(".ex-card__icon path");
+  if (!paths.length) return;
+  paths.forEach((path) => {
+    try {
+      path.style.setProperty("--len", Math.ceil(path.getTotalLength()));
+    } catch {
+      path.style.setProperty("--len", 4000);
+    }
+  });
+})();
