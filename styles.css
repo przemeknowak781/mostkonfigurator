@@ -9878,3 +9878,97 @@ body.menu-open {
 .exwork--terrain .exwork__lede {
   max-width: none;
 }
+
+/* --- Expertise palette: warm beige; the ridge carries the cream of the
+       areas section below so the hero pours straight into it --- */
+.page--expertise {
+  --aud-accent: #c2a173;
+  --aud-accent-rgb: 194, 161, 115;
+}
+
+.page--expertise .hero {
+  background: #c7b6a2;
+}
+
+.page--expertise .hero-media {
+  background: linear-gradient(180deg, #c7b6a2 0%, #d8cab8 38%, #e8ddce 68%, #f3ede4 100%);
+}
+
+.page--expertise .hero-wash {
+  background:
+    linear-gradient(180deg, rgba(248, 243, 236, 0.5), transparent 24%),
+    linear-gradient(90deg, rgba(250, 245, 238, 0.55), rgba(250, 245, 238, 0.2) 42%, transparent 66%);
+}
+
+.page--expertise .hero-content::before {
+  background: radial-gradient(
+    54% 52% at 36% 44%,
+    rgba(250, 245, 238, 0.55),
+    rgba(245, 238, 228, 0.28) 55%,
+    transparent 76%
+  );
+}
+
+.page--expertise .hero-glow__sun {
+  background: radial-gradient(
+    ellipse at 48% 44%,
+    rgba(232, 210, 180, 0.92),
+    rgba(190, 160, 124, 0.7) 30%,
+    rgba(134, 110, 82, 0.38) 52%,
+    rgba(88, 70, 50, 0.16) 68%,
+    transparent 84%
+  );
+}
+
+.page--expertise .hero-ridges__img {
+  filter: drop-shadow(0 -22px 46px rgba(146, 124, 98, 0.35));
+}
+
+.page--expertise .hero-content .eyebrow {
+  color: rgba(94, 74, 50, 0.9);
+}
+
+.page--expertise .hero-title {
+  color: #1b150e;
+}
+
+.page--expertise .hero-tagline {
+  color: rgba(27, 21, 14, 0.78);
+}
+
+.page--expertise .primary-cta {
+  color: #1b150e;
+  border-color: rgba(27, 21, 14, 0.4);
+  box-shadow:
+    inset 0 0 0 1px rgba(27, 21, 14, 0.08),
+    0 16px 44px -20px rgba(120, 96, 66, 0.45);
+}
+
+.page--expertise .top-nav .wordmark {
+  color: #201910;
+}
+
+.page--expertise .top-nav__menu a {
+  color: rgba(32, 25, 16, 0.78);
+}
+
+.page--expertise .top-nav__menu a:hover,
+.page--expertise .top-nav__menu a[aria-current="page"] {
+  color: #201910;
+}
+
+.page--expertise .top-nav .nav-cta {
+  color: #201910;
+  border-color: rgba(32, 25, 16, 0.45);
+}
+
+/* the photo may peek a few px below the ridge - close the seam in cream */
+.page--expertise .hero-media::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18px;
+  background: #f0ebe9;
+}

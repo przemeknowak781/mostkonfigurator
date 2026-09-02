@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
-  <body class="page page--expertise">
+  <body class="page page--audience page--expertise">
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
       <symbol id="most-logo" viewBox="0 0 160 58">
         <path d="M46.1176 16.6761V2.64803L25.4118 34.1921H23.0588L2.82353 2.64803V34.8539H0V0.000976562H4L24.2989 31.1793L44.6596 0.000976562H48.9412V16.6761H46.1176Z" />
@@ -92,24 +92,37 @@
 
     <main>
       <!-- PAGE HERO -->
-      <section class="page-hero" aria-labelledby="page-hero-title">
-        <div class="page-hero__media" aria-hidden="true">
-          <img class="page-hero__bg" src="background.webp" alt="" fetchpriority="high" decoding="async" />
-          <div class="page-hero__wash"></div>
+      <!-- EXPERTISE HERO: the audience-hero construction in a beige palette;
+           the ridge matches the cream of the section below so they merge -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-media" aria-hidden="true">
+          <img class="hero-bg" src="arch-1.webp" alt="" fetchpriority="high" decoding="async" />
+          <div class="hero-wash"></div>
+          <div class="hero-vignette"></div>
+          <div class="hero-noise"></div>
         </div>
-        <div class="page-hero__glow" aria-hidden="true">
-          <span class="page-hero__sun"></span>
+
+        <div class="hero-glow" aria-hidden="true">
+          <span class="hero-glow__sun"></span>
+          <span class="hero-glow__haze"></span>
         </div>
-        <div class="page-hero__ridges" aria-hidden="true">
-          <img class="page-hero__ridge" src="gora-bez-tla-2000px.svg" alt="" decoding="async" />
+
+        <div class="hero-ridges" aria-hidden="true">
+          <div class="hero-climbers-sun" aria-hidden="true"></div>
+
+          <img class="hero-ridges__img" src="gora-beige-2000px.svg" alt="" decoding="async" />
+
+          <div class="hero-climbers" aria-hidden="true">
+            <img class="hero-climbers__img" src="climbers-pomarancz.svg" alt="" decoding="async" />
+          </div>
         </div>
-        <div class="page-hero__content">
-          <p class="page-hero__eyebrow reveal">— our expertise —</p>
-          <h1 class="page-hero__title reveal" id="page-hero-title">
-            Legal solutions built to support growth, funding, and&nbsp;expansion<br>
-            — across markets and&nbsp;stages.
+
+        <div class="hero-content">
+          <p class="eyebrow reveal">— our expertise —</p>
+          <h1 class="hero-title reveal" id="hero-title">
+            Legal solutions built to support growth, funding, and expansion<br>— across markets and&nbsp;stages.
           </h1>
-          <p class="page-hero__tagline reveal">
+          <p class="hero-tagline reveal">
             Eight interconnected areas of support&nbsp;— grown with your business, adapted to your&nbsp;stage.
           </p>
           <a class="primary-cta reveal" href="#areas">
@@ -120,6 +133,18 @@
           </a>
         </div>
       </section>
+
+      <svg class="hero-trail" viewBox="0 0 2000 850" preserveAspectRatio="none" aria-hidden="true">
+        <path class="hero-trail__path" d="" />
+        <g class="hero-trail__leaders"></g>
+      </svg>
+
+      <!-- invisible stub: the trail builder requires the homepage's
+           ridge-edge leaders group to exist before it draws anything -->
+      <svg class="ridge-edge__leaders" viewBox="0 0 2000 100" preserveAspectRatio="none" aria-hidden="true" style="display:none"></svg>
+
+      <div class="hero-trail-points" aria-hidden="true"></div>
+      <div class="hero-trail-labels" aria-hidden="true"></div>
 
       <!-- OUR AREAS OF EXPERTISE: Figma master-detail, 8 areas -->
       <section class="ex-areas" id="areas" aria-labelledby="ex-areas-title">
