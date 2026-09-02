@@ -314,7 +314,6 @@ function updateScroll() {
   }
 
   if (topNav) topNav.classList.toggle("is-scrolled", scrollY > 12);
-  document.body.classList.toggle("is-nav-scrolled", scrollY > 12);
   if (window.updateParallax) window.updateParallax();
 }
 
@@ -655,7 +654,7 @@ function setupAudienceConnectors() {
     [0, 94], [52, 95], [137, 94], [221, 98], [318, 97], [398, 101],
     [432, 96], [506, 86], [552, 89], [589, 72], [652, 64], [701, 69],
     [746, 51], [817, 42], [858, 46], [917, 28], [971, 32], [1004, 21],
-    [1058, 24], [1096, 7], [1130, 4], [1164, 2], [1186, 1], [1200, 0],
+    [1058, 24], [1096, 7], [1130, 15], [1164, -6], [1186, -1], [1200, -52],
   ];
 
   function cssClamp(min, preferred, max) {
@@ -1377,3 +1376,29 @@ setupCtaPattern();
 })();
 
 window.addEventListener("load", () => scheduleTrailOverlay(true));
+
+/* Expertise "Our Areas": master-detail tabs (the Figma layout) */
+(() => {
+  const tabs = Array.from(document.querySelectorAll('.ex-areas__nav [role="tab"]'));
+  if (!tabs.length) return;
+  const panels = Array.from(document.querySelectorAll(".ex-areas__panel"));
+
+  const select = (tab) => {
+    tabs.forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+    panels.forEach((p) => {
+      p.hidden = p.id !== tab.getAttribute("aria-controls");
+    });
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (e) => {
+      const step = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0;
+      if (!step) return;
+      e.preventDefault();
+      const next = tabs[(tabs.indexOf(tab) + step + tabs.length) % tabs.length];
+      next.focus();
+      select(next);
+    });
+  });
+})();
