@@ -1403,17 +1403,61 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   });
 })();
 
-/* Scroll-in reveals for the sections below the audience triptych.
+/* Scroll-in reveals, plus one-at-a-time icon drawing.
+
    Scroll snapping can jump a whole section in a single frame, and an element
    that never intersects never fires the observer - so a scroll sweep backs it
-   up and reveals anything the viewport has already reached or passed. */
+   up and reveals anything the viewport has already reached or passed.
+
+   The one-line icons are the point of these sections, so they never draw over
+   each other: revealed rows queue up and each stroke runs on its own. */
 (() => {
   const pending = new Set(document.querySelectorAll(".io-reveal"));
-  if (!pending.size) return;
+  const icons = document.querySelectorAll(".ex-icon path");
+  if (!pending.size && !icons.length) return;
+
+  icons.forEach((path) => {
+    let len = 4000;
+    try {
+      len = Math.ceil(path.getTotalLength());
+    } catch {}
+    path.style.setProperty("--len", len);
+  });
+
+  const DRAW_MS = 2600;
+  const DRAW_GAP = 160;
+  const queue = [];
+  let drawing = false;
+
+  const drawNext = () => {
+    const svg = queue.shift();
+    if (!svg) {
+      drawing = false;
+      return;
+    }
+    drawing = true;
+    // a fast scroll can queue up more icons than there is time to draw; any
+    // the reader has already passed simply appear, so nothing is left blank
+    if (svg.getBoundingClientRect().bottom < 0) {
+      svg.classList.add("is-drawn");
+      drawNext();
+      return;
+    }
+    svg.classList.add("is-drawing");
+    setTimeout(drawNext, DRAW_MS + DRAW_GAP);
+  };
+
+  const enqueue = (root) => {
+    root.querySelectorAll(".ex-icon").forEach((svg) => {
+      queue.push(svg);
+      if (!drawing) drawNext();
+    });
+  };
 
   const reveal = (el) => {
     el.classList.add("is-in");
     pending.delete(el);
+    enqueue(el);
     if (!pending.size) teardown();
   };
 
@@ -1451,17 +1495,4 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
   sweep();
-})();
-
-/* Measure each teaser icon's stroke so it can draw itself in on scroll */
-(() => {
-  const paths = document.querySelectorAll(".ex-icon path");
-  if (!paths.length) return;
-  paths.forEach((path) => {
-    try {
-      path.style.setProperty("--len", Math.ceil(path.getTotalLength()));
-    } catch {
-      path.style.setProperty("--len", 4000);
-    }
-  });
 })();
