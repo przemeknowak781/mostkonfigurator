@@ -1402,3 +1402,24 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
     });
   });
 })();
+
+/* Scroll-in reveals for containerized home sections */
+(() => {
+  const targets = Array.from(document.querySelectorAll(".io-reveal"));
+  if (!targets.length) return;
+  if (!("IntersectionObserver" in window)) {
+    targets.forEach((el) => el.classList.add("is-in"));
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-in");
+        io.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.16, rootMargin: "0px 0px -6% 0px" }
+  );
+  targets.forEach((el) => io.observe(el));
+})();

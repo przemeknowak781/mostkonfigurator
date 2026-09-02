@@ -9657,3 +9657,311 @@ body.menu-open {
 .page--expertise .page-hero__title {
   font-size: clamp(30px, 4.2vw, 54px);
 }
+
+/* ============ HOME - THREE ROUTES: full-width scroll bands ============ */
+.routes {
+  position: relative;
+  z-index: 7;
+  padding: clamp(140px, 16vh, 220px) max(var(--container-x), calc((100vw - 1360px) / 2)) clamp(90px, 11vh, 140px);
+  background: linear-gradient(180deg, #0a0d18 0%, #07090f 100%);
+}
+
+.routes__head {
+  max-width: 760px;
+  margin: 0 auto clamp(56px, 8vh, 96px);
+  text-align: center;
+}
+
+.routes__eyebrow {
+  margin: 0 0 14px;
+  color: rgba(255, 168, 110, 0.85);
+  font: 500 12px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.routes__title {
+  margin: 0;
+  color: var(--light);
+  font: 500 clamp(30px, 3.6vw, 52px) / 1.1 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+.routes__title-one {
+  color: #ff8a5c;
+}
+
+.routes__lede {
+  margin: 18px auto 0;
+  max-width: 560px;
+  color: var(--light-80);
+  font: 400 clamp(14.5px, 1.05vw, 16.5px) / 1.6 "Outfit", system-ui, sans-serif;
+}
+
+.routes__bands {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vh, 48px);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* the connecting trail on the left edge, dots per band in each accent */
+.routes__track {
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: 11px;
+  width: 2px;
+  background: rgba(240, 235, 233, 0.12);
+  pointer-events: none;
+}
+
+.route {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.35fr);
+  gap: clamp(28px, 3.5vw, 64px);
+  align-items: center;
+  margin-left: 48px;
+  padding: clamp(30px, 4vh, 48px) clamp(28px, 3.2vw, 52px);
+  background: linear-gradient(160deg, rgba(var(--rt), 0.1), rgba(255, 255, 255, 0.02) 55%);
+  border: 1px solid rgba(var(--rt), 0.32);
+  border-radius: 22px;
+}
+
+.route--companies {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.9fr);
+}
+
+.route--companies .route__art {
+  order: 2;
+}
+
+.route__node {
+  position: absolute;
+  top: clamp(38px, 5vh, 56px);
+  left: -44px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgb(var(--rt));
+  box-shadow: 0 0 0 4px rgba(var(--rt), 0.2), 0 0 18px rgba(var(--rt), 0.55);
+}
+
+.route__art {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  border-radius: 16px;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(var(--rt), 0.14), transparent 70%);
+}
+
+.route__chart-svg {
+  width: min(100%, 340px);
+  height: auto;
+  overflow: visible;
+}
+
+.route__kicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 10px;
+}
+
+.route__num {
+  color: rgba(var(--rt), 0.95);
+  font: 500 13px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.2em;
+}
+
+.route__tag {
+  color: var(--light-60);
+  font: 500 12px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.route__name {
+  margin: 0 0 12px;
+  color: var(--light);
+  font: 500 clamp(26px, 2.6vw, 38px) / 1.1 "Urbanist", system-ui, sans-serif;
+}
+
+.route__copy {
+  margin: 0 0 18px;
+  max-width: 56ch;
+  color: rgba(240, 235, 233, 0.82);
+  font: 400 clamp(15px, 1.1vw, 17px) / 1.6 "Outfit", system-ui, sans-serif;
+}
+
+.route__chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 0;
+}
+
+.route__chips li {
+  padding: 8px 16px;
+  border: 1px solid rgba(var(--rt), 0.45);
+  border-radius: 999px;
+  color: rgba(240, 235, 233, 0.88);
+  font: 500 13px / 1.2 "Outfit", system-ui, sans-serif;
+  background: rgba(var(--rt), 0.12);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s var(--ease-out, ease), transform 0.5s var(--ease-out, ease);
+}
+
+.io-reveal.is-in .route__chips li:nth-child(1) { transition-delay: 0.18s; }
+.io-reveal.is-in .route__chips li:nth-child(2) { transition-delay: 0.28s; }
+.io-reveal.is-in .route__chips li:nth-child(3) { transition-delay: 0.38s; }
+.io-reveal.is-in .route__chips li:nth-child(4) { transition-delay: 0.48s; }
+
+.io-reveal.is-in .route__chips li {
+  opacity: 1;
+  transform: none;
+}
+
+.route__sub {
+  margin: 0 0 22px;
+  max-width: 58ch;
+  color: var(--light-60);
+  font: 400 clamp(13.5px, 0.98vw, 15px) / 1.55 "Outfit", system-ui, sans-serif;
+}
+
+.route__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 26px;
+  border: 1px solid rgba(var(--rt), 0.6);
+  border-radius: 999px;
+  color: var(--light);
+  background: rgba(var(--rt), 0.14);
+  font: 500 12.5px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.route__cta svg {
+  width: 16px;
+  height: 16px;
+}
+
+.route__cta:hover {
+  background: rgba(var(--rt), 0.26);
+  border-color: rgba(var(--rt), 0.85);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 980px) {
+  .route,
+  .route--companies {
+    grid-template-columns: 1fr;
+    margin-left: 24px;
+  }
+  .route--companies .route__art {
+    order: 0;
+  }
+}
+
+/* ============ scroll-in reveals (IntersectionObserver adds .is-in) ============ */
+.io-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s var(--ease-out, ease), transform 0.7s var(--ease-out, ease);
+}
+
+.io-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .io-reveal,
+  .route__chips li {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============ HOME - compact How We Work band ============ */
+.exwork--lite .exwork__steps {
+  margin-bottom: clamp(30px, 4vh, 44px);
+}
+
+.exwork--lite .exwork__step h3 {
+  margin: 0;
+}
+
+.exwork__more-wrap {
+  text-align: center;
+}
+
+.exwork__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 26px;
+  border: 1px solid rgba(255, 138, 92, 0.5);
+  border-radius: 999px;
+  color: #ffb98f;
+  background: rgba(255, 97, 44, 0.1);
+  font: 500 12.5px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.exwork__more svg {
+  width: 16px;
+  height: 16px;
+}
+
+.exwork__more:hover {
+  background: rgba(255, 97, 44, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ============ HOME - expertise teaser CTA ============ */
+.expertise-cards__cta-wrap {
+  margin-top: clamp(40px, 5.5vh, 64px);
+  text-align: center;
+}
+
+.expertise-cards__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 30px;
+  border: 1px solid rgba(240, 235, 233, 0.35);
+  border-radius: 999px;
+  color: var(--light);
+  background: rgba(240, 235, 233, 0.06);
+  font: 500 12.5px / 1 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.expertise-cards__cta svg {
+  width: 16px;
+  height: 16px;
+}
+
+.expertise-cards__cta:hover {
+  background: rgba(240, 235, 233, 0.14);
+  border-color: rgba(240, 235, 233, 0.6);
+  transform: translateY(-2px);
+}
