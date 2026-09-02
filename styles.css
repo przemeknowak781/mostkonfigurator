@@ -9756,3 +9756,121 @@ body.menu-open {
   border-color: rgba(240, 235, 233, 0.6);
   transform: translateY(-2px);
 }
+
+/* ============ HOW WE WORK - Figma terrain (light, hand-drawn ridge) ============ */
+.exwork--terrain {
+  padding: clamp(80px, 10vh, 120px) max(var(--container-x), calc((100vw - 1400px) / 2)) clamp(72px, 9vh, 110px);
+  background: #f0ebe9;
+  overflow: hidden;
+}
+
+.exwork--terrain .exwork__head {
+  max-width: none;
+  margin: 0 0 clamp(10px, 2vh, 24px);
+  text-align: left;
+}
+
+.exwork--terrain .exwork__title {
+  margin: 0 0 10px;
+  color: #1c1f2b;
+  font: 500 clamp(26px, 2.4vw, 36px) / 1.12 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.004em;
+}
+
+.exwork--terrain .exwork__lede {
+  margin: 0;
+  color: rgba(28, 31, 43, 0.6);
+  font: 400 clamp(13.5px, 1vw, 15.5px) / 1.55 "Outfit", system-ui, sans-serif;
+}
+
+.exwork-terrain {
+  position: relative;
+  width: min(100%, 1400px);
+  margin: 0 auto;
+  aspect-ratio: 1200 / 430;
+}
+
+.exwork-terrain__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.exwork-terrain__line {
+  fill: none;
+  stroke: #23252f;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.exwork-terrain__leader {
+  stroke: #e8956b;
+  stroke-width: 1.4;
+}
+
+.exwork-terrain__node {
+  fill: #f4b896;
+  stroke: #e2703d;
+  stroke-width: 2;
+}
+
+.exwork-terrain__labels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.exwork-terrain__labels li {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: clamp(180px, 19vw, 250px);
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.exwork-terrain__labels li.is-above {
+  transform: translate(-50%, -100%);
+}
+
+.exwork-terrain__labels h3 {
+  margin: 0 0 7px;
+  color: #1c1f2b;
+  font: 600 clamp(12.5px, 1.02vw, 15px) / 1.3 "Urbanist", system-ui, sans-serif;
+}
+
+.exwork-terrain__labels p {
+  margin: 0;
+  color: rgba(114, 120, 134, 0.95);
+  font: 400 clamp(10.5px, 0.82vw, 12.5px) / 1.5 "Outfit", system-ui, sans-serif;
+}
+
+@media (max-width: 980px) {
+  .exwork-terrain {
+    aspect-ratio: auto;
+  }
+  .exwork-terrain__svg {
+    display: none;
+  }
+  .exwork-terrain__labels {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
+  .exwork-terrain__labels li,
+  .exwork-terrain__labels li.is-above {
+    position: static;
+    width: auto;
+    transform: none;
+    text-align: left;
+  }
+}
+
+/* terrain variant is light - kill the dark base overlays */
+.exwork--terrain::before,
+.exwork--terrain::after {
+  content: none;
+}
