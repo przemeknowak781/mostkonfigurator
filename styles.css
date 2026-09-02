@@ -9989,3 +9989,11 @@ body.menu-open {
 .page--expertise .hero-trail__leader {
   display: none;
 }
+
+/* Figma one-line teaser icons inside the expertise cards */
+.ex-card__icon {
+  display: block;
+  width: clamp(128px, 12vw, 184px);
+  height: auto;
+  margin: 4px 0 2px;
+}
