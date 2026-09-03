@@ -510,11 +510,11 @@ body.menu-open {
 
 .hero-trail__path {
   fill: none;
-  stroke: rgba(255, 168, 110, 0.95);
-  stroke-width: 1.1;
+  stroke: var(--trail-line);
+  stroke-width: var(--trail-width);
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 0 5px rgba(255, 168, 110, 0.46));
+  filter: drop-shadow(0 0 5px var(--trail-glow));
   vector-effect: non-scaling-stroke;
 }
 
@@ -573,7 +573,7 @@ body.menu-open {
 }
 
 .hero-trail__leader {
-  stroke: rgba(255, 168, 110, 0.42);
+  stroke: var(--trail-leader);
   stroke-width: 1;
   stroke-dasharray: 2 4;
   vector-effect: non-scaling-stroke;
@@ -706,7 +706,7 @@ body.menu-open {
 }
 
 .ridge-edge__leaders line {
-  stroke: rgba(255, 168, 110, 0.42);
+  stroke: var(--trail-leader);
   stroke-width: 1;
   stroke-dasharray: 2 4;
   vector-effect: non-scaling-stroke;
@@ -5744,6 +5744,7 @@ body.menu-open {
 
 .exwork__dot {
   fill: var(--marker-core);
+  filter: drop-shadow(0 0 6px var(--marker-halo));
 }
 
 .exwork__dot-halo {
@@ -9578,21 +9579,26 @@ body.menu-open {
 
 .exwork-terrain__line {
   fill: none;
-  stroke: #23252f;
-  stroke-width: 1.6;
+  stroke: var(--trail-line);
+  stroke-width: var(--trail-width);
   stroke-linejoin: round;
   stroke-linecap: round;
+  filter: drop-shadow(0 0 5px var(--trail-glow));
+  vector-effect: non-scaling-stroke;
 }
 
 .exwork-terrain__leader {
-  stroke: #e8956b;
-  stroke-width: 1.4;
+  stroke: var(--trail-leader);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  vector-effect: non-scaling-stroke;
 }
 
 .exwork-terrain__node {
   fill: var(--marker-core);
   stroke: var(--marker-ring);
-  stroke-width: 5;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 6px var(--marker-halo));
 }
 
 .exwork-terrain__labels {
@@ -10067,4 +10073,15 @@ body.menu-open {
   /* --audience-cut-depth is local to that section, so it needs the same
      value as a fallback here or the whole declaration is dropped */
   padding-top: calc(var(--audience-cut-depth, clamp(130px, 11vw, 190px)) + clamp(70px, 9vh, 110px));
+}
+
+/* ============ TRAIL LINES ============
+   Every drawn path on the site - the hero trail, the ridge-edge leaders and
+   the How We Work horizon - is the same warm line with the same glow, and
+   every leader dropping to a label is the same dotted hairline. */
+:root {
+  --trail-line: rgba(255, 168, 110, 0.95);
+  --trail-width: 1.1;
+  --trail-glow: rgba(255, 168, 110, 0.46);
+  --trail-leader: rgba(255, 168, 110, 0.42);
 }
