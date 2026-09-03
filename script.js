@@ -1405,59 +1405,86 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
 
 /* Scroll-in reveals, plus one-at-a-time icon drawing.
 
-   Scroll snapping can jump a whole section in a single frame, and an element
-   that never intersects never fires the observer - so a scroll sweep backs it
-   up and reveals anything the viewport has already reached or passed.
+   Two separate triggers on purpose. Rows slide in as soon as they touch the
+   viewport so nothing is ever blank, but an icon only starts drawing once its
+   row reaches the middle band of the screen - the point where a reader is
+   actually looking at it. Tying the drawing to the layout reveal instead made
+   icons draw while their row was still a sliver at the bottom edge, so by the
+   time you got there the stroke was already finished.
 
-   The one-line icons are the point of these sections, so they never draw over
-   each other: revealed rows queue up and each stroke runs on its own. */
+   Scroll snapping can also jump a whole section in a single frame, and an
+   element that never intersects never fires an observer - so a scroll sweep
+   backs the reveal up. */
 (() => {
   const pending = new Set(document.querySelectorAll(".io-reveal"));
-  const icons = document.querySelectorAll(".ex-icon path");
+  const icons = Array.from(document.querySelectorAll(".ex-icon"));
   if (!pending.size && !icons.length) return;
 
-  icons.forEach((path) => {
-    let len = 4000;
-    try {
-      len = Math.ceil(path.getTotalLength());
-    } catch {}
-    path.style.setProperty("--len", len);
-  });
-
+  /* ---------- icon drawing: one at a time, inside the reading band ---------- */
   const DRAW_MS = 2600;
-  const DRAW_GAP = 160;
-  const queue = [];
-  let drawing = false;
+  const DRAW_GAP = 140;
+  const BAND_TOP = 0.26;
+  const BAND_BOTTOM = 0.72;
 
-  const drawNext = () => {
-    const svg = queue.shift();
-    if (!svg) {
-      drawing = false;
-      return;
-    }
-    drawing = true;
-    // a fast scroll can queue up more icons than there is time to draw; any
-    // the reader has already passed simply appear, so nothing is left blank
-    if (svg.getBoundingClientRect().bottom < 0) {
-      svg.classList.add("is-drawn");
-      drawNext();
-      return;
-    }
-    svg.classList.add("is-drawing");
-    setTimeout(drawNext, DRAW_MS + DRAW_GAP);
-  };
+  icons.forEach((svg) =>
+    svg.querySelectorAll("path").forEach((path) => {
+      let len = 4000;
+      try {
+        len = Math.ceil(path.getTotalLength());
+      } catch {}
+      path.style.setProperty("--len", len);
+    })
+  );
 
-  const enqueue = (root) => {
-    root.querySelectorAll(".ex-icon").forEach((svg) => {
-      queue.push(svg);
-      if (!drawing) drawNext();
+  // One drawing at a time, and it is always the row you are looking at: a row
+  // arriving in the band takes over and the previous stroke snaps to finished.
+  // Queueing instead made every row wait out a 2.6s draw, so at reading speed
+  // most icons were skipped entirely rather than drawn.
+  let current = null;
+  let timer = 0;
+
+  // Dropping the class does not cancel a stroke already in flight, so the
+  // outgoing icon is pinned finished inline - that is what actually stops it.
+  const finish = (svg) => {
+    svg.querySelectorAll("path").forEach((path) => {
+      path.style.transition = "none";
+      path.style.strokeDashoffset = "0";
     });
+    svg.classList.remove("is-drawing");
+    svg.classList.add("is-drawn");
   };
 
+  const startDraw = (svg) => {
+    if (current && current !== svg) finish(current);
+    clearTimeout(timer);
+    current = svg;
+    svg.classList.add("is-drawing");
+    timer = setTimeout(() => {
+      current = null;
+    }, DRAW_MS);
+  };
+
+  if (icons.length) {
+    if ("IntersectionObserver" in window) {
+      const drawIo = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            drawIo.unobserve(entry.target);
+            startDraw(entry.target);
+          }),
+        { rootMargin: `-${BAND_TOP * 100}% 0px -${(1 - BAND_BOTTOM) * 100}% 0px` }
+      );
+      icons.forEach((svg) => drawIo.observe(svg));
+    } else {
+      icons.forEach((svg) => svg.classList.add("is-drawn"));
+    }
+  }
+
+  /* ---------- layout reveals ---------- */
   const reveal = (el) => {
     el.classList.add("is-in");
     pending.delete(el);
-    enqueue(el);
     if (!pending.size) teardown();
   };
 
@@ -1484,15 +1511,16 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
     window.removeEventListener("resize", onScroll);
   }
 
-  if ("IntersectionObserver" in window) {
-    io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && reveal(e.target)),
-      { threshold: 0.16, rootMargin: "0px 0px -6% 0px" }
-    );
-    pending.forEach((el) => io.observe(el));
+  if (pending.size) {
+    if ("IntersectionObserver" in window) {
+      io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.isIntersecting && reveal(e.target)),
+        { threshold: 0.16, rootMargin: "0px 0px -6% 0px" }
+      );
+      pending.forEach((el) => io.observe(el));
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    sweep();
   }
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll, { passive: true });
-  sweep();
 })();
