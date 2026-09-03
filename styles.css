@@ -595,15 +595,12 @@ body.menu-open {
   position: absolute;
   left: 0;
   top: 0;
-  width: 9px;
-  height: 9px;
-  margin: -4.5px 0 0 -4.5px;
+  margin: calc(var(--marker-size) / -2) 0 0 calc(var(--marker-size) / -2);
+  width: var(--marker-size);
+  height: var(--marker-size);
   border-radius: 50%;
-  background: rgba(255, 168, 110, 0.98);
-  box-shadow:
-    0 0 0 3px rgba(255, 168, 110, 0.18),
-    0 0 12px rgba(255, 168, 110, 0.6),
-    0 0 26px rgba(255, 188, 140, 0.32);
+  background: var(--marker-core);
+  box-shadow: var(--marker-shadow);
   animation: trail-point-pulse 3.4s ease-in-out infinite;
 }
 
@@ -2503,23 +2500,20 @@ body.menu-open {
   position: absolute;
   left: 50%;
   z-index: 1;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: rgba(255, 168, 110, 0.98);
   transform: translateX(-50%);
-  box-shadow:
-    0 0 0 3px rgba(255, 168, 110, 0.18),
-    0 0 12px rgba(255, 168, 110, 0.6),
-    0 0 26px rgba(255, 188, 140, 0.32);
+  width: var(--marker-size);
+  height: var(--marker-size);
+  border-radius: 50%;
+  background: var(--marker-core);
+  box-shadow: var(--marker-shadow);
 }
 
 .audience-col__trail-marker {
-  top: calc(var(--connector-top) - 4.5px);
+  top: calc(var(--connector-top) - var(--marker-size) / 2);
 }
 
 .audience-col__card-marker {
-  bottom: -4.5px;
+  bottom: calc(var(--marker-size) / -2);
 }
 
 .audience-col > .preview {
@@ -5749,11 +5743,11 @@ body.menu-open {
 }
 
 .exwork__dot {
-  fill: #ffa86e;
+  fill: var(--marker-core);
 }
 
 .exwork__dot-halo {
-  fill: rgba(255, 168, 110, 0.16);
+  fill: var(--marker-ring);
 }
 
 .exwork__steps {
@@ -8846,15 +8840,12 @@ body.menu-open {
 .has-trail__dot {
   position: absolute;
   z-index: 3;
-  width: 9px;
-  height: 9px;
-  margin: -4.5px 0 0 -4.5px;
+  margin: calc(var(--marker-size) / -2) 0 0 calc(var(--marker-size) / -2);
+  width: var(--marker-size);
+  height: var(--marker-size);
   border-radius: 50%;
-  background: rgba(255, 168, 110, 0.98);
-  box-shadow:
-    0 0 0 3px rgba(255, 168, 110, 0.18),
-    0 0 12px rgba(255, 168, 110, 0.6),
-    0 0 26px rgba(255, 188, 140, 0.32);
+  background: var(--marker-core);
+  box-shadow: var(--marker-shadow);
   pointer-events: none;
   opacity: 0;
   transition: opacity 600ms var(--ease-out) 900ms;
@@ -8974,12 +8965,13 @@ body.menu-open {
   stroke: rgba(186, 84, 44, 0.32);
 }
 
+/* the washed heroes mute the accent - the recipe is the same, only the hue
+   is re-pointed */
 .page--audience .hero-trail-point {
-  background: #c97a4e;
-  box-shadow:
-    0 0 0 3px rgba(201, 122, 78, 0.18),
-    0 0 12px rgba(201, 122, 78, 0.4),
-    0 0 26px rgba(255, 205, 173, 0.35);
+  --marker-core: #c97a4e;
+  --marker-ring: rgba(201, 122, 78, 0.18);
+  --marker-halo: rgba(201, 122, 78, 0.4);
+  --marker-aura: rgba(255, 205, 173, 0.35);
 }
 
 /* Black hero type on the washed ground; dark nav to match. */
@@ -9348,13 +9340,13 @@ body.menu-open {
 .ex-areas__nav button::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 2px;
-  width: 16px;
-  height: 16px;
+  left: calc((16px - var(--marker-size)) / 2);
+  top: 5px;
+  width: var(--marker-size);
+  height: var(--marker-size);
   border-radius: 50%;
-  background: #ff612c;
-  box-shadow: 0 0 0 4px rgba(255, 97, 44, 0.16);
+  background: var(--marker-core);
+  box-shadow: var(--marker-shadow);
   opacity: 0;
   transform: scale(0.5);
   transition: opacity 0.25s ease, transform 0.25s ease;
@@ -9598,9 +9590,9 @@ body.menu-open {
 }
 
 .exwork-terrain__node {
-  fill: #f4b896;
-  stroke: #e2703d;
-  stroke-width: 2;
+  fill: var(--marker-core);
+  stroke: var(--marker-ring);
+  stroke-width: 5;
 }
 
 .exwork-terrain__labels {
@@ -9860,14 +9852,12 @@ body.menu-open {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 12px;
-  height: 12px;
-  margin: -6px 0 0 -6px;
+  margin: calc(var(--marker-size) / -2) 0 0 calc(var(--marker-size) / -2);
+  width: var(--marker-size);
+  height: var(--marker-size);
   border-radius: 50%;
-  background: #ff612c;
-  box-shadow:
-    0 0 0 5px rgba(255, 97, 44, 0.14),
-    0 0 22px rgba(255, 97, 44, 0.5);
+  background: var(--marker-core);
+  box-shadow: var(--marker-shadow);
   opacity: 0;
   transform: scale(0.3);
   transition:
@@ -10051,4 +10041,30 @@ body.menu-open {
   width: 100vw;
   max-width: none;
   margin-inline: calc(50% - 50vw);
+}
+
+/* ============ ORANGE TRAIL MARKERS ============
+   Every round marker on the site - hero trail dots, triptych connectors,
+   rail and terrain nodes, the expertise nav bullet - is the same recipe:
+   a brand-orange core, a soft ring, and two rings of glow scaled off its
+   size. Contexts that need another hue re-point the tokens rather than
+   restating the shadow. */
+:root {
+  --marker-size: 11px;
+  --marker-core: #ff612c;
+  --marker-ring: rgba(255, 97, 44, 0.18);
+  --marker-halo: rgba(255, 138, 92, 0.55);
+  --marker-aura: rgba(255, 188, 140, 0.3);
+  --marker-shadow:
+    0 0 0 calc(var(--marker-size) * 0.33) var(--marker-ring),
+    0 0 calc(var(--marker-size) * 1.25) var(--marker-halo),
+    0 0 calc(var(--marker-size) * 2.5) var(--marker-aura);
+}
+
+/* the audience block's torn edge hangs over whatever follows it, so the
+   terrain heading needs to clear the overhang */
+.audience-intro + .exwork--terrain {
+  /* --audience-cut-depth is local to that section, so it needs the same
+     value as a fallback here or the whole declaration is dropped */
+  padding-top: calc(var(--audience-cut-depth, clamp(130px, 11vw, 190px)) + clamp(70px, 9vh, 110px));
 }
