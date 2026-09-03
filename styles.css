@@ -712,15 +712,32 @@ body.menu-open {
   vector-effect: non-scaling-stroke;
 }
 
+/* The band under the hero carries an architecture photo, faded into the
+   navy at both edges so it reads as part of the scene rather than a
+   pasted-in strip. */
 .ridge-edge__img {
   position: relative;
   display: block;
-  width: 104%;
-  margin-left: -2%;
-  height: auto;
-  transform: scale(-1, -1);
-  transform-origin: center center;
+  width: 100%;
+  height: clamp(260px, 30vw, 460px);
+  object-fit: cover;
+  object-position: center 38%;
   z-index: 2;
+  filter: saturate(0.78) contrast(1.05) brightness(0.82);
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 26%,
+    #000 72%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 26%,
+    #000 72%,
+    transparent 100%
+  );
 }
 
 .hero-content {
@@ -845,49 +862,6 @@ body.menu-open {
 }
 
 /* ---------- RIDGE QUOTE ---------- */
-
-/* An architecture plate sitting in the open left half of the ridge band,
-   warmed to the same sunset the mountains carry. */
-.ridge-photo {
-  position: absolute;
-  left: calc(var(--container-x) + clamp(14px, 2vw, 39px));
-  bottom: clamp(56px, 9vh, 120px);
-  z-index: 5;
-  width: clamp(180px, 19vw, 290px);
-  margin: 0;
-  border-radius: 18px;
-  overflow: hidden;
-  line-height: 0;
-  box-shadow:
-    0 0 0 1px rgba(255, 168, 110, 0.16),
-    0 40px 80px -40px rgba(4, 6, 12, 0.9);
-}
-
-.ridge-photo img {
-  display: block;
-  width: 100%;
-  height: clamp(180px, 19vw, 300px);
-  object-fit: cover;
-  filter: saturate(0.72) contrast(1.04) brightness(0.86);
-}
-
-.ridge-photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    160deg,
-    rgba(255, 138, 92, 0.26),
-    rgba(120, 62, 40, 0.1) 45%,
-    rgba(7, 9, 15, 0.62) 100%
-  );
-}
-
-@media (max-width: 860px) {
-  .ridge-photo {
-    display: none;
-  }
-}
 
 /* ---------- ACCESSIBILITY UTILS ---------- */
 
