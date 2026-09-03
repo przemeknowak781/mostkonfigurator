@@ -846,44 +846,46 @@ body.menu-open {
 
 /* ---------- RIDGE QUOTE ---------- */
 
-.ridge-quote {
+/* An architecture plate sitting in the open left half of the ridge band,
+   warmed to the same sunset the mountains carry. */
+.ridge-photo {
   position: absolute;
   left: calc(var(--container-x) + clamp(14px, 2vw, 39px));
-  bottom: clamp(218px, 31vh, 340px);
+  bottom: clamp(56px, 9vh, 120px);
   z-index: 5;
-  max-width: min(520px, 38vw);
+  width: clamp(180px, 19vw, 290px);
   margin: 0;
-  padding-left: clamp(18px, 1.6vw, 26px);
-  pointer-events: auto;
-  color: rgba(240, 235, 233, 0.78);
-  font: italic 400 clamp(17px, 1.35vw, 24px) / 1.48 "Outfit", system-ui, sans-serif;
-  letter-spacing: 0;
-  text-align: left;
-  text-wrap: pretty;
-  text-shadow: 0 2px 20px rgba(4, 6, 12, 0.78);
+  border-radius: 18px;
+  overflow: hidden;
+  line-height: 0;
+  box-shadow:
+    0 0 0 1px rgba(255, 168, 110, 0.16),
+    0 40px 80px -40px rgba(4, 6, 12, 0.9);
 }
 
-.ridge-quote::before {
+.ridge-photo img {
+  display: block;
+  width: 100%;
+  height: clamp(180px, 19vw, 300px);
+  object-fit: cover;
+  filter: saturate(0.72) contrast(1.04) brightness(0.86);
+}
+
+.ridge-photo::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0.35em;
-  bottom: 0.28em;
-  width: 2px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(255, 168, 110, 0.95), rgba(255, 97, 44, 0.42));
-  box-shadow: 0 0 18px rgba(255, 168, 110, 0.34);
-}
-
-.ridge-quote strong {
-  color: rgba(255, 247, 241, 0.96);
-  font-weight: 500;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 138, 92, 0.26),
+    rgba(120, 62, 40, 0.1) 45%,
+    rgba(7, 9, 15, 0.62) 100%
+  );
 }
 
 @media (max-width: 860px) {
-  .ridge-quote {
-    max-width: calc(100% - 2 * var(--container-x));
-    right: var(--container-x);
+  .ridge-photo {
+    display: none;
   }
 }
 
