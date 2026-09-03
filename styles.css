@@ -712,32 +712,15 @@ body.menu-open {
   vector-effect: non-scaling-stroke;
 }
 
-/* The band under the hero carries an architecture photo, faded into the
-   navy at both edges so it reads as part of the scene rather than a
-   pasted-in strip. */
 .ridge-edge__img {
   position: relative;
   display: block;
-  width: 100%;
-  height: clamp(260px, 30vw, 460px);
-  object-fit: cover;
-  object-position: center 38%;
+  width: 104%;
+  margin-left: -2%;
+  height: auto;
+  transform: scale(-1, -1);
+  transform-origin: center center;
   z-index: 2;
-  filter: saturate(0.78) contrast(1.05) brightness(0.82);
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    #000 26%,
-    #000 72%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    #000 26%,
-    #000 72%,
-    transparent 100%
-  );
 }
 
 .hero-content {
