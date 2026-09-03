@@ -10027,30 +10027,6 @@ body.menu-open {
   min-height: clamp(210px, 27vh, 280px);
 }
 
-/* Home puts How We Work under the dark expertise rail, so the cream section
-   starts with the same torn ridge the audience block uses instead of a flat
-   cut. On Expertise it follows a cream section, so no edge is needed there. */
-.exwork--terrain.exwork--torn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: clamp(56px, 6.5vw, 110px);
-  background: #07090f;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0 L1200 0 L1186 51 L1164 46 L1130 67 L1096 59 L1058 76 L1004 73 L971 84 L917 80 L858 98 L817 94 L746 103 L701 121 L652 116 L589 124 L552 141 L506 138 L432 148 L398 153 L318 149 L221 150 L137 146 L52 147 L0 146 Z' fill='%23fff'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0 L1200 0 L1186 51 L1164 46 L1130 67 L1096 59 L1058 76 L1004 73 L971 84 L917 80 L858 98 L817 94 L746 103 L701 121 L652 116 L589 124 L552 141 L506 138 L432 148 L398 153 L318 149 L221 150 L137 146 L52 147 L0 146 Z' fill='%23fff'/%3E%3C/svg%3E");
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  pointer-events: none;
-}
-
-.exwork--terrain.exwork--torn {
-  padding-top: clamp(120px, 14vh, 190px);
-}
-
 /* The ridge is the horizon: cream sky above it, dark rock below, so the
    labels under the line flip to light type. */
 .exwork-terrain__fill {
