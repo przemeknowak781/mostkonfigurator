@@ -9573,7 +9573,7 @@ body.menu-open {
   position: relative;
   width: min(100%, 1400px);
   margin: 0 auto;
-  aspect-ratio: 1200 / 430;
+  aspect-ratio: 1200 / 660;
 }
 
 .exwork-terrain__svg {
@@ -9613,7 +9613,7 @@ body.menu-open {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  width: clamp(180px, 19vw, 250px);
+  width: clamp(230px, 23vw, 330px);
   transform: translateX(-50%);
   text-align: center;
 }
@@ -9625,13 +9625,13 @@ body.menu-open {
 .exwork-terrain__labels h3 {
   margin: 0 0 7px;
   color: #1c1f2b;
-  font: 600 clamp(12.5px, 1.02vw, 15px) / 1.3 "Urbanist", system-ui, sans-serif;
+  font: 600 clamp(15px, 1.3vw, 19px) / 1.3 "Urbanist", system-ui, sans-serif;
 }
 
 .exwork-terrain__labels p {
   margin: 0;
   color: rgba(114, 120, 134, 0.95);
-  font: 400 clamp(10.5px, 0.82vw, 12.5px) / 1.5 "Outfit", system-ui, sans-serif;
+  font: 400 clamp(13px, 1.05vw, 15.5px) / 1.5 "Outfit", system-ui, sans-serif;
 }
 
 @media (max-width: 980px) {
@@ -10049,4 +10049,30 @@ body.menu-open {
 
 .exwork--terrain.exwork--torn {
   padding-top: clamp(120px, 14vh, 190px);
+}
+
+/* The ridge is the horizon: cream sky above it, dark rock below, so the
+   labels under the line flip to light type. */
+.exwork-terrain__fill {
+  fill: #0b0e18;
+}
+
+.exwork-terrain__labels li.is-below h3 {
+  color: #f4f0ec;
+}
+
+.exwork-terrain__labels li.is-below p {
+  color: rgba(232, 227, 222, 0.72);
+}
+
+/* the dark side runs to the section edge and meets the band below it */
+.exwork--terrain {
+  padding-bottom: 0;
+}
+
+/* the landscape reads as one - let it bleed past the section padding */
+.exwork-terrain {
+  width: 100vw;
+  max-width: none;
+  margin-inline: calc(50% - 50vw);
 }
