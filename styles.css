@@ -9566,7 +9566,7 @@ body.menu-open {
   position: relative;
   width: min(100%, 1400px);
   margin: 0 auto;
-  aspect-ratio: 1200 / 660;
+  aspect-ratio: 2000 / 1100;
 }
 
 .exwork-terrain__svg {
@@ -9588,9 +9588,8 @@ body.menu-open {
 }
 
 .exwork-terrain__leader {
-  stroke: var(--trail-leader);
-  stroke-width: 1;
-  stroke-dasharray: 2 4;
+  stroke: #e8956b;
+  stroke-width: 1.8;
   vector-effect: non-scaling-stroke;
 }
 
@@ -9598,6 +9597,7 @@ body.menu-open {
   fill: var(--marker-core);
   stroke: var(--marker-ring);
   stroke-width: 4;
+  vector-effect: non-scaling-stroke;
   filter: drop-shadow(0 0 6px var(--marker-halo));
 }
 
