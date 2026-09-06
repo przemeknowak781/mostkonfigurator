@@ -11,6 +11,8 @@
   --orange: #ff612c;
   --orange-soft: #ffb077;
   --container-x: clamp(24px, 6.4vw, 96px);
+  /* how far the home hero's ridge sits below where it used to */
+  --hero-ridge-drop: clamp(28px, 5vh, 48px);
   --nav-height: 84px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -324,6 +326,10 @@ body.menu-open {
   position: relative;
   display: grid;
   align-items: start;
+  /* the scene layers deliberately bleed past the hero's sides; clip on x so
+     that never becomes a horizontal scrollbar, and leave y visible because
+     the ridge is meant to hang into the band below */
+  overflow-x: clip;
   min-height: 100svh;
   padding: calc(var(--nav-height) + clamp(64px, 10vh, 120px)) var(--container-x) clamp(140px, 22vh, 260px);
 }
@@ -482,7 +488,11 @@ body.menu-open {
   position: absolute;
   left: -2%;
   right: -2%;
-  bottom: -11%;
+  /* The ridge sat high enough to crowd the third line of the headline. It
+     drops by --hero-ridge-drop - and .ridge-edge below it drops by the same
+     amount, because that band tucks under this silhouette and its own top
+     edge shows the moment the silhouette stops covering it. */
+  bottom: calc(-11% - var(--hero-ridge-drop));
   z-index: 6;
   isolation: isolate;
   pointer-events: none;
@@ -663,7 +673,7 @@ body.menu-open {
 .ridge-edge {
   position: relative;
   z-index: 6;
-  margin-top: calc(clamp(-260px, -20vh, -120px) - 2px);
+  margin-top: calc(clamp(-260px, -20vh, -120px) + var(--hero-ridge-drop) - 2px);
   margin-bottom: -1px;
   pointer-events: none;
   line-height: 0;
@@ -792,11 +802,13 @@ body.menu-open {
   stroke-linejoin: round;
 }
 
+/* The stats ride the ridge - the trail's checkpoint dots land just above
+   them - so they drop with it, keeping that clearance untouched. */
 .hero-stats {
   position: absolute;
   left: var(--container-x);
   right: var(--container-x);
-  bottom: 50px;
+  bottom: calc(50px - var(--hero-ridge-drop));
   z-index: 8;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -9094,16 +9106,11 @@ body.menu-open {
   );
 }
 
-/* arch-1 is a darker photo than the other bleed shots - lift it so the
-   architecture still reads under the mauve duotone. */
+/* the companies bleed is a bright lattice - hold it back so the pattern
+   still reads under the duotone instead of blowing out */
 .page--companies .aud-bleed img {
-  filter: saturate(0.66) brightness(1.08) contrast(1.05);
+  filter: saturate(0.6) brightness(0.68) contrast(1.12);
 }
-/* Figma copy audit: the companies/investors "how we work" rows carry five
-   tiles {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
 .aud-grow__sub {
   margin: 14px auto 26px;
   max-width: 520px;
@@ -9907,9 +9914,12 @@ body.menu-open {
 }
 
 /* The ridge is the horizon: cream sky above it, dark rock below, so the
-   labels under the line flip to light type. */
+   labels under the line flip to light type. The rock is brand navy at the
+   ridge line - where the eye actually reads it - and deepens to the colour
+   of whatever section follows, so the seam at the bottom stays invisible
+   without repainting those sections. */
 .exwork-terrain__fill {
-  fill: #0b0e18;
+  fill: url(#terrain-rock);
 }
 
 .exwork-terrain__labels li.is-below h3 {
