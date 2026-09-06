@@ -30,7 +30,11 @@ html {
 
 body {
   margin: 0;
-  overflow-x: hidden;
+  /* clip, not hidden. `overflow-x: hidden` forces the other axis to compute to
+     `auto`, and a body that resolves to a scroll container is the usual reason
+     `position: sticky` inside it silently does nothing. `clip` clips the hero
+     bleeds exactly the same way without creating one. */
+  overflow-x: clip;
   color: var(--light);
   background: var(--navy-deep);
   font-family: "Outfit", system-ui, sans-serif;
@@ -9240,12 +9244,26 @@ body.menu-open {
 .ex-areas__track {
   --ex-step: clamp(190px, 27vh, 330px);
   --ex-count: 8;
+  --ex-pin-top: calc(var(--nav-height) + clamp(14px, 2.6vh, 34px));
   padding-bottom: calc(var(--ex-count) * var(--ex-step));
+}
+
+/* Sticky is the good path: the compositor holds the column and the main
+   thread never has to keep up. But sticky is quietly disabled by things far
+   away from here - a scroll container anywhere up the ancestor chain is
+   enough - and when it fails the section becomes a tall empty gap, which is
+   worse than no pinning at all. So JS checks whether the column actually
+   held, and if it did not, it carries it with a transform instead. The
+   element stays in flow either way, so its space is reserved either way. */
+.ex-areas__body.is-pinned-js {
+  position: relative;
+  top: 0;
+  will-change: transform;
 }
 
 .ex-areas__body {
   position: sticky;
-  top: calc(var(--nav-height) + clamp(14px, 2.6vh, 34px));
+  top: var(--ex-pin-top);
   display: grid;
   grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
   gap: clamp(48px, 6vw, 96px);

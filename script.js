@@ -1419,6 +1419,14 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   let held = -1;
   let holdTimer = 0;
 
+  const armHold = () => {
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => {
+      held = -1;
+      read();
+    }, 400);
+  };
+
   const apply = (i) => {
     if (i === index) return;
     index = i;
@@ -1432,27 +1440,60 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   };
 
   /* Where the column is pinned, and for how long. Both come out of layout, so
-     a font swap or a resize just changes the answer. */
+     a font swap or a resize just changes the answer.
+
+     The pin offset is read off the column's own `top`, which is a real
+     property and so comes back resolved - reading --ex-pin-top would hand
+     back the unresolved calc() token. Once JS is carrying the column its
+     `top` is zero, so the last good value is kept; a resize drops the class
+     and the reading refreshes. */
+  let pinTop = 0;
   const geometry = () => {
     const travel = track.offsetHeight - stage.offsetHeight;
     if (travel <= 1) return null;
-    const pinTop = parseFloat(getComputedStyle(stage).top) || 0;
+    if (!stage.classList.contains("is-pinned-js")) pinTop = parseFloat(getComputedStyle(stage).top) || 0;
     const trackTop = track.getBoundingClientRect().top + window.scrollY;
-    return { travel, start: trackTop - pinTop };
+    return { travel, pinTop, start: trackTop - pinTop };
+  };
+
+  /* "sticky" until proven otherwise, then either confirmed or replaced. The
+     check needs the column to be a little way into the track, otherwise its
+     pinned and unpinned positions are the same and tell us nothing. */
+  let carry = "unknown";
+
+  const hold = (g, scrolled) => {
+    if (carry === "unknown" && scrolled > 40 && scrolled < g.travel - 40) {
+      const drift = Math.abs(stage.getBoundingClientRect().top - g.pinTop);
+      carry = drift < 4 ? "sticky" : "js";
+      if (carry === "js") stage.classList.add("is-pinned-js");
+    }
+    if (carry === "js") {
+      stage.style.transform = "translate3d(0," + Math.min(g.travel, Math.max(0, scrolled)).toFixed(1) + "px,0)";
+    }
   };
 
   const read = () => {
     const g = geometry();
     if (!g) {
       track.style.setProperty("--ex-progress", "0");
+      if (carry === "js") stage.style.transform = "";
       if (index < 0) apply(0);
       return;
     }
-    const progress = Math.min(1, Math.max(0, (window.scrollY - g.start) / g.travel));
+    const scrolled = window.scrollY - g.start;
+    hold(g, scrolled);
+    const progress = Math.min(1, Math.max(0, scrolled / g.travel));
     track.style.setProperty("--ex-progress", progress.toFixed(4));
     const at = Math.min(tabs.length - 1, Math.floor(progress * tabs.length));
     if (held >= 0) {
-      if (at !== held) return;
+      if (at !== held) {
+        /* Still travelling. Push the deadline out on every frame of the
+           scroll, so the hold ends when scrolling stops rather than after a
+           fixed time - a long glide on a tall window used to outlast a fixed
+           timeout and drop the reader on whatever topic it had reached. */
+        armHold();
+        return;
+      }
       held = -1;
       clearTimeout(holdTimer);
     }
@@ -1468,11 +1509,7 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
     }
     held = i;
     apply(i);
-    clearTimeout(holdTimer);
-    holdTimer = setTimeout(() => {
-      held = -1;
-      read();
-    }, 1200);
+    armHold();
     window.scrollTo({
       top: g.start + ((i + 0.5) / tabs.length) * g.travel,
       behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
@@ -1501,7 +1538,12 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   };
 
   addEventListener("scroll", schedule, { passive: true });
-  addEventListener("resize", schedule);
+  addEventListener("resize", () => {
+    carry = "unknown";
+    stage.classList.remove("is-pinned-js");
+    stage.style.transform = "";
+    schedule();
+  });
   if (typeof ResizeObserver === "function") new ResizeObserver(schedule).observe(stage);
   read();
 })();
