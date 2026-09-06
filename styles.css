@@ -9230,7 +9230,22 @@ body.menu-open {
   text-wrap: pretty;
 }
 
+/* The areas read as one long climb rather than eight clicks: the two columns
+   pin, and the scroll that would have moved them past the viewport walks the
+   list instead. --ex-step is the scroll each topic costs, so the track's
+   padding is the whole travel and the sticky column's own height never enters
+   the arithmetic - which is why the panels are stacked below, so that height
+   cannot change mid-scroll and shift the ground under the reader. JS reads
+   --ex-count off the markup and writes --ex-progress back for the rail. */
+.ex-areas__track {
+  --ex-step: clamp(190px, 27vh, 330px);
+  --ex-count: 8;
+  padding-bottom: calc(var(--ex-count) * var(--ex-step));
+}
+
 .ex-areas__body {
+  position: sticky;
+  top: calc(var(--nav-height) + clamp(14px, 2.6vh, 34px));
   display: grid;
   grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
   gap: clamp(48px, 6vw, 96px);
@@ -9249,15 +9264,27 @@ body.menu-open {
   gap: clamp(26px, 3.4vh, 40px);
 }
 
-/* continuous rail the active dot travels along */
-.ex-areas__nav ul::before {
+/* continuous rail the active dot travels along, and the part of it already
+   climbed - the fill is the only thing that says how far through you are */
+.ex-areas__nav ul::before,
+.ex-areas__nav ul::after {
   content: "";
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 7px;
-  width: 2px;
+  width: var(--rail-width);
+  border-radius: var(--rail-width);
+}
+
+.ex-areas__nav ul::before {
+  bottom: 0;
   background: rgba(28, 20, 25, 0.14);
+}
+
+.ex-areas__nav ul::after {
+  height: calc(var(--ex-progress, 0) * 100%);
+  background: var(--marker-core);
+  opacity: 0.55;
 }
 
 .ex-areas__nav button {
@@ -9303,23 +9330,31 @@ body.menu-open {
   transform: none;
 }
 
+/* All eight panels occupy the same grid cell, so the column is as tall as the
+   tallest one and stays that height whichever is showing. visibility (not
+   display) keeps the box for sizing while taking the panel out of the
+   accessibility tree; JS adds inert so nothing inside is tabbable. */
+.ex-areas__panels {
+  display: grid;
+}
+
 .ex-areas__panel {
+  grid-area: 1 / 1;
   outline: none;
 }
 
-.ex-areas__panel:not([hidden]) {
-  animation: exAreaIn 0.4s ease both;
+.ex-areas__panels.is-stacked .ex-areas__panel {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.34s var(--ease-out), transform 0.34s var(--ease-out), visibility 0s linear 0.34s;
 }
 
-@keyframes exAreaIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.ex-areas__panels.is-stacked .ex-areas__panel.is-current {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition-delay: 0s;
 }
 
 .ex-areas__art {
@@ -9365,6 +9400,66 @@ body.menu-open {
   .ex-areas__head,
   .ex-areas__body {
     grid-template-columns: 1fr;
+  }
+
+  /* one column: pinning would park the list above a tall panel and scroll
+     past it, so the areas go back to being plain tabs */
+  .ex-areas__track {
+    padding-bottom: 0;
+  }
+
+  .ex-areas__body {
+    position: static;
+  }
+}
+
+/* A pinned column has only the space between the nav and the bottom of the
+   window, so on a short one the panel tightens instead of being cut off. */
+@media (max-height: 800px) {
+  .ex-areas__art {
+    margin-bottom: clamp(12px, 2vh, 22px);
+  }
+
+  .ex-areas__panel h3 {
+    font-size: clamp(22px, 2vw, 30px);
+  }
+
+  .ex-areas__panel > p {
+    margin-bottom: clamp(18px, 2.8vh, 30px);
+  }
+
+  .ex-areas__list li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
+/* Below that it stops fitting however tight it gets, so the areas go back to
+   being plain tabs rather than pinning something the reader cannot see. */
+@media (max-height: 690px) {
+  .ex-areas__track {
+    padding-bottom: 0;
+  }
+
+  .ex-areas__body {
+    position: static;
+  }
+}
+
+/* Someone who asked for less motion does not want the copy changing under
+   them as they scroll. No travel means JS finds none and leaves the tabs
+   click-only. */
+@media (prefers-reduced-motion: reduce) {
+  .ex-areas__track {
+    padding-bottom: 0;
+  }
+
+  .ex-areas__body {
+    position: static;
+  }
+
+  .ex-areas__panels.is-stacked .ex-areas__panel {
+    transition-duration: 0s;
   }
 }
 

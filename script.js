@@ -1377,30 +1377,133 @@ setupCtaPattern();
 
 window.addEventListener("load", () => scheduleTrailOverlay(true));
 
-/* Expertise "Our Areas": master-detail tabs (the Figma layout) */
-(() => {
-  const tabs = Array.from(document.querySelectorAll('.ex-areas__nav [role="tab"]'));
-  if (!tabs.length) return;
-  const panels = Array.from(document.querySelectorAll(".ex-areas__panel"));
+/* Expertise "Our Areas": the list walks itself as you scroll.
 
-  const select = (tab) => {
-    tabs.forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
-    panels.forEach((p) => {
-      p.hidden = p.id !== tab.getAttribute("aria-controls");
+   The two columns pin and the scroll that would have carried them past the
+   viewport advances the topic instead - so reading the section top to bottom
+   is reading all eight areas, in order, without clicking anything.
+
+   Scroll is the single source of truth for which topic is showing. A click or
+   an arrow key does not set the state directly; it scrolls to that topic's
+   band and the scroll handler picks it up. That keeps one writer, so the rail
+   fill, the dot and the panel can never disagree. The exception is the short
+   window while a smooth scroll is in flight: the target is held so the reader
+   does not watch eight panels flick past on the way there.
+
+   Without JS the markup is what it always was - topic one, the rest hidden.
+   The stacking that makes the sticky column a constant height is applied
+   here, on the way in, so that fallback stays intact. */
+(() => {
+  const track = document.querySelector(".ex-areas__track");
+  const stage = document.querySelector(".ex-areas__body");
+  const wrap = document.querySelector(".ex-areas__panels");
+  const tabs = Array.from(document.querySelectorAll('.ex-areas__nav [role="tab"]'));
+  const panels = Array.from(document.querySelectorAll(".ex-areas__panel"));
+  if (!track || !stage || !wrap || tabs.length !== panels.length || !tabs.length) return;
+
+  /* The whole pattern rests on the column pinning. Where sticky is not
+     available the track would just be a tall empty gap with the columns
+     scrolled off the top of it, so the travel is removed and the tabs stay
+     tabs - read() sees no travel and never touches scroll. */
+  if (!(window.CSS && CSS.supports && CSS.supports("position", "sticky"))) {
+    track.style.setProperty("--ex-step", "0px");
+  }
+
+  track.style.setProperty("--ex-count", String(tabs.length));
+  wrap.classList.add("is-stacked");
+  panels.forEach((p) => {
+    p.hidden = false;
+  });
+
+  let index = -1;
+  let held = -1;
+  let holdTimer = 0;
+
+  const apply = (i) => {
+    if (i === index) return;
+    index = i;
+    tabs.forEach((t, n) => t.setAttribute("aria-selected", String(n === i)));
+    panels.forEach((p, n) => {
+      p.classList.toggle("is-current", n === i);
+      p.setAttribute("aria-hidden", String(n !== i));
+      if (n === i) p.removeAttribute("inert");
+      else p.setAttribute("inert", "");
     });
   };
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => select(tab));
+  /* Where the column is pinned, and for how long. Both come out of layout, so
+     a font swap or a resize just changes the answer. */
+  const geometry = () => {
+    const travel = track.offsetHeight - stage.offsetHeight;
+    if (travel <= 1) return null;
+    const pinTop = parseFloat(getComputedStyle(stage).top) || 0;
+    const trackTop = track.getBoundingClientRect().top + window.scrollY;
+    return { travel, start: trackTop - pinTop };
+  };
+
+  const read = () => {
+    const g = geometry();
+    if (!g) {
+      track.style.setProperty("--ex-progress", "0");
+      if (index < 0) apply(0);
+      return;
+    }
+    const progress = Math.min(1, Math.max(0, (window.scrollY - g.start) / g.travel));
+    track.style.setProperty("--ex-progress", progress.toFixed(4));
+    const at = Math.min(tabs.length - 1, Math.floor(progress * tabs.length));
+    if (held >= 0) {
+      if (at !== held) return;
+      held = -1;
+      clearTimeout(holdTimer);
+    }
+    apply(at);
+  };
+
+  /* Centre of topic i's band, in page coordinates. */
+  const go = (i) => {
+    const g = geometry();
+    if (!g) {
+      apply(i);
+      return;
+    }
+    held = i;
+    apply(i);
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => {
+      held = -1;
+      read();
+    }, 1200);
+    window.scrollTo({
+      top: g.start + ((i + 0.5) / tabs.length) * g.travel,
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  };
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => go(i));
     tab.addEventListener("keydown", (e) => {
       const step = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0;
       if (!step) return;
       e.preventDefault();
-      const next = tabs[(tabs.indexOf(tab) + step + tabs.length) % tabs.length];
-      next.focus();
-      select(next);
+      const next = (i + step + tabs.length) % tabs.length;
+      tabs[next].focus();
+      go(next);
     });
   });
+
+  let frame = 0;
+  const schedule = () => {
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      read();
+    });
+  };
+
+  addEventListener("scroll", schedule, { passive: true });
+  addEventListener("resize", schedule);
+  if (typeof ResizeObserver === "function") new ResizeObserver(schedule).observe(stage);
+  read();
 })();
 
 /* Scroll-in reveals, plus one-at-a-time icon drawing.
