@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
-  <body class="page page--audience page--investors">
+  <body class="page page--audience page--horizon page--investors">
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
       <symbol id="most-logo" viewBox="0 0 160 58">
         <path d="M46.1176 16.6761V2.64803L25.4118 34.1921H23.0588L2.82353 2.64803V34.8539H0V0.000976562H4L24.2989 31.1793L44.6596 0.000976562H48.9412V16.6761H46.1176Z" />
@@ -63,71 +63,64 @@
 
     <main class="audience-page">
 
-      <!-- AUDIENCE HERO: the homepage hero scene, investors edition (washed
-           slate-blue palette, shared construction) -->
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-media" aria-hidden="true">
-          <img class="hero-bg" src="arch-4.webp" alt="" fetchpriority="high" decoding="async" />
-          <div class="hero-wash"></div>
-          <div class="hero-vignette"></div>
-          <div class="hero-noise"></div>
-        </div>
-
-        <div class="hero-glow" aria-hidden="true">
-          <span class="hero-glow__sun"></span>
-          <span class="hero-glow__haze"></span>
-        </div>
-
-        <div class="hero-ridges" aria-hidden="true">
-          <div class="hero-climbers-sun" aria-hidden="true"></div>
-
-          <img class="hero-ridges__img" src="gora-slate-2000px.svg" alt="" decoding="async" />
-
-          <div class="hero-climbers" aria-hidden="true">
-            <img class="hero-climbers__img" src="climbers-pomarancz.svg" alt="" decoding="async" />
+      <!-- HORIZON SCENE (Figma 2795:945): the steel lattice, read as pattern, the torn
+           horizon cutting a flat field across it, and the orange route
+           dropping from the summit. The intro copy sits on that field, so the
+           scene runs straight into the page instead of stopping at a panel. -->
+      <div class="hz-scene">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hz-photo" aria-hidden="true">
+            <img src="arch-lattice.webp" alt="" fetchpriority="high" decoding="async" />
           </div>
-        </div>
+          <div class="hero-noise" aria-hidden="true"></div>
+          <div class="scene-ground" aria-hidden="true"></div>
 
-        <div class="hero-content">
-          <p class="eyebrow reveal">— for investors</p>
-          <h1 class="hero-title reveal" id="hero-title">
-            Legal support that protects value<br>and keeps deals&nbsp;moving.
-          </h1>
-          <p class="hero-tagline reveal">
-            We manage the legal side of structuring, negotiating, and closing deals&nbsp;— giving you clarity, speed, and confidence at every&nbsp;step.
-          </p>
-          <a class="primary-cta reveal" href="#what-we-help">
-            <span>Learn more</span>
-            <svg viewBox="0 0 20 20" aria-hidden="true">
-              <path d="M10 4v12M6 12l4 4 4-4" />
-            </svg>
-          </a>
-        </div>
-      </section>
+          <svg class="hz-horizon" viewBox="0 0 1440 759" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M10.5 242.66H5L0 244.131V759H1440V138.091H1435L1432.5 135.589L1428.5 134.088L1427 136.09H1423.5L1420 135.089L1415.5 136.09L1410.5 141.593L1405 148.598L1399 153.601L1393 155.603L1387.5 149.599L1385 150.599L1381 149.098L1375.5 149.599L1369.5 150.099L1365 147.097L1360 142.094L1355.5 140.593L1354 134.088L1351.5 130.586L1342.5 123.081L1339.5 117.077L1334.5 112.574L1331 105.069L1323.5 99.0653L1322.5 94.062L1316.5 86.557L1308 76.5504L1302.5 69.5458L1297.5 66.5438L1291.5 59.0389L1284 53.5353L1282 48.0316L1274.5 41.5274L1270.5 43.0283L1266.5 39.526V36.5241L1259 28.5188L1257.5 26.0171L1253.5 22.0145L1247.5 17.5115H1244L1240 14.5096L1235.5 16.5109L1228 22.0145L1224.5 20.5135L1223.5 17.5115H1218L1214.5 12.0079L1209.5 11.5076L1206.5 8.00527L1201 5.0033L1198.5 0L1194 2.50165L1192.5 0L1185 6.00396L1179 9.00593L1173 5.0033H1163L1152 7.50494L1150.5 6.00396L1145 10.0066L1137.5 12.0079L1133 12.5082L1132 10.0066L1127.5 9.50626L1125 6.50428L1117.5 6.00396L1110 6.50428L1105.5 10.0066L1101 12.0079L1094.5 19.5129L1088.5 18.5122L1079 22.5148L1070.5 28.0185L1069.5 32.5214L1067 36.5241L1066.5 40.0264L1061.5 46.0303L1050.5 56.0369L1047 54.0356L1038 62.0409L1032 64.5425V66.5438L1028 68.5452L1027 71.5471L1019.5 76.0501L1014.5 78.0514L1012.5 77.5511L1008 80.0527L1007.5 79.0521L1001 81.0534L999 80.0527L994.5 85.056L991.5 88.058H987.5L984 92.561H978L974 97.5643L968 100.066H966L963.5 104.569L959 107.571L954.5 111.574H949.5V115.076L946 116.076L944 121.58L940 125.583L932 129.085L930.5 128.585L926.5 131.086L921.5 133.088L915.5 136.59L908 142.594L905 148.098L899 155.603L895 160.105L887.5 168.111L882.5 174.115L877.5 179.618L875 184.121L868 188.124L859 192.127L856 196.129L844.5 206.136L840.5 210.138L832 208.137L828.5 209.638L821 214.141L818.5 218.144L814 221.146L812 225.148L813 229.151L809 237.156L805.5 238.657L802 241.159H798.5L793.5 246.663L784.5 250.165L780.5 254.167H777.5L773 257.169L766 259.171L760.5 258.67L754.5 260.171L752.5 261.172L748.5 261.672L744 263.674L740 262.673L736 261.672L729.5 258.67L723.5 260.171L721 262.673L717 264.674L711.5 268.677L708 271.679H703.5L696 270.178L679.5 269.678L677.5 265.675L673.5 264.174L672.5 262.673L667.5 261.172L650.5 255.668L651 253.667L646.5 253.167L633 249.664L631.5 247.663L624.5 247.163V249.164L622 249.664L617 255.668L611.5 256.669L608 258.67H602.5L599 262.673L593.5 265.175L585.5 271.179L584.5 273.68L579.5 276.182L576.5 280.185L570.5 281.686L568 284.187H559.5L555.5 285.688L549.5 287.69L542.5 286.689L539 290.691L534 289.191L531 289.691L526.5 288.69L521 291.692L519 290.691H516.5L515 293.193L513 294.694H510L509 297.696L508.5 299.197H505L503.5 302.199L502.5 304.2L497 307.202L496 305.201H493L491.5 303.2L488.5 304.701L486 305.701L483.5 308.203L482 311.205H478L476 308.203H473.5L470 305.201L464.5 302.699L460 299.197L455 297.696L450 299.197L443.5 300.198L440 301.699H436.5L433 305.201H429.5L426 308.703V312.706L421.5 315.708V319.711L418 323.213H413L410 328.216L404.5 331.719L397.5 333.72L394 332.719L392.5 335.721L385.5 340.724L380 341.725L375 342.225L371 344.227H365.5H358.5L347.5 336.722L346 332.719L342.5 331.719L339.5 328.717L330.5 323.213L326 321.212L324 317.209L319.5 316.709L316 315.708V311.205L309.5 307.703L299.5 306.202L281 299.197L267.5 293.693V290.191L263 287.69L253.5 279.684H249L244 276.682H238.5L235 273.68L230.5 275.181L224 273.68L216 271.179L206 272.179L197 273.68L189.5 271.179L179.5 269.177L169 266.175L158.5 261.172H151L144 257.67L135.5 254.167L126.5 251.666L118.5 249.164H113.5H108.5L100.5 247.163L90 251.666L84.5 253.167H77.5L71 250.165L63.5 246.162L59 247.163L51.5 245.162L37.5 239.158L30 235.155L24 236.656L15.5 240.659L10.5 242.66Z" />
+          </svg>
 
-      <div class="aud-intro-float">
-        <div class="aud-hero__intro">
-          <span class="aud-hero__intro-dot" aria-hidden="true"></span>
-          <p class="aud-hero__intro-lead">
-            As an investor, your focus is on finding opportunities, assessing risk, and generating&nbsp;returns.
-          </p>
-          <p>
-            From early-stage investments to multi-party rounds, follow-ons, secondaries, and exits, we help you move efficiently, protect your position, and maximise long-term&nbsp;value.
-          </p>
-        </div>
+          <svg class="hz-chart js-draw" viewBox="0 0 288.436 512.628" fill="none" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="hz-fade" x1="143.778" y1="13" x2="143.778" y2="512" gradientUnits="userSpaceOnUse">
+                <stop offset="0.0865" stop-color="currentColor" />
+                <stop offset="1" stop-color="currentColor" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <circle cx="259.278" cy="8.5" r="8" fill="currentColor" />
+            <path d="M258.403 13L248.494 24.7094L240.838 43.6245L243.991 49.0289L253.449 56.685H261.556L271.465 67.4937L286.778 78.7527L274.617 88.2103L248.494 94.065H243.991L227.776 98.5686H216.967L195.798 105.324L191.294 115.682H180.935L160.217 123.789L150.309 137.3L167.424 140.452L180.935 145.857L191.294 153.513L205.707 155.764L216.967 160.268H232.28L243.991 164.772L251.197 176.931L261.556 187.29H274.617L282.274 199.449L286.778 212.51L267.861 225.57L248.494 229.624L232.28 225.57L223.723 229.624H216.967L205.707 231.875L186.791 225.57L180.935 217.914H175.531L162.019 223.769L153.912 229.624L141.751 239.081L120.132 234.578L113.827 239.081L98.5134 245.386H93.1086H84.5512H61.5811L49.8708 253.042L31.4047 257.996L20.1448 262.05V281.866L31.4047 285.919L57.9779 288.621L64.7338 296.277L95.811 304.384H102.117L125.087 316.543L137.247 322.848L141.751 325.551H156.614H167.424L175.531 330.955L193.546 334.107L199.402 336.81L205.707 346.717L221.02 352.122L232.28 357.076L238.586 377.342L243.991 384.097L253.449 397.608V408.867L232.28 419.226H221.02L195.798 425.981H175.531H167.424L160.217 434.538L137.247 439.492H110.224L102.117 445.347L73.2913 460.659H61.5811L57.9779 464.262L49.8708 480.024H20.1448V494.436L10.2362 500.291L0.777919 512" stroke="url(#hz-fade)" />
+          </svg>
+
+          <span class="scene-spine scene-spine--hero" aria-hidden="true"></span>
+
+          <div class="hero-content">
+            <p class="eyebrow reveal">for investors</p>
+            <h1 class="hero-title reveal" id="hero-title">
+              Legal support that protects value<br>and keeps deals&nbsp;moving.
+            </h1>
+            <p class="hero-tagline reveal">
+              We manage the legal side of structuring, negotiating, and closing deals&nbsp;— giving you clarity, speed, and confidence at every&nbsp;step.
+            </p>
+            <a class="primary-cta reveal" href="#what-we-help">
+              <span>Learn more</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M10 4v12M6 12l4 4 4-4" />
+              </svg>
+            </a>
+          </div>
+        </section>
+
+        <section class="scene-intro" aria-label="Introduction">
+          <span class="scene-spine scene-spine--intro" aria-hidden="true"></span>
+          <div class="scene-intro__inner">
+            <p class="scene-intro__lead io-reveal">
+              As an investor, your focus is on finding opportunities, assessing risk, and generating&nbsp;returns.
+            </p>
+            <p class="scene-intro__body io-reveal">
+              From early-stage investments to multi-party rounds, follow-ons, secondaries, and exits, we help you move efficiently, protect your position, and maximise long-term&nbsp;value.
+            </p>
+          </div>
+        </section>
       </div>
-
-      <svg class="hero-trail" viewBox="0 0 2000 850" preserveAspectRatio="none" aria-hidden="true">
-        <path class="hero-trail__path" d="" />
-        <g class="hero-trail__leaders"></g>
-      </svg>
-
-      <!-- invisible stub: the trail builder requires the homepage's
-           ridge-edge leaders group to exist before it draws anything -->
-      <svg class="ridge-edge__leaders" viewBox="0 0 2000 100" preserveAspectRatio="none" aria-hidden="true" style="display:none"></svg>
-
-      <div class="hero-trail-points" aria-hidden="true"></div>
-      <div class="hero-trail-labels" aria-hidden="true"></div>
 
       <section class="aud-help" id="what-we-help" aria-labelledby="aud-help-title">
         <header class="aud-help__head">

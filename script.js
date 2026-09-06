@@ -1417,7 +1417,7 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
    backs the reveal up. */
 (() => {
   const pending = new Set(document.querySelectorAll(".io-reveal"));
-  const icons = Array.from(document.querySelectorAll(".ex-icon"));
+  const icons = Array.from(document.querySelectorAll(".ex-icon, .js-draw"));
   if (!pending.size && !icons.length) return;
 
   /* ---------- icon drawing: one at a time, inside the reading band ---------- */

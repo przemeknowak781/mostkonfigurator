@@ -6693,43 +6693,6 @@ body.menu-open {
   transform: translateY(-2px);
 }
 
-/* Intro as a filled accent panel (per the Figma direction), tinted with
-   each audience's accent colour. */
-.aud-hero__intro {
-  position: relative;
-  z-index: 3;
-  margin: clamp(48px, 7vh, 88px) 0 0;
-  max-width: 820px;
-  padding: clamp(24px, 3.2vh, 36px) clamp(26px, 2.6vw, 42px);
-  background: linear-gradient(135deg, #cf7f54 0%, #b25e37 100%);
-  border-radius: 18px;
-  box-shadow: 0 26px 60px -30px rgba(0, 0, 0, 0.6);
-}
-
-.page--companies .aud-hero__intro {
-  background: linear-gradient(135deg, #8d7a86 0%, #6d5966 100%);
-}
-
-.page--investors .aud-hero__intro {
-  background: linear-gradient(135deg, #55719f 0%, #3f5985 100%);
-}
-
-.aud-hero__intro-dot {
-  display: none;
-}
-
-.aud-hero__intro p {
-  margin: 0;
-  color: rgba(255, 246, 240, 0.88);
-  font: 400 clamp(15px, 1.05vw, 16.5px) / 1.65 "Outfit", system-ui, sans-serif;
-}
-
-.aud-hero__intro p.aud-hero__intro-lead {
-  margin: 0 0 10px;
-  color: #fff8f2;
-  font: 500 clamp(16.5px, 1.2vw, 19px) / 1.5 "Urbanist", system-ui, sans-serif;
-}
-
 /* AUD HELP â€” white grid */
 .aud-help {
   padding: clamp(96px, 13vh, 144px) var(--container-x);
@@ -8975,35 +8938,6 @@ body.menu-open {
   border-color: rgba(36, 21, 17, 0.45);
 }
 
-.page--audience .aud-hero__intro {
-  background: linear-gradient(135deg, #f3b78e 0%, #e79d72 100%);
-  box-shadow: 0 26px 60px -34px rgba(150, 74, 34, 0.5);
-}
-
-.page--audience .aud-hero__intro p {
-  color: rgba(62, 30, 14, 0.85);
-}
-
-.page--audience .aud-hero__intro p.aud-hero__intro-lead {
-  color: #3a1c0c;
-}
-
-/* The intro panel floats over the hero's lower-right corner - the open
-   zone of the scene - above the drawn trail line (the trail svg is a
-   sibling of the hero at z-index 18). */
-.page--audience .aud-intro-float {
-  position: relative;
-  z-index: 20;
-  display: flex;
-  justify-content: flex-end;
-  margin: clamp(-300px, -26vh, -160px) var(--container-x) 0;
-}
-
-.page--audience .aud-intro-float .aud-hero__intro {
-  margin-top: 0;
-  max-width: 760px;
-}
-
 /* --- Companies palette: washed grey-brown taupe (same construction, new hues) --- */
 .page--companies .hero {
   background: #b1a49c;
@@ -9070,19 +9004,6 @@ body.menu-open {
   border-color: rgba(32, 26, 21, 0.45);
 }
 
-.page--companies .aud-hero__intro {
-  background: linear-gradient(135deg, #c2b2a7 0%, #a8988b 100%);
-  box-shadow: 0 26px 60px -34px rgba(108, 88, 72, 0.5);
-}
-
-.page--companies .aud-hero__intro p {
-  color: rgba(48, 38, 30, 0.88);
-}
-
-.page--companies .aud-hero__intro p.aud-hero__intro-lead {
-  color: #2a2018;
-}
-
 /* --- Investors palette: washed slate blue (same construction, new hues) --- */
 .page--investors .hero {
   background: #a3adbd;
@@ -9147,19 +9068,6 @@ body.menu-open {
 .page--investors .top-nav .nav-cta {
   color: #1a222f;
   border-color: rgba(26, 34, 47, 0.45);
-}
-
-.page--investors .aud-hero__intro {
-  background: linear-gradient(135deg, #b2bcca 0%, #93a1b3 100%);
-  box-shadow: 0 26px 60px -34px rgba(78, 94, 118, 0.5);
-}
-
-.page--investors .aud-hero__intro p {
-  color: rgba(24, 34, 50, 0.88);
-}
-
-.page--investors .aud-hero__intro p.aud-hero__intro-lead {
-  color: #16202f;
 }
 
 /* The homepage sun glow is orange; under plus-lighter that reads as a
@@ -9742,25 +9650,30 @@ body.menu-open {
 }
 
 /* The Figma icons are single continuous strokes - let each one draw
-   itself as its card scrolls into view. */
-.ex-icon path {
+   itself as its card scrolls into view. .js-draw opts anything else into
+   the same queue; the investor/company hero route uses it. */
+.ex-icon path,
+.js-draw path {
   stroke-dasharray: var(--len, 1200);
   stroke-dashoffset: var(--len, 1200);
 }
 
 /* an icon the reader already scrolled past is just shown, not animated */
-.ex-icon.is-drawn path {
+.ex-icon.is-drawn path,
+.js-draw.is-drawn path {
   stroke-dashoffset: 0;
 }
 
 /* the queue in script.js adds .is-drawing so only one icon draws at a time */
-.ex-icon.is-drawing path {
+.ex-icon.is-drawing path,
+.js-draw.is-drawing path {
   stroke-dashoffset: 0;
   transition: stroke-dashoffset 2600ms cubic-bezier(0.32, 0.72, 0.3, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ex-icon path {
+  .ex-icon path,
+  .js-draw path {
     stroke-dasharray: none;
     stroke-dashoffset: 0;
   }
@@ -10045,39 +9958,137 @@ body.menu-open {
   --trail-leader: rgba(255, 168, 110, 0.42);
 }
 
+/* ============ AUDIENCE SCENES ============
+   The three audience heroes are built the same way: a full-bleed scene whose
+   artwork cuts a horizon across the hero, and an intro block that rides up
+   onto the ground below that cut instead of sitting in a floating panel.
+   Founders gets the Figma ridge; Companies and Investors get the Figma torn
+   horizon over an architecture pattern. What they share lives here.
+
+   --scene-cross is the whole trick: it says where the artwork's left-hand
+   crossing point lands, measured from the top of the hero. Each page derives
+   its own value from the constants baked into its Figma path, and the intro
+   below reads the same variable - that is what keeps the copy sitting just
+   under the horizon at every window size instead of after a slab of dead
+   colour. It is declared on the page, not the hero, so both can see it. */
+
+/* One hairline down the left gutter, carried across the hero/intro seam by
+   two segments that meet at the section boundary. */
+.scene-spine {
+  position: absolute;
+  left: calc(var(--container-x) - var(--scene-gutter, clamp(14px, 2.6vw, 42px)));
+  z-index: 9;
+  width: 2px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.scene-spine::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.scene-spine--hero {
+  /* the eyebrow's first line, which is where the Figma dot sits */
+  top: calc(var(--nav-height) + clamp(64px, 10vh, 120px) + 7px);
+  bottom: 0;
+  background: linear-gradient(180deg, var(--spine-line), var(--spine-line-fade, var(--spine-line)));
+}
+
+.scene-spine--hero::before {
+  top: 0;
+  background: var(--spine-dot);
+  box-shadow: var(--spine-dot-ring, none);
+}
+
+.scene-spine--intro {
+  top: 0;
+  bottom: clamp(36px, 6vh, 80px);
+  background: linear-gradient(180deg, var(--spine-line-2, rgba(244, 236, 231, 0.24)), transparent);
+}
+
+.scene-spine--intro::before {
+  top: clamp(13px, 1.2vw, 18px);
+  background: var(--spine-dot-2, rgba(244, 236, 231, 0.88));
+  box-shadow: 0 0 0 5px rgba(244, 236, 231, 0.1);
+}
+
+/* Whatever is left between the bottom of the artwork and the bottom of the
+   hero. On desktop the art overshoots and this collapses to nothing; on a
+   short, narrow window it is what keeps the ground solid. */
+.scene-ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -2;
+  background: var(--scene-ground);
+}
+
+/* The intro copy sits on the ground the artwork cuts - no panel, no card.
+   The hero is 100svh and the artwork crosses at --scene-cross, so this pulls
+   the block up onto that ground and drops the lead exactly --scene-gap below
+   the crossing. */
+.scene-intro {
+  --scene-gap: clamp(70px, 8.5vh, 116px);
+  position: relative;
+  margin-top: calc(var(--scene-cross) - 100svh + var(--scene-gap));
+  padding: 0 var(--container-x) clamp(90px, 14vh, 168px);
+  color: var(--scene-cream);
+  background: var(--scene-ground);
+}
+
+.scene-intro__lead {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--scene-cream);
+  font: 500 clamp(19px, 1.75vw, 28px) / 1.32 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.scene-intro__body {
+  max-width: 62ch;
+  margin: clamp(18px, 2.4vh, 30px) 0 0;
+  color: rgba(244, 236, 231, 0.66);
+  font: 400 clamp(14px, 1.05vw, 17px) / 1.62 "Outfit", system-ui, sans-serif;
+}
+
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
-   The washed corporate hero is replaced here by the Figma scene: a flat
-   terracotta sky, the ridge silhouette lifted straight out of the Figma
-   frame, and the single founder walking it. The whole scene runs off five
-   tokens, so repainting it is a token swap, not a rewrite. */
+   A flat terracotta sky, the ridge silhouette lifted straight out of the
+   Figma frame, and the single founder walking it. The whole scene runs off
+   five tokens, so repainting it is a token swap, not a rewrite. */
 .page--founders {
   --fnd-sky-high: #dc8a67;
   --fnd-sky: #d17e5f;
   --fnd-sky-low: #c46f51;
   --fnd-land: #161822;
   --fnd-ink: #14161f;
-  --fnd-cream: #f4ece7;
-  --fnd-gutter: clamp(14px, 2.6vw, 42px);
-  /* Where the ridge's left-hand crossing point lands, measured from the top
-     of the hero. 67svh is the Figma ratio; the px+vw floor keeps the small
-     left peak clear of the CTA on short, wide windows, where the art scales
-     by width but the copy still has to fit the height; the cap stops the
-     crossing falling out of the hero entirely on a landscape phone. It is
-     declared on the page, not the hero, because the intro block below reads
-     it too - that is what keeps the copy sitting just under the ridge. */
-  --fnd-cross: min(calc(100svh - 36px), max(67svh, 560px + 7.74vw));
+  --scene-cream: #f4ece7;
+  --scene-ground: var(--fnd-land);
+  --spine-line: rgba(244, 236, 231, 0.6);
+  --spine-line-fade: rgba(244, 236, 231, 0.22);
+  --spine-dot: var(--scene-cream);
+  --spine-dot-ring: 0 0 0 5px rgba(244, 236, 231, 0.15);
+  /* 67svh is the Figma ratio; the px+vw floor keeps the small left peak clear
+     of the CTA on short, wide windows, where the art scales by width but the
+     copy still has to fit the height; the cap stops the crossing falling out
+     of the hero entirely on a landscape phone. */
+  --scene-cross: min(calc(100svh - 36px), max(67svh, 560px + 7.74vw));
 }
 
 .page--founders .fnd-scene {
   position: relative;
 }
 
-/* The scene is driven off the artwork, not the viewport. --fnd-art-w sets
-   how wide the ridge is drawn; --fnd-cross says where its left-hand
-   crossing point lands in the hero. Everything else falls out of the two
-   constants baked into the Figma path: the art is 0.59595 as tall as it is
-   wide, and its crossing sits 0.36532 of that width below its own top. Pin
-   those and the copy never gets swallowed, however wide the window gets. */
+/* The ridge is 0.59595 as tall as it is wide, and its crossing sits 0.36532
+   of that width below its own top. Pin those two and the copy is never
+   swallowed, however wide or short the window gets. */
 .page--founders .hero {
   --fnd-art-w: 100vw;
   --fnd-art-x: 0px;
@@ -10101,7 +10112,7 @@ body.menu-open {
 .page--founders .fnd-ridge {
   position: absolute;
   left: var(--fnd-art-x);
-  top: calc(var(--fnd-cross) - 0.36532 * var(--fnd-art-w));
+  top: calc(var(--scene-cross) - 0.36532 * var(--fnd-art-w));
   z-index: -2;
   width: var(--fnd-art-w);
   height: auto;
@@ -10110,96 +10121,13 @@ body.menu-open {
   pointer-events: none;
 }
 
-/* Whatever is left between the bottom of the artwork and the bottom of the
-   hero. On desktop the art overshoots and this collapses to nothing; on a
-   tall phone it is what keeps the ground solid. */
-.page--founders .fnd-ground {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: calc(var(--fnd-cross) + 0.23063 * var(--fnd-art-w) - 1px);
-  z-index: -2;
-  background: var(--fnd-land);
-}
-
 .page--founders .fnd-ridge__land,
 .page--founders .fnd-ridge__walker {
   fill: currentColor;
 }
 
-/* One hairline down the left gutter, carried across the hero/intro seam by
-   two segments that meet at the section boundary. */
-.page--founders .fnd-spine {
-  position: absolute;
-  left: calc(var(--container-x) - var(--fnd-gutter));
-  z-index: 9;
-  width: 2px;
-  border-radius: 2px;
-  pointer-events: none;
-}
-
-.page--founders .fnd-spine::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: var(--fnd-cream);
-  box-shadow: 0 0 0 5px rgba(244, 236, 231, 0.15);
-  transform: translate(-50%, -50%);
-}
-
-.page--founders .fnd-spine--hero {
-  top: calc(var(--nav-height) + clamp(64px, 10vh, 120px) + 7px);
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(244, 236, 231, 0.6), rgba(244, 236, 231, 0.34) 44%, rgba(244, 236, 231, 0.22));
-}
-
-.page--founders .fnd-spine--hero::before {
-  top: 0;
-}
-
-.page--founders .fnd-spine--intro {
-  top: 0;
-  bottom: clamp(36px, 6vh, 80px);
-  background: linear-gradient(180deg, rgba(244, 236, 231, 0.22), rgba(244, 236, 231, 0.26) 34%, rgba(244, 236, 231, 0));
-}
-
-.page--founders .fnd-spine--intro::before {
-  top: clamp(13px, 1.2vw, 18px);
-  background: rgba(244, 236, 231, 0.88);
-  box-shadow: 0 0 0 5px rgba(244, 236, 231, 0.1);
-}
-
-/* The intro copy sits on the ground the ridge cuts - no panel, no card. */
-.page--founders .fnd-intro {
-  --fnd-gap: clamp(70px, 8.5vh, 116px);
-  position: relative;
-  /* The hero is 100svh and the ridge crosses at --fnd-cross, so this pulls
-     the block up onto the dark ground the ridge cuts and drops the lead
-     exactly --fnd-gap below the crossing - no dead black in between. */
-  margin-top: calc(var(--fnd-cross) - 100svh + var(--fnd-gap));
-  padding: 0 var(--container-x) clamp(90px, 14vh, 168px);
-  color: var(--fnd-cream);
-  background: var(--fnd-land);
-}
-
-.page--founders .fnd-intro__lead {
-  max-width: 42ch;
-  margin: 0;
-  color: var(--fnd-cream);
-  font: 500 clamp(19px, 1.75vw, 28px) / 1.32 "Urbanist", system-ui, sans-serif;
-  letter-spacing: -0.005em;
-  text-wrap: balance;
-}
-
-.page--founders .fnd-intro__body {
-  max-width: 62ch;
-  margin: clamp(18px, 2.4vh, 30px) 0 0;
-  color: rgba(244, 236, 231, 0.66);
-  font: 400 clamp(14px, 1.05vw, 17px) / 1.62 "Outfit", system-ui, sans-serif;
+.page--founders .scene-ground {
+  top: calc(var(--scene-cross) + 0.23063 * var(--fnd-art-w) - 1px);
 }
 
 /* Hero type: near-black on terracotta, the same ink as the ridge. */
@@ -10236,10 +10164,10 @@ body.menu-open {
   border-color: var(--fnd-ink);
 }
 
-/* Light nav again, as on the Figma frame - the sky is saturated enough to
-   carry it, and the scrolled state drops its own dark backdrop underneath. */
+/* Light nav again over the saturated sky, as on the Figma frame - the
+   scrolled state drops its own dark backdrop underneath. */
 .page--founders .top-nav .wordmark {
-  color: var(--fnd-cream);
+  color: var(--scene-cream);
 }
 
 .page--founders .top-nav__menu a {
@@ -10253,7 +10181,191 @@ body.menu-open {
 }
 
 .page--founders .top-nav .nav-cta {
-  color: var(--fnd-cream);
+  color: var(--scene-cream);
   border-color: rgba(250, 242, 237, 0.55);
 }
 
+/* ============ HORIZON SCENE (Figma 2795:1083 and 2795:945) ============
+   Companies and Investors share one construction: an architecture pattern
+   filling the hero, the Figma torn horizon cutting a flat field across it,
+   and the orange route dropping from the summit down into that field. Only
+   two colours and the photograph change between the two pages.
+
+   Same anchoring idea as the founders ridge, with this artwork's own
+   constants: the horizon is 0.52708 as tall as it is wide, and its
+   left-hand crossing sits 0.16944 of that width below its own top. */
+.page--horizon {
+  --hz-accent: #ff612c;
+  --scene-cream: #f4ece7;
+  --scene-ground: var(--hz-field);
+  /* 56svh is the Figma ratio; the px floor keeps the crossing below the CTA
+     on short windows, where the artwork scales by width but the copy still
+     has to fit the height. */
+  --scene-cross: min(calc(100svh - 40px), max(56svh, 585px));
+  --spine-line: var(--hz-accent);
+  --spine-line-fade: rgba(255, 97, 44, 0.5);
+  --spine-dot: transparent;
+  --spine-dot-ring: inset 0 0 0 2px var(--hz-accent);
+  --spine-line-2: rgba(244, 236, 231, 0.34);
+  --spine-dot-2: rgba(244, 236, 231, 0.72);
+}
+
+.page--companies {
+  --hz-field: #5f5853;
+  --hz-ink: 38, 31, 36;
+}
+
+.page--investors {
+  --hz-field: #313e59;
+  --hz-ink: 24, 27, 38;
+}
+
+.page--horizon .hz-scene {
+  position: relative;
+}
+
+.page--horizon .hero {
+  --hz-art-w: 100vw;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--hz-field);
+}
+
+/* The architecture reads as a pattern, not as a building: desaturated,
+   pushed dark, and weighted towards the left so the copy has a ground. */
+.page--horizon .hz-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  overflow: hidden;
+  background: rgb(var(--hz-ink));
+}
+
+.page--horizon .hz-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 52%;
+  filter: saturate(0.46) contrast(1.24) brightness(0.56);
+}
+
+.page--horizon .hz-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(var(--hz-ink), 0.74) 0%, rgba(var(--hz-ink), 0.42) 44%, rgba(var(--hz-ink), 0.58) 100%),
+    linear-gradient(97deg, rgba(var(--hz-ink), 0.8) 0%, rgba(var(--hz-ink), 0.34) 48%, rgba(var(--hz-ink), 0.05) 76%);
+}
+
+.page--horizon .hz-horizon {
+  position: absolute;
+  left: 0;
+  top: calc(var(--scene-cross) - 0.16944 * var(--hz-art-w));
+  z-index: -2;
+  width: var(--hz-art-w);
+  height: auto;
+  aspect-ratio: 1440 / 759;
+  color: var(--hz-field);
+  pointer-events: none;
+}
+
+.page--horizon .hz-horizon path {
+  fill: currentColor;
+}
+
+.page--horizon .scene-ground {
+  top: calc(var(--scene-cross) + 0.35764 * var(--hz-art-w) - 1px);
+}
+
+/* The route is pinned to the horizon, not to the hero: in the Figma frame it
+   starts 871/1440 across and 6/759 down from the horizon's own top-left, so
+   the summit dot always lands on the summit. */
+.page--horizon .hz-chart {
+  position: absolute;
+  left: calc(0.60486 * var(--hz-art-w));
+  top: calc(var(--scene-cross) - 0.16527 * var(--hz-art-w));
+  z-index: -1;
+  width: calc(0.19864 * var(--hz-art-w));
+  height: auto;
+  aspect-ratio: 288.436 / 512.628;
+  color: var(--hz-accent);
+  filter: drop-shadow(0 0 5px var(--trail-glow));
+  pointer-events: none;
+}
+
+.page--horizon .hz-chart path {
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Hero type: white on the darkened pattern, nav left light. */
+.page--horizon .hero-content::before {
+  display: none;
+}
+
+.page--horizon .hero-content .eyebrow {
+  color: rgba(255, 236, 227, 0.72);
+  letter-spacing: 0.24em;
+}
+
+/* Figma sets the copy column on 912px, the headline on 912 and the tagline
+   on 700, and both fall on two lines there. The shared hero caps its content
+   at 820px, which breaks these longer headlines over four lines and walks
+   the CTA into the torn edge - so this restores the Figma measures. */
+.page--horizon .hero-content {
+  width: min(1000px, 76vw);
+}
+
+.page--horizon .hero-title {
+  max-width: min(960px, 66vw);
+  color: #fbf5f2;
+  text-shadow: 0 2px 22px rgba(8, 10, 16, 0.4);
+}
+
+.page--horizon .hero-tagline {
+  max-width: min(700px, 47vw);
+  color: rgba(248, 241, 237, 0.82);
+  text-shadow: 0 1px 12px rgba(8, 10, 16, 0.45);
+}
+
+.page--horizon .primary-cta {
+  color: var(--scene-cream);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(250, 242, 237, 0.5);
+  box-shadow: none;
+}
+
+.page--horizon .primary-cta:hover,
+.page--horizon .primary-cta:focus-visible {
+  color: rgb(var(--hz-ink));
+  background: var(--scene-cream);
+  border-color: var(--scene-cream);
+}
+
+.page--horizon .top-nav .wordmark {
+  color: var(--scene-cream);
+}
+
+.page--horizon .top-nav__menu a {
+  color: rgba(250, 242, 237, 0.86);
+}
+
+.page--horizon .top-nav__menu a:hover,
+.page--horizon .top-nav__menu a:focus-visible,
+.page--horizon .top-nav__menu a[aria-current="page"] {
+  color: #fff;
+}
+
+.page--horizon .top-nav .nav-cta {
+  color: var(--scene-cream);
+  border-color: rgba(250, 242, 237, 0.5);
+}
+
+/* Below laptop width the headline breaks over more lines than Figma's, so
+   the horizon drops to keep clear of it. */
+@media (max-width: 1180px) {
+  .page--horizon {
+    --scene-cross: min(calc(100svh - 40px), max(62svh, 625px));
+  }
+}
