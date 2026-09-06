@@ -6924,24 +6924,9 @@ body.menu-open {
 }
 
 .aud-expertise__list-wrap {
+  /* the rail's dots and segments are absolutely positioned against the rows,
+     but the padding that makes room for them is set per audience page */
   position: relative;
-  display: grid;
-  grid-template-columns: 60px minmax(0, 1fr);
-  gap: 20px;
-}
-
-.aud-expertise__trail {
-  width: 60px;
-  height: 100%;
-  min-height: 540px;
-}
-
-.aud-expertise__trail--companies {
-  min-height: 700px;
-}
-
-.aud-expertise__trail--investors {
-  min-height: 540px;
 }
 
 .aud-expertise__list {
@@ -8406,7 +8391,8 @@ body.menu-open {
 .page--audience .aud-expertise__list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(6px, 0.8vw, 12px);
+  /* the rail's segments span this gap, so the two read the same value */
+  gap: var(--exp-row-gap, clamp(6px, 0.8vw, 12px));
   margin: 0;
   padding: 0;
   border: 0;
@@ -8510,16 +8496,65 @@ body.menu-open {
   grid-column: 2;
 }
 
-/* Figma layout: the wavy accent trail runs beside a single column of
-   plain rows - restore the trail column instead of the card grid. */
+/* The expertise rail. This used to be a hand-drawn wavy SVG with circles
+   dropped at guessed coordinates - they never sat on the curve, and the
+   squiggle was the only line on the site that was not the straight hairline
+   the scene spines use. So it is CSS now, and geometric rather than drawn:
+   one dot per row, and one segment per row reaching down to the next row's
+   dot. Nothing is positioned by hand, so nothing can drift out of line.
+   --exp-dot-y is the only measurement: the row's top padding plus half a
+   line, i.e. the middle of the row's first line of text. */
 .page--audience .aud-expertise__list-wrap {
-  display: grid;
-  grid-template-columns: 60px minmax(0, 1fr);
+  --exp-rail-gutter: clamp(38px, 3.4vw, 54px);
+  --exp-rail-dot: 9px;
+  --exp-rail-dot-end: 13px;
+  --exp-row-gap: clamp(6px, 0.8vw, 12px);
+  --exp-dot-y: calc(14px + 0.775em);
+  /* the rail lives in this padding - a grid column would be a second child
+     the list has to be placed against, and it went wrong exactly that way */
+  padding-left: var(--exp-rail-gutter);
   min-width: 0;
 }
 
-.page--audience .aud-expertise__trail {
-  display: block;
+.page--audience .aud-expertise__list li::before,
+.page--audience .aud-expertise__list li::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--exp-rail-gutter) / -2);
+  pointer-events: none;
+}
+
+.page--audience .aud-expertise__list li::before {
+  top: var(--exp-dot-y);
+  width: var(--exp-rail-dot);
+  height: var(--exp-rail-dot);
+  border-radius: 50%;
+  background: var(--aud-accent);
+  transform: translate(-50%, -50%);
+}
+
+/* the segment from this row's dot to the next one - the row gap is part of
+   the span, which is why the two share a variable */
+.page--audience .aud-expertise__list li::after {
+  top: var(--exp-dot-y);
+  bottom: calc(-1 * (var(--exp-row-gap) + var(--exp-dot-y)));
+  width: 2px;
+  border-radius: 2px;
+  background: rgba(var(--aud-accent-rgb), 0.42);
+  transform: translateX(-50%);
+}
+
+.page--audience .aud-expertise__list li:last-child::after {
+  content: none;
+}
+
+/* the two ends of the path read as a start and a summit, like the trail
+   markers everywhere else */
+.page--audience .aud-expertise__list li:first-child::before,
+.page--audience .aud-expertise__list li:last-child::before {
+  width: var(--exp-rail-dot-end);
+  height: var(--exp-rail-dot-end);
+  box-shadow: 0 0 0 5px rgba(var(--aud-accent-rgb), 0.14);
 }
 
 .page--audience .aud-expertise__copy {
