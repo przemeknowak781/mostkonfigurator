@@ -9645,7 +9645,7 @@ body.menu-open {
 .ex-icon {
   display: block;
   width: auto;
-  height: clamp(118px, 15vw, 210px);
+  height: clamp(88px, 10vw, 148px);
   overflow: visible;
 }
 
@@ -9716,7 +9716,7 @@ body.menu-open {
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: clamp(36px, 6vw, 96px);
-  min-height: clamp(250px, 33vh, 340px);
+  min-height: clamp(200px, 26vh, 280px);
 }
 
 /* the step itself only carries the .is-in hook - its children animate */
@@ -9862,37 +9862,9 @@ body.menu-open {
   }
 }
 
-/* Light rail - the audience pages run the same journey on a cream stage */
-.ex-rail--light .ex-rail__spine {
-  background: linear-gradient(
-    180deg,
-    transparent,
-    rgba(28, 20, 25, 0.16) 7%,
-    rgba(28, 20, 25, 0.16) 93%,
-    transparent
-  );
-}
-
-.ex-rail--light .ex-rail__num {
-  color: rgba(186, 84, 44, 0.85);
-}
-
-.ex-rail--light .ex-rail__name {
-  color: #1c1419;
-}
-
-.ex-rail--light .ex-rail__copy {
-  color: rgba(28, 20, 25, 0.72);
-}
-
 /* the work rail replaces a boxed grid - give the section room to breathe */
 .page--audience .aud-work__head {
   margin-bottom: clamp(28px, 4vh, 48px);
-}
-
-/* audience rows carry one-line copy, so they need less height than home */
-.ex-rail--light .ex-rail__step {
-  min-height: clamp(210px, 27vh, 280px);
 }
 
 /* The ridge is the horizon: cream sky above it, dark rock below, so the
@@ -10368,4 +10340,57 @@ body.menu-open {
   .page--horizon {
     --scene-cross: min(calc(100svh - 40px), max(62svh, 625px));
   }
+}
+
+/* ============ HOW WE WORK - AUDIENCE ROW (Figma 2795:1293) ============
+   The drawn icons are the home page's device, and Basia asked for them back
+   there only. On the audience pages the same four or five points return to
+   the Figma layout: one compact row of columns, each under the shared orange
+   marker. That is ~370px of page instead of ~1400px for four short lines.
+
+   auto-fit collapses the tracks it does not need, so the four-point founders
+   row and the five-point company and investor rows both come out even. */
+.hww {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 178px), 1fr));
+  gap: clamp(30px, 4vh, 46px) clamp(24px, 2.4vw, 32px);
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.hww__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(10px, 1.2vh, 15px);
+}
+
+.hww__dot {
+  flex: none;
+  width: var(--marker-size);
+  height: var(--marker-size);
+  margin-bottom: clamp(4px, 0.8vh, 10px);
+  border-radius: 50%;
+  background: var(--marker-core);
+  box-shadow: var(--marker-shadow);
+}
+
+.hww__name {
+  /* Figma lets the copy start straight after the title, which leaves a
+     ragged baseline across the row when one title wraps and its neighbour
+     does not. Reserving two lines lands them together. */
+  min-height: 2.64em;
+  margin: 0;
+  color: #1c1419;
+  font: 500 clamp(15px, 1.15vw, 18px) / 1.32 "Urbanist", system-ui, sans-serif;
+  letter-spacing: -0.003em;
+  text-wrap: balance;
+}
+
+.hww__copy {
+  margin: 0;
+  color: rgba(28, 20, 25, 0.7);
+  font: 400 clamp(13px, 0.92vw, 15px) / 1.55 "Outfit", system-ui, sans-serif;
 }
