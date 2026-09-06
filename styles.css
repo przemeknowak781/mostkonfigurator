@@ -9537,8 +9537,50 @@ body.menu-open {
   --aud-accent-rgb: 194, 161, 115;
 }
 
+/* The ridge used to scale with the viewport width while the hero's height
+   was capped, so it sat as a thin strip on a narrow window and climbed over
+   the copy on a wide one. It is a horizon band now: full width, its height a
+   fraction of the hero, stretched to fit (the artwork carries
+   preserveAspectRatio="none" for exactly this). The sky keeps the top of the
+   hero at every size and the copy never meets the ridge. */
 .page--expertise .hero {
+  --exp-band: clamp(300px, 42%, 470px);
+  /* slack so the parallax cannot lift the band off the hero's bottom edge */
+  --exp-slack: 90px;
+  /* the 920px cap existed to fight the void the old ridge left; the band
+     closes it, so the hero can fill a tall window again */
+  min-height: clamp(680px, 92svh, 1100px);
+  overflow: hidden;
   background: #c7b6a2;
+}
+
+.page--expertise .hero-ridges {
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: calc(-1 * var(--exp-slack));
+  height: calc(var(--exp-band) + var(--exp-slack));
+}
+
+.page--expertise .hero-ridges__img {
+  width: 100%;
+  height: 100%;
+  margin-left: 0;
+}
+
+/* Figma sets this copy on a wider column than the shared 820px hero; holding
+   that keeps the headline off five lines on a wide window, which is what was
+   walking the CTA into the ridge. */
+.page--expertise .hero-content {
+  width: min(1000px, 76vw);
+}
+
+.page--expertise .hero-title {
+  max-width: min(940px, 66vw);
+}
+
+.page--expertise .hero-tagline {
+  max-width: min(700px, 47vw);
 }
 
 .page--expertise .hero-media {
@@ -9624,16 +9666,13 @@ body.menu-open {
   background: #f0ebe9;
 }
 
-/* Expertise has no floating intro panel below the ridge - shorten the hero
-   and pull the areas section up over the empty cream so the void closes */
-.page--expertise .hero {
-  min-height: clamp(680px, 92svh, 920px);
-}
-
+/* The areas section used to be yanked up to 300px over the hero to close the
+   void the old ridge left; at z-index 20 that was painting over the CTA on a
+   tall window. The band closes the void on its own, and .ex-areas is the same
+   #f0ebe9 as the ridge, so the seam is invisible without the pull. */
 .page--expertise .ex-areas {
   position: relative;
   z-index: 20;
-  margin-top: clamp(-300px, -24vh, -140px);
 }
 
 /* nothing anchors the dotted trail leaders here - drop them */
