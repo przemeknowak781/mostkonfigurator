@@ -9245,6 +9245,7 @@ body.menu-open {
   --ex-step: clamp(190px, 27vh, 330px);
   --ex-count: 8;
   --ex-pin-top: calc(var(--nav-height) + clamp(14px, 2.6vh, 34px));
+  position: relative;
   padding-bottom: calc(var(--ex-count) * var(--ex-step));
 }
 
@@ -9252,13 +9253,46 @@ body.menu-open {
    thread never has to keep up. But sticky is quietly disabled by things far
    away from here - a scroll container anywhere up the ancestor chain is
    enough - and when it fails the section becomes a tall empty gap, which is
-   worse than no pinning at all. So JS checks whether the column actually
-   held, and if it did not, it carries it with a transform instead. The
-   element stays in flow either way, so its space is reserved either way. */
-.ex-areas__body.is-pinned-js {
-  position: relative;
-  top: 0;
-  will-change: transform;
+   worse than no pinning at all.
+
+   So JS checks whether the column actually held, and if it did not, it pins
+   with `fixed` instead. Deliberately `fixed` rather than a transform: a
+   transform has to be rewritten every frame, and on a compositor-driven
+   scroll it always lands a frame late, which reads as the block trying to
+   tear itself loose. A fixed box is held by the browser - script only
+   switches state twice per section, at the two ends of the track, and there
+   is nothing left to lag.
+
+   Out of flow means the column's space has to be given back, which is what
+   the track's padding-top does. The column is centred in the viewport by
+   the same arithmetic that centres it in the track, so left/right/auto
+   margins land it in exactly the same place. */
+.ex-areas__track.is-pinning {
+  padding-top: var(--ex-stage-h, 0px);
+}
+
+/* Pinned: the box is taken verbatim from where the column was standing a
+   frame earlier. Centring it in the viewport instead would be close but not
+   equal - below about 1300px the section's own padding, not max-width, is
+   what decides the column's width. */
+.ex-areas__body.is-pinned {
+  position: fixed;
+  top: var(--ex-pin-top);
+  left: var(--ex-stage-x, 0px);
+  right: auto;
+  width: var(--ex-stage-w, auto);
+  max-width: none;
+  margin-inline: 0;
+}
+
+/* Parked at the end of the track. Absolute inside the track, so the track's
+   own content box centres it exactly as flow did. */
+.ex-areas__body.is-parked {
+  position: absolute;
+  top: var(--ex-parked-top, 0px);
+  left: 0;
+  right: 0;
+  margin-inline: auto;
 }
 
 .ex-areas__body {

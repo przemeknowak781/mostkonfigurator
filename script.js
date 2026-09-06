@@ -1401,14 +1401,6 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   const panels = Array.from(document.querySelectorAll(".ex-areas__panel"));
   if (!track || !stage || !wrap || tabs.length !== panels.length || !tabs.length) return;
 
-  /* The whole pattern rests on the column pinning. Where sticky is not
-     available the track would just be a tall empty gap with the columns
-     scrolled off the top of it, so the travel is removed and the tabs stay
-     tabs - read() sees no travel and never touches scroll. */
-  if (!(window.CSS && CSS.supports && CSS.supports("position", "sticky"))) {
-    track.style.setProperty("--ex-step", "0px");
-  }
-
   track.style.setProperty("--ex-count", String(tabs.length));
   wrap.classList.add("is-stacked");
   panels.forEach((p) => {
@@ -1451,32 +1443,79 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   const geometry = () => {
     const travel = track.offsetHeight - stage.offsetHeight;
     if (travel <= 1) return null;
-    if (!stage.classList.contains("is-pinned-js")) pinTop = parseFloat(getComputedStyle(stage).top) || 0;
+    if (pinState === "") pinTop = parseFloat(getComputedStyle(stage).top) || 0;
     const trackTop = track.getBoundingClientRect().top + window.scrollY;
     return { travel, pinTop, start: trackTop - pinTop };
   };
 
-  /* "sticky" until proven otherwise, then either confirmed or replaced. The
-     check needs the column to be a little way into the track, otherwise its
-     pinned and unpinned positions are the same and tell us nothing. */
-  let carry = "unknown";
+  /* Which mechanism holds the column.
+
+     Decided up front rather than by watching what happens, because watching
+     costs a few frames and those frames are visible: the column slips before
+     it catches. What breaks sticky is knowable without scrolling - a scroll
+     container anywhere between here and the viewport - so the chain is read
+     once instead. html and body are the exception: their overflow propagates
+     to the viewport, which is the scrollport sticky wants anyway, and `clip`
+     never makes a scroll container at all.
+
+     The reading is still checked once scrolling starts, because being wrong
+     here is worse than being slow: a section that does not pin is a tall
+     empty gap. Two bad frames in a row, so that one measurement taken mid
+     scroll cannot flip it. */
+  const stickyHolds = () => {
+    if (!(window.CSS && CSS.supports && CSS.supports("position", "sticky"))) return false;
+    for (let el = stage.parentElement; el && el !== document.documentElement; el = el.parentElement) {
+      const cs = getComputedStyle(el);
+      const scrolls = /^(auto|scroll|hidden|overlay)$/;
+      if (el !== document.body && (scrolls.test(cs.overflowX) || scrolls.test(cs.overflowY))) return false;
+    }
+    return true;
+  };
+
+  let carry = stickyHolds() ? "sticky" : "js";
+  let strikes = 0;
+  let pinState = "";
+
+  /* Only ever called on a state change, so the fixed box is set up twice per
+     section rather than every frame. The height has to be read while the
+     column is still in flow, which is why it is taken here and not later. */
+  const setPin = (next, g) => {
+    if (next === pinState) return;
+    if (pinState === "") {
+      /* Fractional, not offsetHeight: the padding that gives the column's
+         space back has to match its height exactly, or the page grows or
+         shrinks by a pixel at the moment it is pinned. */
+      const box = stage.getBoundingClientRect();
+      track.style.setProperty("--ex-stage-h", box.height + "px");
+      track.style.setProperty("--ex-stage-w", box.width + "px");
+      track.style.setProperty("--ex-stage-x", box.left + "px");
+    }
+    pinState = next;
+    track.style.setProperty("--ex-parked-top", g.travel + "px");
+    track.classList.toggle("is-pinning", next !== "");
+    stage.classList.toggle("is-pinned", next === "pinned");
+    stage.classList.toggle("is-parked", next === "parked");
+  };
 
   const hold = (g, scrolled) => {
-    if (carry === "unknown" && scrolled > 40 && scrolled < g.travel - 40) {
-      const drift = Math.abs(stage.getBoundingClientRect().top - g.pinTop);
-      carry = drift < 4 ? "sticky" : "js";
-      if (carry === "js") stage.classList.add("is-pinned-js");
+    if (carry === "sticky") {
+      /* A column that is not holding has drifted by exactly the distance
+         scrolled, so the test is proportional and works from the first few
+         pixels - no need to wait until the slip would be visible. */
+      if (scrolled > 12 && scrolled < g.travel - 12) {
+        if (Math.abs(stage.getBoundingClientRect().top - g.pinTop) < Math.max(4, scrolled * 0.5)) strikes = 0;
+        else if (++strikes >= 2) carry = "js";
+      }
+      return;
     }
-    if (carry === "js") {
-      stage.style.transform = "translate3d(0," + Math.min(g.travel, Math.max(0, scrolled)).toFixed(1) + "px,0)";
-    }
+    setPin(scrolled <= 0 ? "" : scrolled >= g.travel ? "parked" : "pinned", g);
   };
 
   const read = () => {
     const g = geometry();
     if (!g) {
       track.style.setProperty("--ex-progress", "0");
-      if (carry === "js") stage.style.transform = "";
+      if (carry === "js") setPin("", { travel: 0 });
       if (index < 0) apply(0);
       return;
     }
@@ -1538,10 +1577,13 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   };
 
   addEventListener("scroll", schedule, { passive: true });
+  /* A new layout can change the answer, so the test is run again from
+     scratch - including putting the column back in flow so its pin offset
+     and height can be measured afresh. */
   addEventListener("resize", () => {
-    carry = "unknown";
-    stage.classList.remove("is-pinned-js");
-    stage.style.transform = "";
+    strikes = 0;
+    setPin("", { travel: 0 });
+    carry = stickyHolds() ? "sticky" : "js";
     schedule();
   });
   if (typeof ResizeObserver === "function") new ResizeObserver(schedule).observe(stage);
