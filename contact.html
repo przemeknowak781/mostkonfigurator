@@ -63,70 +63,116 @@
 
     <main class="contact-page">
 
-      <section class="contact-hero" aria-labelledby="contact-hero-title">
-        <div class="contact-hero__bg" aria-hidden="true">
-          <img class="contact-hero__photo" src="background.webp" alt="" fetchpriority="high" decoding="async" />
-          <div class="contact-hero__wash"></div>
+      <!-- PAGE HERO -->
+      <section class="page-hero page-hero--contact" aria-labelledby="page-hero-title">
+        <div class="page-hero__media" aria-hidden="true">
+          <img class="page-hero__bg" src="background.webp" alt="" fetchpriority="high" decoding="async" />
+          <div class="page-hero__wash"></div>
+          <div class="page-hero__vignette"></div>
+          <div class="page-hero__noise"></div>
         </div>
-        <div class="contact-hero__ridge" aria-hidden="true"><img src="gora-bez-tla-2000px.svg" alt="" decoding="async" /></div>
-        <div class="contact-hero__climber" aria-hidden="true"><img src="climbers.svg" alt="" decoding="async" /></div>
-        <div class="contact-hero__sun" aria-hidden="true"></div>
-
-        <div class="contact-hero__content">
-          <p class="contact-hero__eyebrow reveal">Contact us</p>
-          <h1 class="contact-hero__title reveal" id="contact-hero-title">
-            Let's make the MOST of every stage.
+        <div class="page-hero__glow" aria-hidden="true">
+          <span class="page-hero__sun"></span>
+          <span class="page-hero__haze"></span>
+        </div>
+        <div class="page-hero__ridges" aria-hidden="true">
+          <img class="page-hero__ridge" src="gora-bez-tla-2000px.svg" alt="" decoding="async" />
+        </div>
+        <div class="page-hero__content">
+          <p class="page-hero__eyebrow reveal">&mdash; contact us &mdash;</p>
+          <h1 class="page-hero__title reveal" id="page-hero-title">
+            Let&rsquo;s make the MOST<br>
+            of every&nbsp;stage.
           </h1>
-          <ul class="contact-hero__channels reveal" aria-label="Contact details">
-            <li>
-              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13v9h-13v-9Zm.8.8 5.7 4.4 5.7-4.4M4.2 13.6l4.3-3.4M11.5 10.2l4.3 3.4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-              <span><strong>Write a message</strong><a href="mailto:bemost@mostpartners.com">bemost@mostpartners.com</a></span>
-            </li>
-            <li>
-              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 17s5-4.6 5-9a5 5 0 0 0-10 0c0 4.4 5 9 5 9Zm0-7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-              <span><strong>Visit us</strong>Bracka 20, 00-028 Warsaw</span>
-            </li>
-          </ul>
-          <a class="contact-hero__social reveal" href="#" aria-label="MOST Partners on LinkedIn">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h3v11H3V6Zm1.5-3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM8 6h3v1.5c.5-1 1.6-1.7 3-1.7 2.2 0 3 1.4 3 3.8V17h-3v-6c0-1.4-.4-2-1.4-2-1 0-1.6.7-1.6 2v6H8V6Z" fill="currentColor"/></svg>
-          </a>
+          <p class="page-hero__tagline reveal">
+            Tell us where you are&nbsp;— a round, a hire, a contract, a market you are moving into&nbsp;— and we will tell you what the next step looks&nbsp;like.
+          </p>
+        </div>
+        <div class="page-hero__meta reveal" aria-label="Key facts">
+          <div class="page-hero__fact">
+            <strong>Warsaw</strong>
+            <span>Bracka 20, 00-028</span>
+          </div>
+          <div class="page-hero__fact">
+            <strong>EU · US · UK</strong>
+            <span>Where we work</span>
+          </div>
+          <div class="page-hero__fact">
+            <strong>2 business days</strong>
+            <span>Typical reply</span>
+          </div>
         </div>
       </section>
 
-      <section class="contact-grid" aria-labelledby="contact-form-title">
-        <div class="contact-grid__details">
-          <h2 class="contact-grid__title">Fill out the form and we will get back to you shortly</h2>
-        </div>
+      <!-- THE DESK: channels on the left, form on the right -->
+      <section class="contact-desk has-trail has-trail--a" aria-labelledby="contact-desk-title">
+        <span class="has-trail__dot" aria-hidden="true"></span>
 
-        <form class="contact-form" id="contact-form" novalidate aria-labelledby="contact-form-title" onsubmit="event.preventDefault(); this.querySelector('.contact-form__success').hidden = false; this.querySelector('button[type=submit]').textContent = 'Thanks - we will be in touch';">
-          <h2 class="contact-form__title" id="contact-form-title">Send a message</h2>
-          <label class="contact-form__field">
-            <span class="contact-form__label">Your Name</span>
-            <input type="text" name="name" required autocomplete="name" />
-          </label>
-          <label class="contact-form__field">
-            <span class="contact-form__label">Email</span>
-            <input type="email" name="email" required autocomplete="email" />
-          </label>
-          <label class="contact-form__field">
-            <span class="contact-form__label">Phone</span>
-            <input type="tel" name="phone" autocomplete="tel" />
-          </label>
-          <label class="contact-form__field">
-            <span class="contact-form__label">Message</span>
-            <textarea name="message" rows="3" required></textarea>
-          </label>
+        <div class="contact-desk__grid">
+          <div class="contact-desk__col" data-reveal>
+            <p class="contact-desk__step"><span>01</span> write to us</p>
+            <h2 class="contact-desk__title" id="contact-desk-title">
+              Fill out the form and we will get back to you&nbsp;shortly.
+            </h2>
+            <p class="contact-desk__lede">
+              A sentence about the stage you are at is enough to start. If it is faster to write directly or to come by the office, both are&nbsp;below.
+            </p>
 
-          <div class="contact-form__foot">
-            <button class="contact-form__submit" type="submit">
-              <span>Submit</span>
-            </button>
+            <ul class="channel-rail">
+              <li class="channel-rail__item">
+                <p class="channel-rail__label">Write to us</p>
+                <a class="channel-rail__value" href="mailto:bemost@mostpartners.com">bemost@mostpartners.com</a>
+              </li>
+              <li class="channel-rail__item">
+                <p class="channel-rail__label">Visit us</p>
+                <p class="channel-rail__value">Bracka 20, 00-028&nbsp;Warsaw</p>
+              </li>
+              <li class="channel-rail__item">
+                <p class="channel-rail__label">Follow us</p>
+                <a class="channel-rail__value" href="#" aria-label="MOST Partners on LinkedIn">LinkedIn</a>
+              </li>
+            </ul>
+
+            <p class="contact-desk__note">
+              The more you can say about the stage you are at, the faster we can put the right person on&nbsp;it.
+            </p>
           </div>
 
-          <p class="contact-form__success" hidden role="status">
-            Thanks - your message is on the way. We will get back within two business days.
-          </p>
-        </form>
+          <form class="contact-form" id="contact-form" novalidate aria-labelledby="contact-form-title" data-reveal style="--reveal-delay: 120ms" onsubmit="event.preventDefault(); if (!this.reportValidity()) return; this.querySelector('.contact-form__success').hidden = false; const b = this.querySelector('button[type=submit]'); b.disabled = true; this.querySelector('.contact-form__success').focus();">
+            <h3 class="contact-form__title" id="contact-form-title">Send a message</h3>
+
+            <div class="contact-form__row">
+              <label class="contact-form__field">
+                <span class="contact-form__label">Your name</span>
+                <input type="text" name="name" required autocomplete="name" />
+              </label>
+              <label class="contact-form__field">
+                <span class="contact-form__label">Email</span>
+                <input type="email" name="email" required autocomplete="email" />
+              </label>
+            </div>
+
+            <label class="contact-form__field">
+              <span class="contact-form__label">Phone <em>optional</em></span>
+              <input type="tel" name="phone" autocomplete="tel" />
+            </label>
+
+            <label class="contact-form__field">
+              <span class="contact-form__label">Message</span>
+              <textarea name="message" rows="4" required></textarea>
+            </label>
+
+            <div class="contact-form__foot">
+              <button class="contact-form__submit" type="submit">
+                <span>Send it over</span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M11 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button>
+              <p class="contact-form__success" hidden role="status" tabindex="-1">
+                Thanks&nbsp;— your message is on the way. We will get back within two business&nbsp;days.
+              </p>
+            </div>
+          </form>
+        </div>
       </section>
     </main>
 
