@@ -158,12 +158,10 @@
         </div>
         <div class="perspective__triangulation" aria-hidden="true">
           <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
-            <circle cx="80" cy="160" r="4" fill="#ff612c" />
-            <circle cx="320" cy="160" r="4" fill="#ff612c" />
-            <circle cx="200" cy="40" r="6" fill="#ff612c" />
-            <path d="M80 160 L 200 40 L 320 160 Z" fill="none" stroke="rgba(255,168,110,0.32)" stroke-width="1" />
-            <line x1="80" y1="160" x2="320" y2="160" stroke="rgba(255,168,110,0.18)" stroke-width="1" stroke-dasharray="3 5" />
+            <path class="tri-edge" d="M80 160 L 200 40 L 320 160" />
+            <path class="tri-base" d="M80 160 H 320" />
           </svg>
+          <span></span><span></span><span></span>
         </div>
       </section>
 
@@ -276,9 +274,16 @@
           </li>
         </ol>
 
-        <svg class="ascent__route" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M60 170 C 220 170, 280 130, 380 130 S 540 80, 660 50 S 880 100, 1140 90" stroke="rgba(255,168,110,0.32)" stroke-width="1.2" fill="none" stroke-dasharray="4 6" />
-        </svg>
+        <div class="ascent__trail" aria-hidden="true">
+          <svg class="ascent__route" viewBox="0 0 1200 200" preserveAspectRatio="none">
+            <path vector-effect="non-scaling-stroke"
+                  d="M0 166 C 60 160, 100 150, 150 150 C 250 150, 330 118, 450 112 C 570 106, 640 66, 750 62 C 860 66, 940 96, 1050 98 C 1110 99, 1160 104, 1200 110" />
+          </svg>
+          <span class="ascent__mark ascent__mark--01"></span>
+          <span class="ascent__mark ascent__mark--02"></span>
+          <span class="ascent__mark ascent__mark--03"></span>
+          <span class="ascent__mark ascent__mark--04"></span>
+        </div>
       </section>
 
       <!-- PHILOSOPHY: stacked overlapping cards -->

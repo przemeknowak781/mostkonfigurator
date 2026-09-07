@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --navy: #161822;
   --navy-deep: #080b13;
   --light: #f0ebe9;
@@ -1562,16 +1562,79 @@ body.menu-open {
   text-wrap: balance;
 }
 
+/* The ascent line is a route like every other route on the site: the same
+   warm hairline, the same glow, the same left-to-right draw-in. It sits
+   below the stage cards rather than behind them, and its four peaks rise
+   and fall exactly as the cards do, so the cards read as standing on it.
+   The stroke is non-scaling, so stretching the viewBox to the section
+   width moves the geometry without ever thickening the line. */
+/* The trail sits in flow directly under the stages, so it stays the same
+   distance below them however tall the section grows. */
+.ascent__trail {
+  position: relative;
+  z-index: 1;
+  height: clamp(64px, 8vh, 100px);
+  margin: clamp(26px, 3.4vh, 44px) calc(var(--container-x) * -1) 0;
+  pointer-events: none;
+}
+
 .ascent__route {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: clamp(40px, 6vh, 80px);
+  inset: 0;
   width: 100%;
-  height: clamp(140px, 18vh, 220px);
-  z-index: 0;
+  height: 100%;
   pointer-events: none;
-  opacity: 0.7;
+  filter: drop-shadow(0 0 5px var(--trail-glow));
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.6s var(--ease-out) 320ms;
+}
+
+.ascent.is-visible .ascent__route {
+  clip-path: inset(0 0 0 0);
+}
+
+.ascent__route path {
+  stroke: var(--trail-line);
+  stroke-width: var(--trail-width);
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Checkpoints ride the route the way they do on every other line. The peaks
+   sit at fixed fractions of the stretched viewBox, so a percentage of the
+   route's own box lands on them at any width. */
+.ascent__mark {
+  position: absolute;
+  margin: calc(var(--marker-size) / -2) 0 0 calc(var(--marker-size) / -2);
+  width: var(--marker-size);
+  height: var(--marker-size);
+  border-radius: 50%;
+  background: var(--marker-core);
+  box-shadow: var(--marker-shadow);
+  opacity: 0;
+  transition: opacity 500ms var(--ease-out);
+}
+
+.ascent.is-visible .ascent__mark {
+  opacity: 1;
+}
+
+/* left = x/1200, top = y/200 of the route's viewBox */
+.ascent__mark--01 { left: 12.5%; top: 75%; transition-delay: 700ms; }
+.ascent__mark--02 { left: 37.5%; top: 56%; transition-delay: 900ms; }
+.ascent__mark--03 { left: 62.5%; top: 31%; transition-delay: 1100ms; }
+.ascent__mark--04 { left: 87.5%; top: 49%; transition-delay: 1300ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ascent__route {
+    clip-path: none;
+    transition: none;
+  }
+  .ascent__mark {
+    opacity: 1;
+    transition: none;
+  }
 }
 
 .ascent__stages {
@@ -1671,7 +1734,7 @@ body.menu-open {
   .ascent__stage--04 {
     transform: none;
   }
-  .ascent__route { display: none; }
+  .ascent__trail { display: none; }
 }
 
 @media (max-width: 720px) {
@@ -1774,17 +1837,53 @@ body.menu-open {
   color: var(--light);
 }
 
+/* The three points the copy triangulates - law, jurisdictions, capital.
+   Rendered at its natural size so the strokes are the site's true weights
+   rather than whatever a scale factor makes of them, with the vertices as
+   real markers rather than bare SVG circles. */
 .perspective__triangulation {
   position: relative;
   z-index: 1;
-  max-width: 320px;
+  width: min(100%, 400px);
+  aspect-ratio: 2 / 1;
   margin: clamp(32px, 4vh, 56px) auto 0;
 }
 
 .perspective__triangulation svg {
+  display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
+
+.perspective__triangulation .tri-edge {
+  stroke: var(--trail-line);
+  stroke-width: var(--trail-width);
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.perspective__triangulation .tri-base {
+  stroke: var(--trail-leader);
+  stroke-width: var(--trail-leader-width);
+  stroke-dasharray: var(--trail-leader-dash);
+  fill: none;
+}
+
+/* left = x/400, top = y/200 of the viewBox */
+.perspective__triangulation span {
+  position: absolute;
+  margin: calc(var(--marker-size) / -2) 0 0 calc(var(--marker-size) / -2);
+  width: var(--marker-size);
+  height: var(--marker-size);
+  border-radius: 50%;
+  background: var(--marker-core);
+  box-shadow: var(--marker-shadow);
+}
+
+.perspective__triangulation span:nth-child(2) { left: 20%; top: 80%; }
+.perspective__triangulation span:nth-child(3) { left: 80%; top: 80%; }
+.perspective__triangulation span:nth-child(4) { left: 50%; top: 20%; }
 
 @media (max-width: 720px) {
   .perspective__pillars {
@@ -2009,8 +2108,8 @@ body.menu-open {
   top: 50%;
   left: 6%;
   right: 6%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 168, 110, 0.32) 20%, rgba(255, 168, 110, 0.32) 80%, transparent);
+  height: calc(var(--trail-leader-width) * 1px);
+  background: linear-gradient(90deg, transparent, var(--trail-leader) 20%, var(--trail-leader) 80%, transparent);
   pointer-events: none;
   z-index: 0;
 }
@@ -2166,11 +2265,11 @@ body.menu-open {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 14px;
-  height: 14px;
-  background: var(--orange);
+  width: var(--marker-size);
+  height: var(--marker-size);
+  background: var(--marker-core);
   border-radius: 50%;
-  box-shadow: 0 0 0 6px rgba(255, 97, 44, 0.16), 0 0 22px rgba(255, 97, 44, 0.7);
+  box-shadow: var(--marker-shadow);
   transform: translate(-50%, -50%);
 }
 
