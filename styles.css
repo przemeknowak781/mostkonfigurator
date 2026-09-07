@@ -1526,31 +1526,38 @@ body.menu-open {
   justify-content: center;
 }
 
+/* Label left, statement right - but on the same first baseline. Bottom
+   alignment hung the label 198px below the top of a four-line headline,
+   in the middle of an otherwise empty quadrant. */
 .ascent__head {
   position: relative;
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto clamp(56px, 8vh, 96px);
   display: grid;
   grid-template-columns: minmax(0, 0.36fr) minmax(0, 0.64fr);
   gap: clamp(32px, 5vw, 80px);
-  align-items: end;
+  align-items: baseline;
 }
 
 .ascent__eyebrow {
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 14px;
   color: rgba(240, 235, 233, 0.5);
   font: 500 11px / 1.4 "Montserrat", system-ui, sans-serif;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  max-width: 260px;
+  max-width: 300px;
 }
 
+/* As a flex item competing with two lines of tracked-out caps inside a
+   260px box, this rule resolved to 0px wide at every width and never drew
+   at all. Sitting on the baseline in front of the label, it does. */
 .ascent__eyebrow-rule {
-  flex: 1;
+  display: inline-block;
+  width: 44px;
   height: 1px;
+  margin-right: 12px;
+  vertical-align: middle;
   background: linear-gradient(90deg, rgba(255, 168, 110, 0.55), transparent);
 }
 
@@ -1563,13 +1570,56 @@ body.menu-open {
 }
 
 /* The ascent line is a route like every other route on the site: the same
-   warm hairline, the same glow, the same left-to-right draw-in. It sits
-   below the stage cards rather than behind them, and its four peaks rise
-   and fall exactly as the cards do, so the cards read as standing on it.
-   The stroke is non-scaling, so stretching the viewBox to the section
-   width moves the geometry without ever thickening the line. */
-/* The trail sits in flow directly under the stages, so it stays the same
-   distance below them however tall the section grows. */
+   warm hairline, the same glow, the same left-to-right draw-in. It sits in
+   flow below the stage cards rather than behind them, so it holds the same
+   distance from them however tall the section grows, and its four peaks
+   rise and fall exactly as the cards do. The stroke is non-scaling, so
+   stretching the viewBox to the section width moves the geometry without
+   ever thickening the line. */
+/* The heading names founders, companies and investors; this is where the
+   page stops naming them and starts pointing at them. */
+.ascent__paths {
+  position: relative;
+  z-index: 1;
+  margin: clamp(30px, 4vh, 48px) auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px clamp(18px, 2.4vw, 34px);
+}
+
+.ascent__paths-label {
+  color: rgba(240, 235, 233, 0.5);
+  font: 500 11px / 1.4 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.ascent__paths a {
+  position: relative;
+  color: rgba(255, 168, 110, 0.92);
+  font: 400 clamp(15px, 1.15vw, 17px) / 1.4 "Outfit", system-ui, sans-serif;
+  text-decoration: none;
+}
+
+.ascent__paths a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  transition: opacity 220ms var(--ease-out);
+}
+
+.ascent__paths a:hover::after,
+.ascent__paths a:focus-visible::after {
+  opacity: 1;
+}
+
 .ascent__trail {
   position: relative;
   z-index: 1;
@@ -1684,19 +1734,6 @@ body.menu-open {
   height: 22px;
 }
 
-.ascent__stage--active {
-  background: linear-gradient(180deg, rgba(34, 22, 18, 0.95), rgba(20, 14, 12, 0.95));
-  border-color: rgba(255, 168, 110, 0.45);
-  box-shadow: 0 32px 80px rgba(255, 97, 44, 0.18), 0 0 0 1px rgba(255, 168, 110, 0.18) inset;
-}
-
-.ascent__stage--active .ascent__icon {
-  background: radial-gradient(circle, rgba(255, 97, 44, 0.55), rgba(255, 97, 44, 0.15));
-  border-color: rgba(255, 168, 110, 0.75);
-  color: var(--light);
-  box-shadow: 0 0 24px rgba(255, 97, 44, 0.55);
-}
-
 .ascent__step {
   margin: 0;
   color: rgba(255, 168, 110, 0.65);
@@ -1735,6 +1772,7 @@ body.menu-open {
     transform: none;
   }
   .ascent__trail { display: none; }
+  .ascent__paths { margin-bottom: clamp(8px, 2vh, 24px); }
 }
 
 @media (max-width: 720px) {
@@ -1759,29 +1797,44 @@ body.menu-open {
   justify-content: center;
 }
 
+/* The marks bracket the line they are quoting. They used to sit at the
+   corners of a box spanning almost the whole section - the opening one
+   above and left of the eyebrow, the closing one 300px below the text,
+   next to nothing. Wrapping the heading makes them track it at any size.
+   The outward offset is a percentage of the frame, so the marks move
+   inward as the column narrows instead of clipping against overflow. */
+/* The marks are laid out beside the line they quote rather than positioned
+   at magic offsets: the opening one aligns to the top of the heading box,
+   the closing one to the bottom, so they follow it through any wrap,
+   type size or font substitution. A line-height of 1 keeps each glyph in
+   a predictable em box - at 0.5 the ink floated most of a line above where
+   the box said it was. */
 .perspective__frame {
-  position: absolute;
-  inset: clamp(80px, 12vh, 140px) clamp(8%, 12vw, 18%);
-  pointer-events: none;
-  z-index: 0;
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto clamp(36px, 5vh, 60px);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(2px, 1vw, 16px);
 }
 
 .perspective__quote {
-  position: absolute;
+  flex: 0 0 auto;
   color: rgba(255, 97, 44, 0.16);
-  font: 600 clamp(160px, 22vw, 320px) / 0.5 "Urbanist", system-ui, sans-serif;
+  font: 600 clamp(64px, 6.4vw, 112px) / 1 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.04em;
+  pointer-events: none;
   user-select: none;
 }
 
 .perspective__quote--open {
-  top: 0;
-  left: 0;
+  align-self: flex-start;
 }
 
 .perspective__quote--close {
-  bottom: 0;
-  right: 0;
+  align-self: flex-end;
 }
 
 .perspective__step {
@@ -1805,8 +1858,8 @@ body.menu-open {
 .perspective__title {
   position: relative;
   z-index: 1;
-  max-width: 880px;
-  margin: 0 auto clamp(36px, 5vh, 60px);
+  flex: 0 1 880px;
+  margin: 0;
   color: var(--light);
   font: italic 500 clamp(30px, 4.2vw, 56px) / 1.1 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
@@ -1910,14 +1963,25 @@ body.menu-open {
   justify-content: center;
 }
 
+/* The lede used to auto-place into column one, row two - under the small
+   eyebrow, leaving a hole under the title it belongs to. Placed
+   explicitly, the head reads label-left, statement-and-lede-right. */
 .track-record__head {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto clamp(40px, 6vh, 72px);
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-  gap: clamp(32px, 5vw, 80px);
-  align-items: end;
+  grid-template-areas:
+    "step title"
+    ".    lede";
+  gap: 0 clamp(32px, 5vw, 80px);
+  align-items: baseline;
 }
+
+.track-record__step { grid-area: step; }
+.track-record__title { grid-area: title; }
+.track-record__lede { grid-area: lede; }
 
 .track-record__step {
   margin: 0;
@@ -1936,7 +2000,7 @@ body.menu-open {
 }
 
 .track-record__title {
-  margin: 12px 0 0;
+  margin: 0;
   color: var(--light);
   font: 500 clamp(30px, 3.8vw, 52px) / 1.06 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.005em;
@@ -1944,7 +2008,8 @@ body.menu-open {
 }
 
 .track-record__lede {
-  margin: 0;
+  margin: clamp(18px, 2.4vh, 28px) 0 0;
+  max-width: 46ch;
   color: rgba(240, 235, 233, 0.74);
   font: 400 clamp(16px, 1.2vw, 19px) / 1.55 "Outfit", system-ui, sans-serif;
   text-wrap: pretty;
@@ -2035,6 +2100,8 @@ body.menu-open {
 @media (max-width: 1024px) {
   .track-record__head {
     grid-template-columns: 1fr;
+    grid-template-areas: "step" "title" "lede";
+    gap: 0;
     gap: 16px;
     align-items: start;
   }
@@ -2051,7 +2118,12 @@ body.menu-open {
 
 .philosophy {
   position: relative;
-  min-height: 100svh;
+  /* Three short cards are about 420px of content. A full viewport is the
+     right box for that at laptop heights and too much box above them - at
+     1080 it left 335px of nothing above and 325px below, a 39% fill. The
+     cap holds the chapter feel where it works and stops the box growing
+     faster than what is in it. */
+  min-height: min(100svh, 830px);
   padding: clamp(88px, 12vh, 140px) var(--container-x);
   background:
     radial-gradient(900px 600px at 50% 110%, rgba(255, 97, 44, 0.16), transparent 70%),
@@ -2178,7 +2250,8 @@ body.menu-open {
 
 .manifesto {
   position: relative;
-  min-height: 100svh;
+  /* Same reasoning as .philosophy, with a taller cap for its two columns. */
+  min-height: min(100svh, 890px);
   padding: clamp(88px, 12vh, 140px) var(--container-x);
   background:
     radial-gradient(900px 600px at 92% 90%, rgba(255, 176, 119, 0.14), transparent 70%),
@@ -5706,6 +5779,22 @@ body.menu-open {
   text-wrap: balance;
 }
 
+/* A background-image underline would draw one 460px rule under a caption
+   that wraps to two ragged lines. Text decoration follows the text. */
+a.photo-break__line {
+  align-self: flex-start;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 260ms var(--ease-out);
+}
+
+a.photo-break__line:hover,
+a.photo-break__line:focus-visible {
+  text-decoration-color: rgba(255, 168, 110, 0.85);
+}
+
 /* ---------- EXPERTISE: AUDIENCE CHIPS ---------- */
 
 .ex-card__for {
@@ -6003,6 +6092,25 @@ body.menu-open {
   color: var(--light);
   font: 500 clamp(32px, 4.4vw, 56px) / 1.05 "Urbanist", system-ui, sans-serif;
   letter-spacing: -0.01em;
+}
+
+/* The quiet second route sits under the button, not beside it - the strip
+   is a centred block, so an inline-block would just share the line. */
+.cta-strip__alt {
+  display: table;
+  margin: clamp(20px, 2.6vh, 30px) auto 0;
+  color: rgba(240, 235, 233, 0.62);
+  font: 400 15px / 1.4 "Outfit", system-ui, sans-serif;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(240, 235, 233, 0.22);
+  padding-bottom: 3px;
+  transition: color 220ms ease, border-color 220ms ease;
+}
+
+.cta-strip__alt:hover,
+.cta-strip__alt:focus-visible {
+  color: var(--light);
+  border-bottom-color: rgba(255, 168, 110, 0.7);
 }
 
 .cta-strip__btn {

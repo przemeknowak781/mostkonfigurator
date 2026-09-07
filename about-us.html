@@ -135,21 +135,21 @@
         <img src="arch-break-towers.webp" alt="A curved curtain wall repeating into the distance" loading="lazy" decoding="async" />
         <figcaption class="photo-break__caption" data-reveal>
           <span class="photo-break__index">— 01</span>
-          <span class="photo-break__line">Long-term partners in law and&nbsp;business.</span>
+          <a class="photo-break__line" href="our-team.html">Long-term partners in law and&nbsp;business.</a>
         </figcaption>
       </figure>
 
       <!-- PERSPECTIVE: editorial pull-quote -->
       <section class="perspective has-trail has-trail--a" id="perspective" aria-labelledby="perspective-title">
         <span class="has-trail__dot" aria-hidden="true"></span>
-        <div class="perspective__frame" aria-hidden="true">
-          <span class="perspective__quote perspective__quote--open">“</span>
-          <span class="perspective__quote perspective__quote--close">”</span>
-        </div>
         <p class="perspective__step" data-reveal><span>01</span> our perspective</p>
-        <h2 class="perspective__title" id="perspective-title" data-reveal style="--reveal-delay: 90ms">
-          We see law through the lens of business&nbsp;reality.
-        </h2>
+        <div class="perspective__frame">
+          <span class="perspective__quote perspective__quote--open" aria-hidden="true">“</span>
+          <h2 class="perspective__title" id="perspective-title" data-reveal style="--reveal-delay: 90ms">
+            We see law through the lens of business&nbsp;reality.
+          </h2>
+          <span class="perspective__quote perspective__quote--close" aria-hidden="true">”</span>
+        </div>
         <div class="perspective__pillars" data-reveal style="--reveal-delay: 180ms">
           <p>We combine legal expertise, multijurisdictional experience in Europe, the US, and the UK, and an investment-driven understanding of how companies raise capital, hire, scale, and make strategic&nbsp;decisions.</p>
           <p>This lets us advise on cross-border matters with a perspective that strengthens decision-making, reduces friction, and supports momentum at every stage of&nbsp;growth.</p>
@@ -246,7 +246,7 @@
             <p class="ascent__copy">SAFEs, term sheets, convertibles, VC and venture debt&nbsp;— closed with clarity, speed, and&nbsp;confidence.</p>
           </li>
 
-          <li class="ascent__stage ascent__stage--03 ascent__stage--active" data-reveal style="--reveal-delay: 220ms">
+          <li class="ascent__stage ascent__stage--03" data-reveal style="--reveal-delay: 220ms">
             <div class="ascent__icon" aria-hidden="true">
               <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 22 L13 15 L18 20 L26 10" />
@@ -271,6 +271,13 @@
             <p class="ascent__copy">Cross-border structures, subsidiaries, M&amp;A and exits across Poland, the UK, the US, and&nbsp;beyond.</p>
           </li>
         </ol>
+
+        <nav class="ascent__paths" aria-label="Audience pages">
+          <span class="ascent__paths-label">Follow the ascent from where you stand</span>
+          <a href="for-founders.html">Founders</a>
+          <a href="for-companies.html">Companies</a>
+          <a href="for-investors.html">Investors</a>
+        </nav>
 
         <div class="ascent__trail" aria-hidden="true">
           <svg class="ascent__route" viewBox="0 0 1200 200" preserveAspectRatio="none">
@@ -355,6 +362,7 @@
             <span>Start a conversation</span>
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M11 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
           </a>
+          <a class="cta-strip__alt" href="expertise.html">Or read what we actually do</a>
         </div>
       </section>
     </main>
