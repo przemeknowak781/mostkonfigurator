@@ -1441,7 +1441,6 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
     /* Which way the reader is going decides which side the outgoing thread
        winds back to, so the two always pass each other rather than stacking. */
     const from = index;
-    if (art && from >= 0) art.classList.toggle("is-reversing", i < from);
     index = i;
     tabs.forEach((t, n) => t.setAttribute("aria-selected", String(n === i)));
     threads.forEach((t, n) => {
@@ -1487,18 +1486,6 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
      here is worse than being slow: a section that does not pin is a tall
      empty gap. Two bad frames in a row, so that one measurement taken mid
      scroll cannot flip it. */
-  const stickyHolds = () => {
-    if (!(window.CSS && CSS.supports && CSS.supports("position", "sticky"))) return false;
-    for (let el = stage.parentElement; el && el !== document.documentElement; el = el.parentElement) {
-      const cs = getComputedStyle(el);
-      const scrolls = /^(auto|scroll|hidden|overlay)$/;
-      if (el !== document.body && (scrolls.test(cs.overflowX) || scrolls.test(cs.overflowY))) return false;
-    }
-    return true;
-  };
-
-  let carry = stickyHolds() ? "sticky" : "js";
-  let strikes = 0;
   let pinState = "";
 
   /* Only ever called on a state change, so the fixed box is set up twice per
@@ -1523,24 +1510,6 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   };
 
   const hold = (g, scrolled) => {
-    if (carry === "sticky") {
-      /* A column that is not holding has drifted by exactly the distance
-         scrolled, so the test is proportional and works from the first few
-         pixels - no need to wait until the slip would be visible. */
-      if (scrolled > 12 && scrolled < g.travel - 12) {
-        if (Math.abs(stage.getBoundingClientRect().top - g.pinTop) < Math.max(4, scrolled * 0.5)) {
-          strikes = 0;
-        } else {
-          if (++strikes >= 2) carry = "js";
-          /* Carry the check forward a frame at a time. Arriving mid track in
-             one jump - an anchor link, a restored scroll position - fires a
-             single scroll event, and one event can neither finish a test that
-             wants two readings nor apply the pin the decision calls for. */
-          schedule();
-        }
-      }
-      return;
-    }
     setPin(scrolled <= 0 ? "" : scrolled >= g.travel ? "parked" : "pinned", g);
   };
 
@@ -1548,7 +1517,7 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
     const g = geometry();
     if (!g) {
       track.style.setProperty("--ex-progress", "0");
-      if (carry === "js") setPin("", { travel: 0 });
+      setPin("", { travel: 0 });
       if (index < 0) apply(0);
       return;
     }
@@ -1613,9 +1582,7 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
      scratch - including putting the column back in flow so its pin offset
      and height can be measured afresh. */
   addEventListener("resize", () => {
-    strikes = 0;
     setPin("", { travel: 0 });
-    carry = stickyHolds() ? "sticky" : "js";
     schedule();
   });
   if (typeof ResizeObserver === "function") new ResizeObserver(schedule).observe(stage);

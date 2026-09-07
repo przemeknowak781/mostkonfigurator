@@ -9249,19 +9249,24 @@ body.menu-open {
   padding-bottom: calc(var(--ex-count) * var(--ex-step));
 }
 
-/* Sticky is the good path: the compositor holds the column and the main
-   thread never has to keep up. But sticky is quietly disabled by things far
-   away from here - a scroll container anywhere up the ancestor chain is
-   enough - and when it fails the section becomes a tall empty gap, which is
-   worse than no pinning at all.
+/* The column is pinned with `fixed`, not with sticky.
 
-   So JS checks whether the column actually held, and if it did not, it pins
-   with `fixed` instead. Deliberately `fixed` rather than a transform: a
-   transform has to be rewritten every frame, and on a compositor-driven
-   scroll it always lands a frame late, which reads as the block trying to
-   tear itself loose. A fixed box is held by the browser - script only
-   switches state twice per section, at the two ends of the track, and there
-   is nothing left to lag.
+   Sticky reads better on paper - the compositor holds it and script does
+   nothing - but it is quietly disabled by things far away from here, and
+   when it fails the section becomes a tall empty gap. That happened twice.
+   Detecting the failure and stepping in afterwards was worse again: the
+   detection is itself unobservable from a machine that cannot render sticky
+   at all, so each attempt was a guess. `fixed` behaves the same everywhere
+   and can be measured, so it is the only path now.
+
+   Deliberately `fixed` rather than a transform: a transform has to be
+   rewritten every frame, and on a compositor-driven scroll it always lands a
+   frame late, which reads as the block trying to tear itself loose. A fixed
+   box is held by the browser - script only switches state twice per section,
+   at the two ends of the track, and there is nothing left to lag.
+
+   The sticky declaration below stays as the resting state: it costs nothing,
+   and if script never runs the column still behaves sensibly.
 
    Out of flow means the column's space has to be given back, which is what
    the track's padding-top does. The column is centred in the viewport by
@@ -9408,11 +9413,19 @@ body.menu-open {
    always a length of thread, wound or unwound. */
 .ex-art {
   --thread-ms: 760ms;
+  /* The two properties are deliberately not on the same curve. The stroke
+     draws early and fast, so the new thread has visibly unwound while it is
+     still out to the right; the slide home is an ease-in-out, so it lingers
+     out there and only arrives at the end. Matching curves made the arriving
+     thread slide home while it was still mostly undrawn, which put it right
+     on top of the one it was replacing. */
+  --thread-draw: cubic-bezier(0.32, 0.72, 0.3, 1);
+  --thread-slide: cubic-bezier(0.85, 0, 0.18, 1);
   /* px, not %: a percentage translate on an SVG resolves against that
-     element's own viewBox, so every icon would slide a different distance */
-  --thread-shift: clamp(26px, 3.4vw, 52px);
-  /* +1 going down the list, -1 coming back up */
-  --thread-dir: 1;
+     element's own viewBox, so every icon would slide a different distance.
+     The arriving thread starts well clear of the one it is replacing - these
+     drawings are 250-370px wide, so a small offset just stacked them. */
+  --thread-in: clamp(190px, 27vw, 400px);
   /* shared with the threads: a percentage height on them would resolve
      against an auto-sized grid row and fall back to the SVG's own default,
      which is how they ended up 885px tall */
@@ -9436,22 +9449,22 @@ body.menu-open {
   overflow: visible;
   stroke-dasharray: var(--len, 1200);
   stroke-dashoffset: var(--len, 1200);
-  /* waiting threads sit on the side you are heading towards, so the next one
-     always arrives from ahead of you */
-  transform: translateX(calc(var(--thread-dir) * var(--thread-shift)));
+  /* a waiting thread sits out to the right - always, whichever way the
+     reader is going, so an arriving thread never crosses the nav */
+  transform: translateX(var(--thread-in));
   transition:
-    stroke-dashoffset var(--thread-ms) cubic-bezier(0.32, 0.72, 0.3, 1),
-    transform var(--thread-ms) cubic-bezier(0.32, 0.72, 0.3, 1);
+    stroke-dashoffset var(--thread-ms) var(--thread-draw),
+    transform var(--thread-ms) var(--thread-slide);
 }
 
-/* and the one being replaced winds back the way you came, so the two pass
-   each other instead of piling up on the same side */
+/* The one being replaced winds up where it stands and only then slides off
+   to the waiting side, which it reaches with no ink left - so that move is
+   invisible, and it is already parked on the right if the reader scrolls
+   back to it later. Nothing has to remember which way anyone was going.
+   It also winds up quicker than the new one unwinds, so it is finished by
+   the time the arriving thread crosses the space it was using. */
 .ex-art__thread.is-leaving {
-  transform: translateX(calc(var(--thread-dir) * -1 * var(--thread-shift)));
-}
-
-.ex-art.is-reversing {
-  --thread-dir: -1;
+  transition-duration: calc(var(--thread-ms) * 0.6), var(--thread-ms);
 }
 
 .ex-art__thread.is-current {
