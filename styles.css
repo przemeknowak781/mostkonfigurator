@@ -1934,9 +1934,45 @@ body.menu-open {
   box-shadow: var(--marker-shadow);
 }
 
-.perspective__triangulation span:nth-child(2) { left: 20%; top: 80%; }
-.perspective__triangulation span:nth-child(3) { left: 80%; top: 80%; }
-.perspective__triangulation span:nth-child(4) { left: 50%; top: 20%; }
+.perspective__triangulation span:nth-of-type(1) { left: 20%; top: 80%; }
+.perspective__triangulation span:nth-of-type(2) { left: 80%; top: 80%; }
+.perspective__triangulation span:nth-of-type(3) { left: 50%; top: 20%; }
+
+/* The diagram triangulates the three things the paragraph above it names.
+   Unlabelled it was three dots and a triangle. */
+.perspective__triangulation b {
+  position: absolute;
+  color: rgba(240, 235, 233, 0.55);
+  font: 500 10px / 1.3 "Montserrat", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.perspective__triangulation b:nth-of-type(1) {
+  left: 20%;
+  top: 80%;
+  transform: translate(-50%, 18px);
+}
+
+.perspective__triangulation b:nth-of-type(2) {
+  left: 80%;
+  top: 80%;
+  transform: translate(-50%, 18px);
+}
+
+.perspective__triangulation b:nth-of-type(3) {
+  left: 50%;
+  top: 20%;
+  transform: translate(-50%, calc(-100% - 16px));
+}
+
+@media (max-width: 720px) {
+  .perspective__triangulation b {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
+}
 
 @media (max-width: 720px) {
   .perspective__pillars {
