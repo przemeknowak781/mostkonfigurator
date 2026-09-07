@@ -23,6 +23,12 @@
 
 html {
   color-scheme: dark;
+  /* The horizontal clip lives here, on the element that is already the
+     viewport's scroller, rather than on body. On body it was the one thing
+     standing between the pinned expertise column and the viewport, and both
+     `position: sticky` and `position: fixed` are sensitive to exactly that.
+     The root cannot get in its own way. */
+  overflow-x: clip;
   scroll-behavior: smooth;
   scroll-snap-type: y proximity;
   scroll-padding-top: calc(var(--nav-height) + clamp(56px, 9vh, 120px));
@@ -30,11 +36,6 @@ html {
 
 body {
   margin: 0;
-  /* clip, not hidden. `overflow-x: hidden` forces the other axis to compute to
-     `auto`, and a body that resolves to a scroll container is the usual reason
-     `position: sticky` inside it silently does nothing. `clip` clips the hero
-     bleeds exactly the same way without creating one. */
-  overflow-x: clip;
   color: var(--light);
   background: var(--navy-deep);
   font-family: "Outfit", system-ui, sans-serif;
@@ -9249,24 +9250,15 @@ body.menu-open {
   padding-bottom: calc(var(--ex-count) * var(--ex-step));
 }
 
-/* The column is pinned with `fixed`, not with sticky.
-
-   Sticky reads better on paper - the compositor holds it and script does
-   nothing - but it is quietly disabled by things far away from here, and
-   when it fails the section becomes a tall empty gap. That happened twice.
-   Detecting the failure and stepping in afterwards was worse again: the
-   detection is itself unobservable from a machine that cannot render sticky
-   at all, so each attempt was a guess. `fixed` behaves the same everywhere
-   and can be measured, so it is the only path now.
+/* Sticky pins the column. These rules are the safety net for when it does
+   not: script watches whether the column is actually holding and, if it is
+   not, pins it with `fixed` instead.
 
    Deliberately `fixed` rather than a transform: a transform has to be
    rewritten every frame, and on a compositor-driven scroll it always lands a
    frame late, which reads as the block trying to tear itself loose. A fixed
    box is held by the browser - script only switches state twice per section,
    at the two ends of the track, and there is nothing left to lag.
-
-   The sticky declaration below stays as the resting state: it costs nothing,
-   and if script never runs the column still behaves sensibly.
 
    Out of flow means the column's space has to be given back, which is what
    the track's padding-top does. The column is centred in the viewport by
@@ -9412,20 +9404,22 @@ body.menu-open {
    Only stroke-dashoffset hides a thread - never opacity - so what you see is
    always a length of thread, wound or unwound. */
 .ex-art {
-  --thread-ms: 760ms;
+  --thread-ms: 1300ms;
   /* The two properties are deliberately not on the same curve. The stroke
      draws early and fast, so the new thread has visibly unwound while it is
      still out to the right; the slide home is an ease-in-out, so it lingers
      out there and only arrives at the end. Matching curves made the arriving
      thread slide home while it was still mostly undrawn, which put it right
      on top of the one it was replacing. */
-  --thread-draw: cubic-bezier(0.32, 0.72, 0.3, 1);
-  --thread-slide: cubic-bezier(0.85, 0, 0.18, 1);
+  --thread-draw: cubic-bezier(0.3, 0.06, 0.38, 0.94);
+  --thread-slide: cubic-bezier(0.9, 0, 0.25, 1);
   /* px, not %: a percentage translate on an SVG resolves against that
      element's own viewBox, so every icon would slide a different distance.
      The arriving thread starts well clear of the one it is replacing - these
      drawings are 250-370px wide, so a small offset just stacked them. */
-  --thread-in: clamp(190px, 27vw, 400px);
+  --thread-in: clamp(200px, 29vw, 430px);
+  /* where the wind-up ends and the travel begins */
+  --thread-split: 0.62;
   /* shared with the threads: a percentage height on them would resolve
      against an auto-sized grid row and fall back to the SVG's own default,
      which is how they ended up 885px tall */
@@ -9457,19 +9451,32 @@ body.menu-open {
     transform var(--thread-ms) var(--thread-slide);
 }
 
-/* The one being replaced winds up where it stands and only then slides off
-   to the waiting side, which it reaches with no ink left - so that move is
-   invisible, and it is already parked on the right if the reader scrolls
-   back to it later. Nothing has to remember which way anyone was going.
-   It also winds up quicker than the new one unwinds, so it is finished by
-   the time the arriving thread crosses the space it was using. */
+/* The change happens in two halves, and nothing moves during the first one.
+
+   First half: the old thread winds up where it stands while the new one
+   unwinds where it is waiting, out to the right. Both are working at once -
+   one shortening, one lengthening - and they are the better part of a
+   hundred pixels apart the whole time, so neither is ever drawn over the
+   other.
+
+   Second half: the old one is gone, and only then does the new one travel
+   into place. Crossing while the old thread was still visible is what made
+   them look tangled. */
 .ex-art__thread.is-leaving {
-  transition-duration: calc(var(--thread-ms) * 0.6), var(--thread-ms);
+  transition-duration: calc(var(--thread-ms) * var(--thread-split)), 1ms;
+  transition-delay: 0s, var(--thread-ms);
 }
 
 .ex-art__thread.is-current {
   stroke-dashoffset: 0;
   transform: none;
+  /* draws over the same span the old one takes to wind up, so the two read
+     as one movement: the same length of thread leaving one drawing and
+     arriving in the other */
+  transition-duration:
+    calc(var(--thread-ms) * var(--thread-split)),
+    calc(var(--thread-ms) * 0.45);
+  transition-delay: 0s, calc(var(--thread-ms) * var(--thread-split));
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1486,6 +1486,18 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
      here is worse than being slow: a section that does not pin is a tall
      empty gap. Two bad frames in a row, so that one measurement taken mid
      scroll cannot flip it. */
+  /* Sticky does the pinning. It is the right mechanism - the compositor holds
+     the column and script does nothing at all - and the section is built
+     around it.
+
+     What sticky cannot do is fail loudly: when something disables it the
+     section becomes a tall empty gap. So the column is watched, and if it is
+     not actually holding, `fixed` takes over. The test is proportional - a
+     column that is not holding has drifted by exactly the distance scrolled -
+     so it needs no threshold guessing and fires within a couple of frames.
+     Two readings, so a single measurement taken mid-scroll cannot flip it. */
+  let carry = "sticky";
+  let strikes = 0;
   let pinState = "";
 
   /* Only ever called on a state change, so the fixed box is set up twice per
@@ -1510,6 +1522,21 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   };
 
   const hold = (g, scrolled) => {
+    if (carry === "sticky") {
+      if (scrolled > 12 && scrolled < g.travel - 12) {
+        if (Math.abs(stage.getBoundingClientRect().top - g.pinTop) < Math.max(4, scrolled * 0.5)) {
+          strikes = 0;
+        } else {
+          if (++strikes >= 2) carry = "js";
+          /* Carry the check forward a frame at a time. Arriving mid track in
+             one jump - an anchor link, a restored scroll position - fires a
+             single scroll event, and one event can neither finish a test that
+             wants two readings nor apply the pin the decision calls for. */
+          schedule();
+        }
+      }
+      return;
+    }
     setPin(scrolled <= 0 ? "" : scrolled >= g.travel ? "parked" : "pinned", g);
   };
 
@@ -1517,7 +1544,7 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
     const g = geometry();
     if (!g) {
       track.style.setProperty("--ex-progress", "0");
-      setPin("", { travel: 0 });
+      if (carry === "js") setPin("", { travel: 0 });
       if (index < 0) apply(0);
       return;
     }
@@ -1581,8 +1608,12 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
   /* A new layout can change the answer, so the test is run again from
      scratch - including putting the column back in flow so its pin offset
      and height can be measured afresh. */
+  /* A new layout can change the answer, so the column goes back in flow and
+     sticky gets another chance before the test runs again. */
   addEventListener("resize", () => {
     setPin("", { travel: 0 });
+    carry = "sticky";
+    strikes = 0;
     schedule();
   });
   if (typeof ResizeObserver === "function") new ResizeObserver(schedule).observe(stage);
