@@ -9388,11 +9388,89 @@ body.menu-open {
    accessibility tree; JS adds inert so nothing inside is tabbable. */
 .ex-areas__panels {
   display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .ex-areas__panel {
-  grid-area: 1 / 1;
+  grid-area: 2 / 1;
   outline: none;
+}
+
+/* ---------- THE THREAD ----------
+   Every one of these icons is a single unbroken stroke, so a topic change can
+   be read literally: the outgoing thread winds itself back up while the next
+   one unwinds beside it. Both live in the same cell and pass each other, the
+   old one retreating the way you came from and the new one arriving from the
+   way you are going, so for the middle of the change there really are two
+   threads side by side rather than a cross-fade.
+
+   Only stroke-dashoffset hides a thread - never opacity - so what you see is
+   always a length of thread, wound or unwound. */
+.ex-art {
+  --thread-ms: 760ms;
+  /* px, not %: a percentage translate on an SVG resolves against that
+     element's own viewBox, so every icon would slide a different distance */
+  --thread-shift: clamp(26px, 3.4vw, 52px);
+  /* +1 going down the list, -1 coming back up */
+  --thread-dir: 1;
+  /* shared with the threads: a percentage height on them would resolve
+     against an auto-sized grid row and fall back to the SVG's own default,
+     which is how they ended up 885px tall */
+  /* height as well as width: the column is pinned, so everything in it has
+     to fit the viewport, and on a short wide window the icon is what has to
+     give */
+  --art-h: clamp(84px, min(11vw, 15vh), 150px);
+  grid-area: 1 / 1;
+  display: grid;
+  height: var(--art-h);
+  margin: 0 0 clamp(22px, 3vh, 34px);
+  overflow: visible;
+}
+
+.ex-art__thread {
+  grid-area: 1 / 1;
+  align-self: center;
+  justify-self: start;
+  width: auto;
+  height: var(--art-h);
+  overflow: visible;
+  stroke-dasharray: var(--len, 1200);
+  stroke-dashoffset: var(--len, 1200);
+  /* waiting threads sit on the side you are heading towards, so the next one
+     always arrives from ahead of you */
+  transform: translateX(calc(var(--thread-dir) * var(--thread-shift)));
+  transition:
+    stroke-dashoffset var(--thread-ms) cubic-bezier(0.32, 0.72, 0.3, 1),
+    transform var(--thread-ms) cubic-bezier(0.32, 0.72, 0.3, 1);
+}
+
+/* and the one being replaced winds back the way you came, so the two pass
+   each other instead of piling up on the same side */
+.ex-art__thread.is-leaving {
+  transform: translateX(calc(var(--thread-dir) * -1 * var(--thread-shift)));
+}
+
+.ex-art.is-reversing {
+  --thread-dir: -1;
+}
+
+.ex-art__thread.is-current {
+  stroke-dashoffset: 0;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ex-art__thread {
+    transition: none;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    transform: none;
+    visibility: hidden;
+  }
+
+  .ex-art__thread.is-current {
+    visibility: visible;
+  }
 }
 
 .ex-areas__panels.is-stacked .ex-areas__panel {

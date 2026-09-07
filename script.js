@@ -1419,10 +1419,35 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
     }, 400);
   };
 
+  /* Each icon is one unbroken stroke, so the length of that stroke is the
+     length of thread. Measured once - getTotalLength is not free and the
+     paths never change. */
+  const art = stage.querySelector(".ex-art");
+  const threads = art ? Array.from(art.querySelectorAll(".ex-art__thread")) : [];
+  threads.forEach((svg) =>
+    svg.querySelectorAll("path").forEach((path) => {
+      let len = 1200;
+      try {
+        len = Math.ceil(path.getTotalLength());
+      } catch {}
+      svg.style.setProperty("--len", len);
+    })
+  );
+
+  let frame = 0;
+
   const apply = (i) => {
     if (i === index) return;
+    /* Which way the reader is going decides which side the outgoing thread
+       winds back to, so the two always pass each other rather than stacking. */
+    const from = index;
+    if (art && from >= 0) art.classList.toggle("is-reversing", i < from);
     index = i;
     tabs.forEach((t, n) => t.setAttribute("aria-selected", String(n === i)));
+    threads.forEach((t, n) => {
+      t.classList.toggle("is-leaving", n === from);
+      t.classList.toggle("is-current", n === i);
+    });
     panels.forEach((p, n) => {
       p.classList.toggle("is-current", n === i);
       p.setAttribute("aria-hidden", String(n !== i));
@@ -1503,8 +1528,16 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
          scrolled, so the test is proportional and works from the first few
          pixels - no need to wait until the slip would be visible. */
       if (scrolled > 12 && scrolled < g.travel - 12) {
-        if (Math.abs(stage.getBoundingClientRect().top - g.pinTop) < Math.max(4, scrolled * 0.5)) strikes = 0;
-        else if (++strikes >= 2) carry = "js";
+        if (Math.abs(stage.getBoundingClientRect().top - g.pinTop) < Math.max(4, scrolled * 0.5)) {
+          strikes = 0;
+        } else {
+          if (++strikes >= 2) carry = "js";
+          /* Carry the check forward a frame at a time. Arriving mid track in
+             one jump - an anchor link, a restored scroll position - fires a
+             single scroll event, and one event can neither finish a test that
+             wants two readings nor apply the pin the decision calls for. */
+          schedule();
+        }
       }
       return;
     }
@@ -1567,7 +1600,6 @@ window.addEventListener("load", () => scheduleTrailOverlay(true));
     });
   });
 
-  let frame = 0;
   const schedule = () => {
     if (frame) return;
     frame = requestAnimationFrame(() => {
