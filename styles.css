@@ -5663,6 +5663,28 @@ body.menu-open {
   filter: blur(10px);
 }
 
+/* The wanderers are the motif that ties the closings together, so the summit
+   band carries them the way the grow band does. They stand on the ridge, to
+   the left of the trail's marker, small enough to read as figures in a
+   landscape rather than as an illustration. */
+.footer-summit__climbers {
+  position: absolute;
+  z-index: 3;
+  /* standing on the trail, just short of its marker - anchored to the same
+     trail box the marker uses, so nobody re-derives where the path is. At
+     44% the curve sits about 0.6 of the box above its foot. */
+  left: 44%;
+  bottom: calc(var(--fs-trail-bottom) + var(--fs-trail-h) * 0.6);
+  width: clamp(78px, 8.5vw, 124px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.footer-summit__climbers img {
+  width: 100%;
+  height: auto;
+}
+
 .footer-summit__ridge {
   position: absolute;
   left: 0;
@@ -7630,11 +7652,6 @@ a.contact-channels__value:focus-visible {
 
 .contact-form__success:focus {
   outline: none;
-}
-
-/* The frame runs the footer straight off the cream band - no summit here. */
-.page--contact .footer-summit {
-  display: none;
 }
 
 .page--contact .site-footer {
