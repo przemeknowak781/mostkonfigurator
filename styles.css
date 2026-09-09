@@ -7675,7 +7675,8 @@ a.contact-channels__value:focus-visible {
 .page--audience {
   --aud-stage-top: #2a1e18;
   --aud-stage-bottom: #161822;
-  --aud-grid-line: rgba(var(--aud-accent-rgb), 0.08);
+  --aud-tint-rgb: 209, 126, 95;
+  --aud-grid-line: rgba(var(--aud-tint-rgb), 0.08);
   --aud-card-border: rgba(240, 235, 233, 0.1);
   --aud-card-bg: linear-gradient(180deg, rgba(240, 235, 233, 0.055), rgba(240, 235, 233, 0.015));
 }
@@ -7695,7 +7696,7 @@ a.contact-channels__value:focus-visible {
 .page--audience .aud-expertise {
   color: var(--light);
   background:
-    radial-gradient(900px 600px at 12% 16%, rgba(var(--aud-accent-rgb), 0.2), transparent 70%),
+    radial-gradient(900px 600px at 12% 16%, rgba(var(--aud-tint-rgb), 0.2), transparent 70%),
     linear-gradient(180deg, var(--aud-stage-top) 0%, var(--aud-stage-bottom) 100%);
 }
 
@@ -7704,7 +7705,7 @@ a.contact-channels__value:focus-visible {
   background-image:
     linear-gradient(var(--aud-grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--aud-grid-line) 1px, transparent 1px),
-    radial-gradient(900px 600px at 12% 16%, rgba(var(--aud-accent-rgb), 0.2), transparent 70%),
+    radial-gradient(900px 600px at 12% 16%, rgba(var(--aud-tint-rgb), 0.2), transparent 70%),
     linear-gradient(180deg, var(--aud-stage-top) 0%, var(--aud-stage-bottom) 100%);
   background-size: 80px 80px, 80px 80px, auto, auto;
 }
@@ -7716,7 +7717,7 @@ a.contact-channels__value:focus-visible {
   border: 0;
   border-radius: 0;
   background:
-    linear-gradient(78deg, transparent 0 110px, rgba(var(--aud-accent-rgb), 0.05) 110px 111px);
+    linear-gradient(78deg, transparent 0 110px, rgba(var(--aud-tint-rgb), 0.05) 110px 111px);
   opacity: 1;
   mask-image: radial-gradient(ellipse 80% 65% at 48% 42%, #000 0%, transparent 88%);
   -webkit-mask-image: radial-gradient(ellipse 80% 65% at 48% 42%, #000 0%, transparent 88%);
@@ -7799,7 +7800,7 @@ a.contact-channels__value:focus-visible {
 .page--audience .aud-work {
   padding-block: clamp(88px, 12vh, 140px);
   background:
-    radial-gradient(760px 480px at 72% 8%, rgba(var(--aud-accent-rgb), 0.18), transparent 72%),
+    radial-gradient(760px 480px at 72% 8%, rgba(var(--aud-tint-rgb), 0.18), transparent 72%),
     linear-gradient(180deg, #161822 0%, var(--aud-stage-bottom) 100%);
 }
 
@@ -7900,7 +7901,7 @@ a.contact-channels__value:focus-visible {
 .page--audience .aud-expertise {
   color: #1c1419;
   background:
-    linear-gradient(90deg, rgba(var(--aud-accent-rgb), 0.11) 0 1px, transparent 1px) 0 0 / 88px 88px,
+    linear-gradient(90deg, rgba(var(--aud-tint-rgb), 0.11) 0 1px, transparent 1px) 0 0 / 88px 88px,
     linear-gradient(180deg, #f8f4f1 0%, var(--light) 100%);
 }
 
@@ -7909,7 +7910,7 @@ a.contact-channels__value:focus-visible {
   width: clamp(180px, 22vw, 330px);
   height: auto;
   aspect-ratio: 1;
-  border: 1px solid rgba(var(--aud-accent-rgb), 0.24);
+  border: 1px solid rgba(var(--aud-tint-rgb), 0.24);
   border-radius: 50%;
   background: transparent;
   opacity: 0.8;
@@ -7954,7 +7955,7 @@ a.contact-channels__value:focus-visible {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(145deg, rgba(var(--aud-accent-rgb), 0.12), transparent 58%);
+  background: linear-gradient(145deg, rgba(var(--aud-tint-rgb), 0.12), transparent 58%);
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;
@@ -8216,7 +8217,7 @@ a.contact-channels__value:focus-visible {
   padding: clamp(86px, 11vh, 124px) max(var(--container-x), calc((100vw - 1360px) / 2));
   color: #1c1419;
   background:
-    linear-gradient(90deg, rgba(var(--aud-accent-rgb), 0.1) 0 1px, transparent 1px) 0 0 / 88px 88px,
+    linear-gradient(90deg, rgba(var(--aud-tint-rgb), 0.1) 0 1px, transparent 1px) 0 0 / 88px 88px,
     linear-gradient(180deg, #f8f4f1 0%, var(--light) 100%);
 }
 
@@ -8269,7 +8270,7 @@ a.contact-channels__value:focus-visible {
   padding: clamp(92px, 12vh, 140px) max(var(--container-x), calc((100vw - 1360px) / 2));
   color: #1c1419;
   background:
-    linear-gradient(90deg, rgba(var(--aud-accent-rgb), 0.08) 0 1px, transparent 1px) 0 0 / 88px 88px,
+    linear-gradient(90deg, rgba(var(--aud-tint-rgb), 0.08) 0 1px, transparent 1px) 0 0 / 88px 88px,
     linear-gradient(180deg, var(--light) 0%, #faf6f3 100%);
 }
 
@@ -8393,19 +8394,29 @@ a.contact-channels__value:focus-visible {
   color: var(--aud-accent);
 }
 
+/* Two tokens, not one. --aud-accent is what the eye reads as the accent -
+   the dots, the rails, the rules, the numbers - and on every audience page
+   that is the brand orange, the way the Figma frames draw it (sampled off
+   the Companies frame: #f86028 on the expertise trail). --aud-tint is the
+   page's own ground: the mauve, the slate, the warm, carried by the grids,
+   the washes and the card chrome. Collapsing the two is why Companies and
+   Investors measured 0.0% saturated orange across a whole page. */
 .page--founders {
-  --aud-accent: #d17e5f;
-  --aud-accent-rgb: 209, 126, 95;
+  --aud-accent: var(--orange);
+  --aud-accent-rgb: 255, 97, 44;
+  --aud-tint-rgb: 209, 126, 95;
 }
 
 .page--companies {
-  --aud-accent: #9b8b95;
-  --aud-accent-rgb: 155, 139, 149;
+  --aud-accent: var(--orange);
+  --aud-accent-rgb: 255, 97, 44;
+  --aud-tint-rgb: 155, 139, 149;
 }
 
 .page--investors {
-  --aud-accent: #5b7ab0;
-  --aud-accent-rgb: 91, 122, 176;
+  --aud-accent: var(--orange);
+  --aud-accent-rgb: 255, 97, 44;
+  --aud-tint-rgb: 91, 122, 176;
 }
 
 /* Hard reset for Our Expertise after route-trail legacy styles. */
@@ -9765,6 +9776,7 @@ a.contact-channels__value:focus-visible {
 .page--expertise {
   --aud-accent: #c2a173;
   --aud-accent-rgb: 194, 161, 115;
+  --aud-tint-rgb: 194, 161, 115;
 }
 
 /* The ridge used to scale with the viewport width while the hero's height
