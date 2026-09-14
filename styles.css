@@ -10810,15 +10810,21 @@ a.contact-channels__value:focus-visible {
    warm reflection - no sky, no clouds, no building opposite. */
 .page--founders[data-hero="c1"] .fnd-photo { background-image: url("fnd-arch-7.webp"); }
 
-/* c2: cantilevered floor slabs. The frame it came back in shows the slabs
-   ending on the left with open ground beyond, which is the building edge
-   the client objected to before, so the crop is pushed into the run where
-   the plates cross the frame uninterrupted. */
+/* c2: cantilevered floor slabs, shown whole - the slab ends on the left stay
+   in frame rather than being cropped away. */
 .page--founders[data-hero="c2"] .fnd-photo {
   background-image: url("fnd-arch-8.webp");
-  background-size: 150%;
-  background-position: 100% 42%;
 }
+
+/* --- hue ---
+   The backdrop photographs are all one warm family, so the whole family can
+   be turned together on the photo layer alone. The grades over them are
+   left where they are, so each step shows the picture's own hue moving and
+   nothing else. */
+.page--founders[data-hue="rose"] .fnd-photo { filter: hue-rotate(-38deg); }
+.page--founders[data-hue="ember"] .fnd-photo { filter: hue-rotate(-16deg) saturate(1.08); }
+.page--founders[data-hue="amber"] .fnd-photo { filter: hue-rotate(16deg); }
+.page--founders[data-hue="gold"] .fnd-photo { filter: hue-rotate(32deg) saturate(0.94); }
 
 .page--founders[data-hero="c1"] .fnd-sky,
 .page--founders[data-hero="c2"] .fnd-sky {
