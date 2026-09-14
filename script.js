@@ -218,6 +218,28 @@ function positionTrailOverlay() {
     return { el, left: screen.x - labelsRect.left };
   });
 
+  // The leaders used to stop at a constant in trail space. That constant is
+  // measured from the ridge image, so lowering the ridge carried the leader
+  // ends down with it and off the bottom of the hero. Resolving the stats'
+  // own top back into trail coordinates keeps them meeting whatever the
+  // ridge does.
+  let leaderWrite = null;
+  const statsEl = document.querySelector(".hero-stats");
+  if (statsEl) {
+    const inv = ctm.inverse();
+    const sp = trailSvg.createSVGPoint();
+    sp.x = 0;
+    sp.y = statsEl.getBoundingClientRect().top - 14;
+    const localY = sp.matrixTransform(inv).y;
+    if (Number.isFinite(localY)) {
+      leaderWrite = [...document.querySelectorAll(".hero-trail__leader")].map((el) => ({
+        el,
+        // never let a leader invert if the stats sit above its checkpoint
+        y2: Math.max(localY, parseFloat(el.getAttribute("y1")) + 8),
+      }));
+    }
+  }
+
   let climberWrite = null;
   let sunWrite = null;
   const climbers = document.querySelector(".hero-climbers");
@@ -262,6 +284,9 @@ function positionTrailOverlay() {
   }
 
   // ---- WRITE PHASE: batch all style mutations after reads are done ----
+  if (leaderWrite) {
+    for (const l of leaderWrite) l.el.setAttribute("y2", String(l.y2));
+  }
   for (const p of dotPositions) {
     p.el.style.left = `${p.left}px`;
     p.el.style.top = `${p.top}px`;

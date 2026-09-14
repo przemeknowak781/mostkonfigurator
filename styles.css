@@ -12,6 +12,12 @@
   --orange-soft: #ffb077;
   --container-x: clamp(24px, 6.4vw, 96px);
   /* how far the home hero's ridge sits below where it used to */
+  /* How far the hero silhouette sits below its natural place. The route
+     drawn on it, its checkpoints and their leaders all ride the image, and
+     the leaders have to reach the stats pinned at the hero's foot - so the
+     drop is bounded by how much run is left on the left-hand checkpoint,
+     which is tightest on short viewports. Below 880px tall there is none to
+     spare and the geometry stays as it was; above it the ridge comes down. */
   --hero-ridge-drop: clamp(28px, 5vh, 48px);
   --nav-height: 84px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -19,6 +25,12 @@
 
 * {
   box-sizing: border-box;
+}
+
+@media (min-height: 880px) {
+  :root {
+    --hero-ridge-drop: clamp(52px, 8vh, 96px);
+  }
 }
 
 html {
@@ -813,7 +825,9 @@ body.menu-open {
   position: absolute;
   left: var(--container-x);
   right: var(--container-x);
-  bottom: calc(50px - var(--hero-ridge-drop));
+  /* Pinned to the hero's own foot rather than riding the ridge. The ridge
+     now drops far enough that riding it would push the stats past the fold. */
+  bottom: clamp(10px, 1.6vh, 22px);
   z-index: 8;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
