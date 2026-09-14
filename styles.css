@@ -10457,17 +10457,22 @@ a.contact-channels__value:focus-visible {
   --bloom-a: 0.58;
 }
 
-/* --- photographic skies --- */
+/* --- photographic skies ---
+   Three photographs, all generated to the same brief: burnt amber and ember
+   over near-black, the top of the frame kept quiet so the headline has room.
+   Each is padded to the hero's own 16:10 so nothing lands under the seam
+   where the next section begins. */
 
 .page--founders .fnd-photo { display: none; }
 
 .page--founders[data-hero="e"] .fnd-photo,
-.page--founders[data-hero="f"] .fnd-photo {
+.page--founders[data-hero="f"] .fnd-photo,
+.page--founders[data-hero="g"] .fnd-photo {
   display: block;
   position: absolute;
   inset: 0;
   z-index: -3;
-  background-position: var(--photo-pos, 50% 50%);
+  background-position: var(--photo-pos, 50% 0%);
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -10475,7 +10480,8 @@ a.contact-channels__value:focus-visible {
 /* the photograph carries its own light, so the painted sky steps aside and
    only a wash is left to hold the type */
 .page--founders[data-hero="e"] .fnd-sky,
-.page--founders[data-hero="f"] .fnd-sky {
+.page--founders[data-hero="f"] .fnd-sky,
+.page--founders[data-hero="g"] .fnd-sky {
   background: linear-gradient(
     180deg,
     rgba(5, 9, 17, 0.72) 0%,
@@ -10487,47 +10493,81 @@ a.contact-channels__value:focus-visible {
 }
 
 .page--founders[data-hero="e"],
-.page--founders[data-hero="f"] {
+.page--founders[data-hero="f"],
+.page--founders[data-hero="g"] {
   --fnd-ink: #f0ebe9;
 }
 
 .page--founders[data-hero="e"] .hero-title,
-.page--founders[data-hero="f"] .hero-title { color: #f0ebe9; }
+.page--founders[data-hero="f"] .hero-title,
+.page--founders[data-hero="g"] .hero-title { color: #f0ebe9; }
 
 .page--founders[data-hero="e"] .hero-tagline,
-.page--founders[data-hero="f"] .hero-tagline { color: rgba(240, 235, 233, 0.8); }
+.page--founders[data-hero="f"] .hero-tagline,
+.page--founders[data-hero="g"] .hero-tagline { color: rgba(240, 235, 233, 0.8); }
 
 .page--founders[data-hero="e"] .hero-content .eyebrow,
-.page--founders[data-hero="f"] .hero-content .eyebrow { color: rgba(255, 168, 110, 0.95); }
+.page--founders[data-hero="f"] .hero-content .eyebrow,
+.page--founders[data-hero="g"] .hero-content .eyebrow { color: rgba(255, 168, 110, 0.95); }
 
 .page--founders[data-hero="e"] .primary-cta,
-.page--founders[data-hero="f"] .primary-cta {
+.page--founders[data-hero="f"] .primary-cta,
+.page--founders[data-hero="g"] .primary-cta {
   color: #f0ebe9;
   background: transparent;
   border-color: rgba(240, 235, 233, 0.5);
 }
 
-/* e: the summit. The sun is already in the frame, so no bloom is added. */
-.page--founders[data-hero="e"] .fnd-photo {
-  background-image: url("fnd-summit.webp");
-  --photo-pos: 52% 42%;
+/* each photograph brings its own light, so the painted bloom stays out */
+.page--founders[data-hero="e"] .hero::before,
+.page--founders[data-hero="f"] .hero::before,
+.page--founders[data-hero="g"] .hero::before { content: none; }
+
+/* the photograph brings its own ridge and its own walker, so the painted
+   Figma silhouette steps aside rather than doubling it and masking the sun */
+.page--founders[data-hero="e"] .fnd-ridge,
+.page--founders[data-hero="f"] .fnd-ridge,
+.page--founders[data-hero="g"] .fnd-ridge { display: none; }
+
+/* the facade and the lookout are busy exactly where the headline sits, so a
+   soft scrim is drawn in from the left to hold the type. The valley is dark
+   there on its own and needs none. */
+.page--founders[data-hero="f"] .fnd-sky,
+.page--founders[data-hero="g"] .fnd-sky {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(5, 9, 17, 0.84) 0%,
+      rgba(5, 9, 17, 0.58) 30%,
+      rgba(5, 9, 17, 0.14) 56%,
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(5, 9, 17, 0.72) 0%,
+      rgba(5, 9, 17, 0.42) 34%,
+      rgba(5, 9, 17, 0.12) 62%,
+      transparent 100%
+    );
 }
 
-.page--founders[data-hero="e"] .hero::before { content: none; }
+/* e: the valley. Layered ranges in terracotta haze, the founder small on a
+   spur at the right — the Coming Soon hero read as a photograph. */
+.page--founders[data-hero="e"] .fnd-photo {
+  background-image: url("fnd-valley.webp");
+}
 
-/* f: the facade. Geometry only, so the warm light is put back as the bloom. */
+/* g: the lookout. The same light, but the founder close and central — the
+   individual, emotional end of the same family. */
+.page--founders[data-hero="g"] .fnd-photo {
+  background-image: url("fnd-lookout.webp");
+}
+
+/* f: the facade. Architecture as rhythm rather than as a building: concrete
+   fins, raking light, no skyline and no sky. */
 .page--founders[data-hero="f"] .fnd-photo {
   background-image: url("fnd-facade.webp");
-  --photo-pos: 42% 50%;
-  filter: saturate(0.9) contrast(1.06) brightness(0.86);
-}
-
-.page--founders[data-hero="f"] {
-  --bloom-x: 2vw;
-  --bloom-y: 0vh;
-  --bloom-w: min(80vw, 1000px);
-  --bloom-h: min(60vh, 620px);
-  --bloom-a: 0.5;
+  --photo-pos: 58% 50%;
 }
 
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
