@@ -10358,6 +10358,133 @@ a.contact-channels__value:focus-visible {
   font: 400 clamp(14px, 1.05vw, 17px) / 1.62 "Outfit", system-ui, sans-serif;
 }
 
+/* ============ FOUNDERS HERO VARIANTS ============
+   Four repaints of the founders hero toward the Coming Soon look, driven by
+   data-hero on <body>. The scene already runs off tokens, so each variant is
+   a token swap plus the bloom; nothing below the hero is touched. No
+   attribute = the Figma terracotta as built.
+
+   The bloom is the Coming Soon sun, same recipe: a wide blurred ellipse
+   anchored off the bottom-left corner, plus-lighter over whatever sky is
+   behind it.
+
+     a  dark sky + bloom + ridge      (closest to Coming Soon)
+     b  dark sky + bloom, no ridge    (soft horizon instead)
+     c  terracotta + bloom + ridge    (smallest step from today)
+     d  terracotta + bloom, no ridge
+*/
+
+.page--founders[data-hero] .hero::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  left: var(--bloom-x, -18vw);
+  bottom: var(--bloom-y, -6vh);
+  width: var(--bloom-w, min(92vw, 1180px));
+  height: var(--bloom-h, min(78vh, 800px));
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse at 43% 40%,
+    rgba(246, 146, 88, 0.94),
+    rgba(204, 96, 52, 0.78) 26%,
+    rgba(139, 66, 39, 0.42) 48%,
+    rgba(86, 38, 26, 0.18) 66%,
+    transparent 84%
+  );
+  filter: blur(26px) saturate(0.78);
+  mix-blend-mode: plus-lighter;
+  opacity: var(--bloom-a, 0.62);
+  pointer-events: none;
+  animation: fndBloom 7.5s ease-in-out infinite alternate;
+}
+
+@keyframes fndBloom {
+  from { transform: scale(1); opacity: var(--bloom-a, 0.62); }
+  to   { transform: scale(1.06); opacity: calc(var(--bloom-a, 0.62) + 0.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page--founders[data-hero] .hero::before { animation: none; }
+}
+
+/* --- dark sky, the Coming Soon ground --- */
+.page--founders[data-hero="a"],
+.page--founders[data-hero="b"] {
+  --fnd-ink: #f0ebe9;
+  /* the sun rises behind the ridge rather than off the bottom-left corner,
+     which is where Coming Soon puts it because its figure stands centre-right */
+  --bloom-x: 4vw;
+  --bloom-y: 2vh;
+  --bloom-w: min(86vw, 1100px);
+  --bloom-h: min(66vh, 680px);
+  --bloom-a: 0.9;
+}
+
+.page--founders[data-hero="a"] .fnd-sky,
+.page--founders[data-hero="b"] .fnd-sky {
+  background:
+    radial-gradient(900px 520px at 80% 34%, rgba(9, 18, 33, 0.5), transparent 78%),
+    linear-gradient(
+      180deg,
+      #050d19 0%,
+      #08111f 26%,
+      #29242a 50%,
+      #79402b 74%,
+      #371811 100%
+    );
+}
+
+/* light type on the dark sky */
+.page--founders[data-hero="a"] .hero-title,
+.page--founders[data-hero="b"] .hero-title { color: #f0ebe9; }
+
+.page--founders[data-hero="a"] .hero-tagline,
+.page--founders[data-hero="b"] .hero-tagline { color: rgba(240, 235, 233, 0.76); }
+
+.page--founders[data-hero="a"] .hero-content .eyebrow,
+.page--founders[data-hero="b"] .hero-content .eyebrow {
+  color: rgba(255, 168, 110, 0.95);
+}
+
+.page--founders[data-hero="a"] .primary-cta,
+.page--founders[data-hero="b"] .primary-cta {
+  color: #f0ebe9;
+  background: transparent;
+  border-color: rgba(240, 235, 233, 0.5);
+}
+
+.page--founders[data-hero="c"],
+.page--founders[data-hero="d"] {
+  --bloom-x: -22vw;
+  --bloom-y: -8vh;
+  --bloom-a: 0.58;
+}
+
+/* --- no ridge: a soft horizon carries the sky into the ground --- */
+.page--founders[data-hero="b"] .fnd-ridge,
+.page--founders[data-hero="d"] .fnd-ridge {
+  display: none;
+}
+
+.page--founders[data-hero="b"] .hero::after,
+.page--founders[data-hero="d"] .hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 56%;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(22, 24, 34, 0.35) 42%,
+    rgba(22, 24, 34, 0.82) 72%,
+    var(--fnd-land) 96%
+  );
+  pointer-events: none;
+}
+
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
    A flat terracotta sky, the ridge silhouette lifted straight out of the
    Figma frame, and the single founder walking it. The whole scene runs off
