@@ -10572,7 +10572,7 @@ a.contact-channels__value:focus-visible {
   position: absolute;
   inset: 0;
   z-index: -4;
-  background-image: url("fnd-facade-sun.webp");
+  background-image: url("fnd-corten.webp");
   background-position: var(--photo-pos, 50% 50%);
   background-size: cover;
   background-repeat: no-repeat;
