@@ -10524,28 +10524,44 @@ a.contact-channels__value:focus-visible {
    the sky behind the ridge. */
 .page--founders[data-hero="f"] .fnd-photo { background-image: url("fnd-facade.webp"); }
 
-/* the facade carries far more detail than a sky does, so the grade over it
-   is heavier on the side the copy sits on */
+/* The facade is a dark photograph - near-black in the shadows, burnt amber
+   only along the lit edges - so the grade over it is drawn from its own
+   shadow rather than from the Figma sky: deepening the shadow on the side
+   the copy sits on instead of repainting it in a lighter, pinker colour.
+   The copy turns light to follow. */
 .page--founders[data-hero="f"] .fnd-sky {
   background:
     linear-gradient(
       180deg,
-      rgba(36, 22, 14, 0.4) 0%,
-      rgba(36, 22, 14, 0.12) 12%,
+      rgba(18, 11, 7, 0.46) 0%,
+      rgba(18, 11, 7, 0.14) 12%,
       transparent 20%
     ),
     linear-gradient(
       100deg,
-      rgba(238, 176, 140, 0.78) 0%,
-      rgba(233, 156, 118, 0.52) 34%,
-      rgba(233, 156, 118, 0.16) 58%,
+      rgba(20, 12, 8, 0.88) 0%,
+      rgba(20, 12, 8, 0.66) 30%,
+      rgba(20, 12, 8, 0.24) 56%,
       transparent 74%
     ),
     linear-gradient(
       179deg,
-      rgba(220, 138, 103, 0.14) 0%,
-      rgba(196, 111, 81, 0.24) 100%
+      rgba(20, 12, 8, 0.22) 0%,
+      rgba(58, 28, 14, 0.14) 100%
     );
+}
+
+.page--founders[data-hero="f"] {
+  --fnd-ink: #f4ece7;
+  --spine-line: rgba(244, 236, 231, 0.6);
+}
+.page--founders[data-hero="f"] .hero-title { color: #f4ece7; }
+.page--founders[data-hero="f"] .hero-tagline { color: rgba(244, 236, 231, 0.82); }
+.page--founders[data-hero="f"] .hero-content .eyebrow { color: rgba(255, 168, 110, 0.95); }
+.page--founders[data-hero="f"] .primary-cta {
+  color: #f4ece7;
+  background: transparent;
+  border-color: rgba(244, 236, 231, 0.52);
 }
 
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
