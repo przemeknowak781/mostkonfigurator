@@ -10469,7 +10469,10 @@ a.contact-channels__value:focus-visible {
 .page--founders[data-hero="g"] .fnd-photo,
 .page--founders[data-hero="m1"] .fnd-photo,
 .page--founders[data-hero="m2"] .fnd-photo,
-.page--founders[data-hero="m3"] .fnd-photo {
+.page--founders[data-hero="m3"] .fnd-photo,
+.page--founders[data-hero="a1"] .fnd-photo,
+.page--founders[data-hero="a2"] .fnd-photo,
+.page--founders[data-hero="a3"] .fnd-photo {
   display: block;
   position: absolute;
   inset: 0;
@@ -10485,7 +10488,10 @@ a.contact-channels__value:focus-visible {
 .page--founders[data-hero="g"] .fnd-sky,
 .page--founders[data-hero="m1"] .fnd-sky,
 .page--founders[data-hero="m2"] .fnd-sky,
-.page--founders[data-hero="m3"] .fnd-sky {
+.page--founders[data-hero="m3"] .fnd-sky,
+.page--founders[data-hero="a1"] .fnd-sky,
+.page--founders[data-hero="a2"] .fnd-sky,
+.page--founders[data-hero="a3"] .fnd-sky {
   z-index: -3;
   background:
     linear-gradient(
@@ -10594,7 +10600,7 @@ a.contact-channels__value:focus-visible {
    light, so no grade is laid over them at all - the lesson from the
    corten. */
 .page--founders[data-hero="m1"] .fnd-sky,
-.page--founders[data-hero="m2"] .fnd-sky { background: none; }
+.page--founders[data-hero="m2"] .fnd-sky,
 
 /* m1 and m2 are pale, and the top band is light by default, so on them the
    wordmark, the links and the button all turn dark like the rest of the copy */
@@ -10664,6 +10670,49 @@ a.contact-channels__value:focus-visible {
 .page--founders[data-hero="m1"] .fnd-photo { background-image: url("fnd-mist-1.webp"); }
 .page--founders[data-hero="m2"] .fnd-photo { background-image: url("fnd-mist-2.webp"); }
 .page--founders[data-hero="m3"] .fnd-photo { background-image: url("fnd-mist-3.webp"); }
+
+/* --- the architecture, gently ---
+   Three different ideas rather than three shades of one. All three are
+   held at the same colour intensity as m2, so what separates them is the
+   motif and nothing else. Like the mist, none of them takes a grade. */
+
+/* All three run pale on one side of the top band and deep on the other, and
+   a3's stone is busy right where the links sit, so no single ink colour holds
+   across the bar. They keep the light navbar the rest of the site uses and
+   take a short scrim under it, drawn from their own shadow. */
+.page--founders[data-hero="a1"] .fnd-sky,
+.page--founders[data-hero="a2"] .fnd-sky,
+.page--founders[data-hero="a3"] .fnd-sky {
+  background: linear-gradient(
+    180deg,
+    rgba(48, 26, 14, 0.66) 0%,
+    rgba(48, 26, 14, 0.24) 11%,
+    transparent 22%
+  );
+}
+
+/* a2 and a3 are the palest of the three up there, so their scrims carry more */
+.page--founders[data-hero="a2"] .fnd-sky,
+.page--founders[data-hero="a3"] .fnd-sky {
+  background: linear-gradient(
+    180deg,
+    rgba(48, 26, 14, 0.82) 0%,
+    rgba(48, 26, 14, 0.36) 12%,
+    transparent 22%
+  );
+}
+
+/* a1: light on form. One curving plaster wall, the whole picture gradation
+   and not a single hard edge anywhere in it. */
+.page--founders[data-hero="a1"] .fnd-photo { background-image: url("fnd-arch-1.webp"); }
+
+/* a2: the building only as its shadow. A perforated screen, never itself in
+   frame, throwing soft pools of light across plaster. */
+.page--founders[data-hero="a2"] .fnd-photo { background-image: url("fnd-arch-2.webp"); }
+
+/* a3: architecture as material. Travertine cropped inside the slab, bedding
+   and pores, grain without a rhythm anyone could count. */
+.page--founders[data-hero="a3"] .fnd-photo { background-image: url("fnd-arch-3.webp"); }
 
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
    A flat terracotta sky, the ridge silhouette lifted straight out of the
