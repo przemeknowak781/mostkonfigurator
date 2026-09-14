@@ -10472,6 +10472,9 @@ a.contact-channels__value:focus-visible {
 .page--founders[data-hero="m3"] .fnd-photo,
 .page--founders[data-hero="a1"] .fnd-photo,
 .page--founders[data-hero="a2"] .fnd-photo,
+.page--founders[data-hero="b1"] .fnd-photo,
+.page--founders[data-hero="b2"] .fnd-photo,
+.page--founders[data-hero="b3"] .fnd-photo,
 .page--founders[data-hero="a3"] .fnd-photo {
   display: block;
   position: absolute;
@@ -10491,6 +10494,9 @@ a.contact-channels__value:focus-visible {
 .page--founders[data-hero="m3"] .fnd-sky,
 .page--founders[data-hero="a1"] .fnd-sky,
 .page--founders[data-hero="a2"] .fnd-sky,
+.page--founders[data-hero="b1"] .fnd-sky,
+.page--founders[data-hero="b2"] .fnd-sky,
+.page--founders[data-hero="b3"] .fnd-sky,
 .page--founders[data-hero="a3"] .fnd-sky {
   z-index: -3;
   background:
@@ -10713,6 +10719,85 @@ a.contact-channels__value:focus-visible {
 /* a3: architecture as material. Travertine cropped inside the slab, bedding
    and pores, grain without a rhythm anyone could count. */
 .page--founders[data-hero="a3"] .fnd-photo { background-image: url("fnd-arch-3.webp"); }
+
+/* --- the architecture, read as architecture ---
+   The first set leaned abstract - a curve, a shadow, a stone. These three
+   are unmistakably built: an arcade, a coffered ceiling, the soffit of a
+   stair. Each is still cropped inside the fabric, so no roofline, no
+   corner of a building and no sky ever enters the frame, and the colour
+   paragraph of the prompt is the one from the first set, word for word,
+   so the tonality carries over. */
+
+/* b1: the arcade. Piers and arch heads repeating flat across the frame. */
+.page--founders[data-hero="b1"] .fnd-photo { background-image: url("fnd-arch-4.webp"); }
+
+/* b2: the coffered ceiling, seen straight up. */
+.page--founders[data-hero="b2"] .fnd-photo { background-image: url("fnd-arch-5.webp"); }
+
+/* b3: the folded soffit of a stair, two flights crossing. */
+.page--founders[data-hero="b3"] .fnd-photo { background-image: url("fnd-arch-6.webp"); }
+
+/* Each of the three needs help in a different place, so each is graded
+   separately - always in a tone lifted from the picture itself, never in a
+   colour from somewhere else. b1's wall is pale where the headline sits but
+   its arch heads darken under the tagline, so it takes a soft lift in its
+   own highlight; b2's coffers are deep enough that the copy turns light and
+   the grade deepens instead; b3 needs nothing but the scrim under the bar. */
+.page--founders[data-hero="b1"] .fnd-sky {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(48, 26, 14, 0.86) 0%,
+      rgba(48, 26, 14, 0.34) 12%,
+      transparent 22%
+    ),
+    linear-gradient(
+      100deg,
+      rgba(250, 228, 202, 0.62) 0%,
+      rgba(250, 228, 202, 0.42) 30%,
+      rgba(250, 228, 202, 0.16) 50%,
+      transparent 68%
+    );
+}
+
+.page--founders[data-hero="b2"] .fnd-sky {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(40, 20, 10, 0.5) 0%,
+      rgba(40, 20, 10, 0.16) 11%,
+      transparent 22%
+    ),
+    linear-gradient(
+      100deg,
+      rgba(40, 20, 10, 0.86) 0%,
+      rgba(40, 20, 10, 0.68) 30%,
+      rgba(40, 20, 10, 0.34) 50%,
+      transparent 70%
+    );
+}
+
+.page--founders[data-hero="b3"] .fnd-sky {
+  background: linear-gradient(
+    180deg,
+    rgba(48, 26, 14, 0.74) 0%,
+    rgba(48, 26, 14, 0.28) 11%,
+    transparent 22%
+  );
+}
+
+.page--founders[data-hero="b2"] {
+  --fnd-ink: #f4ece7;
+  --spine-line: rgba(244, 236, 231, 0.6);
+}
+.page--founders[data-hero="b2"] .hero-title { color: #f4ece7; }
+.page--founders[data-hero="b2"] .hero-tagline { color: #f4ece7; }
+.page--founders[data-hero="b2"] .hero-content .eyebrow { color: rgba(255, 190, 140, 0.95); }
+.page--founders[data-hero="b2"] .primary-cta {
+  color: #f4ece7;
+  background: transparent;
+  border-color: rgba(244, 236, 231, 0.55);
+}
 
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
    A flat terracotta sky, the ridge silhouette lifted straight out of the
