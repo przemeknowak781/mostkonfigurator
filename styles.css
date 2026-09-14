@@ -10466,8 +10466,10 @@ a.contact-channels__value:focus-visible {
 .page--founders .fnd-photo { display: none; }
 
 .page--founders[data-hero="e"] .fnd-photo,
-.page--founders[data-hero="f"] .fnd-photo,
-.page--founders[data-hero="g"] .fnd-photo {
+.page--founders[data-hero="g"] .fnd-photo,
+.page--founders[data-hero="m1"] .fnd-photo,
+.page--founders[data-hero="m2"] .fnd-photo,
+.page--founders[data-hero="m3"] .fnd-photo {
   display: block;
   position: absolute;
   inset: 0;
@@ -10480,8 +10482,10 @@ a.contact-channels__value:focus-visible {
 /* the painted sky stops being the sky and becomes a thin grade over the
    photograph, holding the Figma warmth and keeping the copy legible */
 .page--founders[data-hero="e"] .fnd-sky,
-.page--founders[data-hero="f"] .fnd-sky,
-.page--founders[data-hero="g"] .fnd-sky {
+.page--founders[data-hero="g"] .fnd-sky,
+.page--founders[data-hero="m1"] .fnd-sky,
+.page--founders[data-hero="m2"] .fnd-sky,
+.page--founders[data-hero="m3"] .fnd-sky {
   z-index: -3;
   background:
     linear-gradient(
@@ -10540,100 +10544,126 @@ a.contact-channels__value:focus-visible {
   border-color: rgba(244, 236, 231, 0.52);
 }
 
-/* f: architecture as texture. Concrete fins and raking light standing in for
-   the sky behind the ridge. */
-.page--founders[data-hero="f"] .fnd-photo { background-image: url("fnd-facade.webp"); }
-
-/* The facade is a dark photograph - near-black in the shadows, burnt amber
-   only along the lit edges - so the grade over it is drawn from its own
-   shadow rather than from the Figma sky: deepening the shadow on the side
-   the copy sits on instead of repainting it in a lighter, pinker colour.
-   The copy turns light to follow. */
-.page--founders[data-hero="f"] .fnd-sky {
+/* g carries light copy over the latte band, which is the brightest part of
+   that sky, so its grade deepens the left rather than lifting it - a warm
+   dark pitched between the navy above and the terracotta below */
+.page--founders[data-hero="g"] .fnd-sky {
   background:
     linear-gradient(
-      180deg,
-      rgba(18, 11, 7, 0.46) 0%,
-      rgba(18, 11, 7, 0.14) 12%,
-      transparent 20%
-    ),
-    linear-gradient(
       100deg,
-      rgba(20, 12, 8, 0.88) 0%,
-      rgba(20, 12, 8, 0.66) 30%,
-      rgba(20, 12, 8, 0.24) 56%,
-      transparent 74%
+      rgba(34, 24, 30, 0.72) 0%,
+      rgba(34, 24, 30, 0.52) 30%,
+      rgba(34, 24, 30, 0.26) 48%,
+      rgba(34, 24, 30, 0.08) 64%,
+      transparent 78%
     ),
     linear-gradient(
       179deg,
-      rgba(20, 12, 8, 0.22) 0%,
-      rgba(58, 28, 14, 0.14) 100%
+      rgba(20, 26, 44, 0.16) 0%,
+      rgba(196, 111, 81, 0.12) 100%
     );
 }
 
-.page--founders[data-hero="f"] {
+/* e: the dawn sky. Terracotta through the whole frame, brightest toward the
+   upper right - the Figma gradient, photographed. */
+.page--founders[data-hero="e"] .fnd-photo { background-image: url("fnd-sky-dawn.webp"); }
+
+/* g: the same sky an hour earlier. Night blue at the top falling into
+   terracotta at the bottom - the bridge to the Coming Soon hero. */
+.page--founders[data-hero="g"] .fnd-photo { background-image: url("fnd-sky-night.webp"); }
+
+/* g's sky is dark where the copy sits, so the copy turns light there - the
+   one variant that follows Coming Soon rather than the Figma frame */
+.page--founders[data-hero="g"] {
   --fnd-ink: #f4ece7;
   --spine-line: rgba(244, 236, 231, 0.6);
 }
-.page--founders[data-hero="f"] .hero-title { color: #f4ece7; }
-.page--founders[data-hero="f"] .hero-tagline { color: rgba(244, 236, 231, 0.82); }
-.page--founders[data-hero="f"] .hero-content .eyebrow { color: rgba(255, 168, 110, 0.95); }
-.page--founders[data-hero="f"] .primary-cta {
+.page--founders[data-hero="g"] .hero-title { color: #f4ece7; }
+.page--founders[data-hero="g"] .hero-tagline { color: rgba(244, 236, 231, 0.82); }
+.page--founders[data-hero="g"] .hero-content .eyebrow { color: rgba(255, 168, 110, 0.95); }
+.page--founders[data-hero="g"] .primary-cta {
   color: #f4ece7;
   background: transparent;
   border-color: rgba(244, 236, 231, 0.52);
 }
 
-/* h: corten. Folded weathering-steel blades in mature patina, lit head-on,
-   so the whole frame is rust orange at different depths. */
-.page--founders[data-hero="h"] .fnd-photo {
-  display: block;
-  position: absolute;
-  inset: 0;
-  z-index: -4;
-  background-image: url("fnd-corten.webp");
-  background-position: var(--photo-pos, 50% 50%);
-  background-size: cover;
-  background-repeat: no-repeat;
+/* --- the mist ---
+   One motif at three colour intensities. Drifting veils of backlit mist:
+   no edge, no shape and nothing a viewer could name, so nothing competes
+   with the ridge standing in front of it. The photographs carry their own
+   light, so no grade is laid over them at all - the lesson from the
+   corten. */
+.page--founders[data-hero="m1"] .fnd-sky,
+.page--founders[data-hero="m2"] .fnd-sky { background: none; }
+
+/* m1 and m2 are pale, and the top band is light by default, so on them the
+   wordmark, the links and the button all turn dark like the rest of the copy */
+.page--founders[data-hero="m1"] .wordmark,
+.page--founders[data-hero="m2"] .wordmark { color: #161822; }
+
+.page--founders[data-hero="m1"] .top-nav__menu a,
+.page--founders[data-hero="m2"] .top-nav__menu a { color: rgba(22, 24, 34, 0.78); }
+
+.page--founders[data-hero="m1"] .top-nav__menu--right a,
+.page--founders[data-hero="m2"] .top-nav__menu--right a { color: rgba(22, 24, 34, 0.62); }
+
+.page--founders[data-hero="m1"] .top-nav__menu a:hover,
+.page--founders[data-hero="m1"] .top-nav__menu a:focus-visible,
+.page--founders[data-hero="m2"] .top-nav__menu a:hover,
+.page--founders[data-hero="m2"] .top-nav__menu a:focus-visible { color: #161822; }
+
+.page--founders[data-hero="m1"] .nav-cta,
+.page--founders[data-hero="m2"] .nav-cta {
+  color: #161822;
+  border-color: rgba(22, 24, 34, 0.42);
 }
 
-/* Nothing lightens the corten - a wash over it would dilute the patina the
-   way it dilutes any saturated surface. The grade is the steel's own
-   deepest rust instead, so the copy gets its contrast from shadow rather
-   than from a second colour, and the material stays intact. */
-.page--founders[data-hero="h"] .fnd-sky {
-  z-index: -3;
+.page--founders[data-hero="m1"] .nav-cta:hover,
+.page--founders[data-hero="m1"] .nav-cta:focus-visible,
+.page--founders[data-hero="m2"] .nav-cta:hover,
+.page--founders[data-hero="m2"] .nav-cta:focus-visible {
+  color: #f4ece7;
+  background: #161822;
+  border-color: #161822;
+}
+
+/* m3 lands in the awkward middle - too dark for dark copy, too light for
+   light - so it is the one that takes a grade, in its own deep sienna, and
+   light copy with it */
+.page--founders[data-hero="m3"] .fnd-sky {
   background:
     linear-gradient(
       180deg,
-      rgba(58, 15, 4, 0.5) 0%,
-      rgba(58, 15, 4, 0.16) 13%,
+      rgba(58, 20, 6, 0.42) 0%,
+      rgba(58, 20, 6, 0.12) 13%,
       transparent 26%
     ),
     linear-gradient(
       100deg,
-      rgba(58, 15, 4, 0.86) 0%,
-      rgba(58, 15, 4, 0.74) 32%,
-      rgba(58, 15, 4, 0.46) 50%,
-      rgba(58, 15, 4, 0.14) 66%,
+      rgba(58, 20, 6, 0.78) 0%,
+      rgba(58, 20, 6, 0.6) 32%,
+      rgba(58, 20, 6, 0.3) 50%,
+      rgba(58, 20, 6, 0.08) 66%,
       transparent 80%
     );
 }
 
-.page--founders[data-hero="h"] {
+.page--founders[data-hero="m3"] {
   --fnd-ink: #f4ece7;
   --spine-line: rgba(244, 236, 231, 0.6);
 }
-.page--founders[data-hero="h"] .hero-title { color: #f4ece7; }
-.page--founders[data-hero="h"] .hero-tagline { color: #f4ece7; }
-.page--founders[data-hero="h"] .hero-content .eyebrow { color: rgba(255, 190, 140, 0.95); }
-.page--founders[data-hero="h"] .primary-cta {
+.page--founders[data-hero="m3"] .hero-title { color: #f4ece7; }
+.page--founders[data-hero="m3"] .hero-tagline { color: #f4ece7; }
+.page--founders[data-hero="m3"] .hero-content .eyebrow { color: rgba(255, 190, 140, 0.95); }
+.page--founders[data-hero="m3"] .primary-cta {
   color: #f4ece7;
-  /* the button sits where the patina is brightest, so it carries its own
-     shade rather than the whole corner being darkened for it */
-  background: rgba(46, 14, 4, 0.42);
+  background: rgba(46, 14, 4, 0.4);
   border-color: rgba(244, 236, 231, 0.58);
 }
+
+.page--founders[data-hero="m1"] .fnd-photo { background-image: url("fnd-mist-1.webp"); }
+.page--founders[data-hero="m2"] .fnd-photo { background-image: url("fnd-mist-2.webp"); }
+.page--founders[data-hero="m3"] .fnd-photo { background-image: url("fnd-mist-3.webp"); }
 
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
    A flat terracotta sky, the ridge silhouette lifted straight out of the
