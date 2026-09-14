@@ -10497,6 +10497,26 @@ a.contact-channels__value:focus-visible {
     );
 }
 
+/* g carries light copy over the latte band, which is the brightest part of
+   that sky, so its grade deepens the left rather than lifting it - a warm
+   dark pitched between the navy above and the terracotta below */
+.page--founders[data-hero="g"] .fnd-sky {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(34, 24, 30, 0.72) 0%,
+      rgba(34, 24, 30, 0.52) 30%,
+      rgba(34, 24, 30, 0.26) 48%,
+      rgba(34, 24, 30, 0.08) 64%,
+      transparent 78%
+    ),
+    linear-gradient(
+      179deg,
+      rgba(20, 26, 44, 0.16) 0%,
+      rgba(196, 111, 81, 0.12) 100%
+    );
+}
+
 /* e: the dawn sky. Terracotta through the whole frame, brightest toward the
    upper right - the Figma gradient, photographed. */
 .page--founders[data-hero="e"] .fnd-photo { background-image: url("fnd-sky-dawn.webp"); }
@@ -10564,9 +10584,8 @@ a.contact-channels__value:focus-visible {
   border-color: rgba(244, 236, 231, 0.52);
 }
 
-/* h: the same facade flooded with sun. Bright, saturated orange edge to
-   edge, so it takes the Figma treatment back - a light warm wash and dark
-   copy - rather than the dark grade f needs. */
+/* h: corten. Folded weathering-steel blades in mature patina, lit head-on,
+   so the whole frame is rust orange at different depths. */
 .page--founders[data-hero="h"] .fnd-photo {
   display: block;
   position: absolute;
@@ -10578,27 +10597,42 @@ a.contact-channels__value:focus-visible {
   background-repeat: no-repeat;
 }
 
+/* Nothing lightens the corten - a wash over it would dilute the patina the
+   way it dilutes any saturated surface. The grade is the steel's own
+   deepest rust instead, so the copy gets its contrast from shadow rather
+   than from a second colour, and the material stays intact. */
 .page--founders[data-hero="h"] .fnd-sky {
   z-index: -3;
   background:
     linear-gradient(
       180deg,
-      rgba(116, 54, 18, 0.52) 0%,
-      rgba(116, 54, 18, 0.18) 13%,
+      rgba(58, 15, 4, 0.5) 0%,
+      rgba(58, 15, 4, 0.16) 13%,
       transparent 26%
     ),
     linear-gradient(
       100deg,
-      rgba(247, 205, 168, 0.5) 0%,
-      rgba(243, 176, 128, 0.26) 34%,
-      rgba(243, 176, 128, 0.08) 58%,
-      transparent 74%
-    ),
-    linear-gradient(
-      179deg,
-      rgba(255, 214, 178, 0.14) 0%,
-      rgba(198, 104, 60, 0.18) 100%
+      rgba(58, 15, 4, 0.86) 0%,
+      rgba(58, 15, 4, 0.74) 32%,
+      rgba(58, 15, 4, 0.46) 50%,
+      rgba(58, 15, 4, 0.14) 66%,
+      transparent 80%
     );
+}
+
+.page--founders[data-hero="h"] {
+  --fnd-ink: #f4ece7;
+  --spine-line: rgba(244, 236, 231, 0.6);
+}
+.page--founders[data-hero="h"] .hero-title { color: #f4ece7; }
+.page--founders[data-hero="h"] .hero-tagline { color: #f4ece7; }
+.page--founders[data-hero="h"] .hero-content .eyebrow { color: rgba(255, 190, 140, 0.95); }
+.page--founders[data-hero="h"] .primary-cta {
+  color: #f4ece7;
+  /* the button sits where the patina is brightest, so it carries its own
+     shade rather than the whole corner being darkened for it */
+  background: rgba(46, 14, 4, 0.42);
+  border-color: rgba(244, 236, 231, 0.58);
 }
 
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
