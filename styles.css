@@ -10817,14 +10817,45 @@ a.contact-channels__value:focus-visible {
 }
 
 /* --- hue ---
-   The backdrop photographs are all one warm family, so the whole family can
-   be turned together on the photo layer alone. The grades over them are
-   left where they are, so each step shows the picture's own hue moving and
-   nothing else. */
-.page--founders[data-hue="rose"] .fnd-photo { filter: hue-rotate(-38deg); }
-.page--founders[data-hue="ember"] .fnd-photo { filter: hue-rotate(-16deg) saturate(1.08); }
-.page--founders[data-hue="amber"] .fnd-photo { filter: hue-rotate(16deg); }
-.page--founders[data-hue="gold"] .fnd-photo { filter: hue-rotate(32deg) saturate(0.94); }
+   hue-rotate() turned the whole picture at once, neutrals included, and
+   walked straight out of the palette. These are gradient maps instead: the
+   photograph's luminance is kept exactly as it is and every value is looked
+   up in a ramp built only from tokens already in this stylesheet, so the
+   result cannot leave the palette by construction. Each ramp runs dark to
+   light through five stops.
+
+     terracotta  --fnd-land -> --fnd-sky-low -> --fnd-sky -> --fnd-sky-high
+                 -> --scene-cream        (the Founders sky, as it is now)
+     orange      --navy-deep -> --orange -> --light
+     mauve       --aud-tint-rgb from Companies, 155 139 149
+     slate       --aud-tint-rgb from Investors, 91 122 176
+     sand        --aud-tint-rgb from Expertise, 194 161 115
+*/
+.page--founders[data-hero="c1"][data-hue="terracotta"] .fnd-photo { background-image: url("fnd-arch-7-terracotta.webp"); }
+.page--founders[data-hero="c1"][data-hue="orange"] .fnd-photo { background-image: url("fnd-arch-7-orange.webp"); }
+.page--founders[data-hero="c1"][data-hue="mauve"] .fnd-photo { background-image: url("fnd-arch-7-mauve.webp"); }
+.page--founders[data-hero="c1"][data-hue="slate"] .fnd-photo { background-image: url("fnd-arch-7-slate.webp"); }
+.page--founders[data-hero="c1"][data-hue="sand"] .fnd-photo { background-image: url("fnd-arch-7-sand.webp"); }
+
+.page--founders[data-hero="c2"][data-hue="terracotta"] .fnd-photo { background-image: url("fnd-arch-8-terracotta.webp"); }
+.page--founders[data-hero="c2"][data-hue="orange"] .fnd-photo { background-image: url("fnd-arch-8-orange.webp"); }
+.page--founders[data-hero="c2"][data-hue="mauve"] .fnd-photo { background-image: url("fnd-arch-8-mauve.webp"); }
+.page--founders[data-hero="c2"][data-hue="slate"] .fnd-photo { background-image: url("fnd-arch-8-slate.webp"); }
+.page--founders[data-hero="c2"][data-hue="sand"] .fnd-photo { background-image: url("fnd-arch-8-sand.webp"); }
+
+/* slate and mauve are cool grounds, so the warm lift over them would fight
+   the ramp - they get the same lift in their own colour instead */
+.page--founders[data-hero][data-hue="slate"] .fnd-sky {
+  background:
+    linear-gradient(180deg, rgba(10, 16, 26, 0.8) 0%, rgba(10, 16, 26, 0.3) 12%, transparent 24%),
+    linear-gradient(100deg, rgba(222, 232, 246, 0.78) 0%, rgba(222, 232, 246, 0.56) 30%, rgba(222, 232, 246, 0.2) 50%, transparent 70%);
+}
+
+.page--founders[data-hero][data-hue="mauve"] .fnd-sky {
+  background:
+    linear-gradient(180deg, rgba(28, 20, 26, 0.8) 0%, rgba(28, 20, 26, 0.3) 12%, transparent 24%),
+    linear-gradient(100deg, rgba(240, 232, 236, 0.78) 0%, rgba(240, 232, 236, 0.56) 30%, rgba(240, 232, 236, 0.2) 50%, transparent 70%);
+}
 
 .page--founders[data-hero="c1"] .fnd-sky,
 .page--founders[data-hero="c2"] .fnd-sky {
