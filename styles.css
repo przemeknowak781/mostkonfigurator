@@ -10564,6 +10564,43 @@ a.contact-channels__value:focus-visible {
   border-color: rgba(244, 236, 231, 0.52);
 }
 
+/* h: the same facade flooded with sun. Bright, saturated orange edge to
+   edge, so it takes the Figma treatment back - a light warm wash and dark
+   copy - rather than the dark grade f needs. */
+.page--founders[data-hero="h"] .fnd-photo {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  background-image: url("fnd-facade-sun.webp");
+  background-position: var(--photo-pos, 50% 50%);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.page--founders[data-hero="h"] .fnd-sky {
+  z-index: -3;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(116, 54, 18, 0.52) 0%,
+      rgba(116, 54, 18, 0.18) 13%,
+      transparent 26%
+    ),
+    linear-gradient(
+      100deg,
+      rgba(247, 205, 168, 0.5) 0%,
+      rgba(243, 176, 128, 0.26) 34%,
+      rgba(243, 176, 128, 0.08) 58%,
+      transparent 74%
+    ),
+    linear-gradient(
+      179deg,
+      rgba(255, 214, 178, 0.14) 0%,
+      rgba(198, 104, 60, 0.18) 100%
+    );
+}
+
 /* ============ FOUNDERS SCENE (Figma 2795:1228) ============
    A flat terracotta sky, the ridge silhouette lifted straight out of the
    Figma frame, and the single founder walking it. The whole scene runs off
