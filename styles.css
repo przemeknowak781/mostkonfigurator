@@ -10529,6 +10529,12 @@ a.contact-channels__value:focus-visible {
 .page--founders[data-hero="f"] .fnd-sky {
   background:
     linear-gradient(
+      180deg,
+      rgba(36, 22, 14, 0.4) 0%,
+      rgba(36, 22, 14, 0.12) 12%,
+      transparent 20%
+    ),
+    linear-gradient(
       100deg,
       rgba(238, 176, 140, 0.78) 0%,
       rgba(233, 156, 118, 0.52) 34%,
